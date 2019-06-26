@@ -2,8 +2,16 @@ body {
   color: #717171;
 }
 
+.logo {
+  max-width: 15rem;
+  margin: 0 auto;
+  margin-right: 1rem;
+  padding-right: 1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+}
+
 .top-bar {
-  background-color: #fd4f1c;
+  background-color: #3a3a3a;
   color: white;
   padding-bottom: 2rem;
 }
@@ -15,8 +23,8 @@ body {
 }
 
 .title {
-  margin: 2rem;
-  text-align: center;
+  margin: 1rem 0;
+  text-align: left;
 }
 
 .pinyin {

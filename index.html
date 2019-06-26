@@ -25,8 +25,9 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <h1 class="title">HSK Dictionary</h1>
-            <input type="text" class="form-control" placeholder="Search for a Chinese word here...">
+            <h1 class="title">
+                <img src="img/logo-mark.png" class="logo" alt="">HSK Dictionary</h1>
+            <input v-on:keyup.enter="lookup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
           </div>
         </div>
       </div>
@@ -59,13 +60,13 @@
             <p class="english">{{ entry['English'] }}</p>
         </div>
       </div>
-      <div class="row mt1">
+      <div class="row mt1 character-example-wrapper">
         <div class="col-md-6" v-for="character in characterExamples">
-          <p><b class="character-example-word" v-bind:data-hsk="character.examples[0]['Book']">{{ character.character }}</b> as in:</p>
+          <p><b class="character-example-word">{{ character.character }}</b> as in:</p>
           <ul class="character-examples collapsed">
-            <li v-for="example in character.examples" class="character-example"><span class="character-example-word"><b v-bind:data-hsk="example['Book']">{{ example['Word'] }}</b></span> <span class="character-example-pinyin">{{ example['Pinyin'] }}</span> <em class="character-example-english">{{ example['English'] }}</em></li>
+            <li v-for="example in character.examples" class="character-example"><a :href="'#' + example['Word']"><span class="character-example-word"><b v-bind:data-hsk="example['Book']">{{ example['Word'] }}</b></span></a> <span class="character-example-pinyin">{{ example['Pinyin'] }}</span> <em class="character-example-english">{{ example['English'] }}</em></li>
           </ul>
-          <button class="show-more">More examples</button>
+          <button class="show-more">Expand / Collapse</button>
         </div>
       </div>
     </div>
@@ -73,7 +74,7 @@
   </div>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.slim.min.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="vendor/papaparse/papaparse.min.js"></script>
