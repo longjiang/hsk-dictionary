@@ -40,7 +40,7 @@
               <img v-bind:src="image" class="example-image" v-if="hasImage">
               <img v-bind:src="unsplashImage" class="example-image" alt="" v-else="hasImage">
           </div>
-          <div class="col-md-9">
+          <div class="col-md-9 example-wrapper">
               <div class="label" v-bind:data-bg-hsk="entry['Book']">HSK {{ entry['Book'] }}</div>
               <div class="example-sentence">
                 <p class="example-sentence-pinyin">{{ entry['Example Pinyin'] }}</p>
@@ -67,7 +67,7 @@
           <ul class="character-examples collapsed">
             <li v-for="example in character.examples" class="character-example"><a :href="'#' + example['Word']"><span class="character-example-word"><b v-bind:data-hsk="example['Book']">{{ example['Word'] }}</b></span></a> <span class="character-example-pinyin">{{ example['Pinyin'] }}</span> <em class="character-example-english">{{ example['English'] }}</em></li>
           </ul>
-          <button class="show-more">Expand / Collapse</button>
+          <button class="show-more">Show more / less</button>
         </div>
       </div>
     </div>

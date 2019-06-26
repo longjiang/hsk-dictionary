@@ -77,6 +77,19 @@ body {
   font-weight: bold;
 }
 
+@media(max-width: 576px) {
+  .label {
+    margin: 0 auto;
+    display: block;
+  }
+
+  .character-example-wrapper > div {
+    margin-bottom: 2rem;
+  }
+
+}
+
+
 .bg-hsk1,
 [data-bg-hsk="1"] {
   background-color: #f8b51e;
@@ -145,6 +158,7 @@ body {
   border: none;
   padding: 0.2rem 0.5rem;
   color: #8e8e8e;
+  margin: 0 auto;
 }
 
 
@@ -165,6 +179,19 @@ body {
 
 .example-image {
     max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+@media(max-width: 576px) {
+   .example-image {
+     max-width: 14rem;
+   }
+
+  .example-wrapper {
+    margin-top: 2rem;
+    text-align: center;
+  }
 }
 
 .mt1 {
