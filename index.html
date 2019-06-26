@@ -26,7 +26,7 @@
         <div class="row">
           <div class="col-sm-12">
             <h1 class="title">
-                <img src="img/logo-mark.png" class="logo" alt="">HSK Dictionary</h1>
+              <a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a>HSK Dictionary</h1>
             <input v-on:keyup.enter="lookup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
           </div>
         </div>
@@ -58,6 +58,7 @@
             <div class="pinyin">{{ entry['Pinyin'] }}</div>
             <h1 class="word"><span v-bind:data-hsk="entry['Book']">{{ entry['Word'] }}</h1>
             <p class="english">{{ entry['English'] }}</p>
+            <p class="learn-this">Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a></p>
         </div>
       </div>
       <div class="row mt1 character-example-wrapper">
