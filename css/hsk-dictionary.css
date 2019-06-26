@@ -1,0 +1,141 @@
+body {
+  color: #717171;
+}
+
+.top-bar {
+  background-color: #fd4f1c;
+  color: white;
+  padding-bottom: 2rem;
+}
+
+.example-bar {
+  background-color: #ececec;
+  overflow: hidden;
+  padding: 2rem 0;
+}
+
+.title {
+  margin: 2rem;
+  text-align: center;
+}
+
+.pinyin {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.word {
+  font-size: 6rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.entry {
+  padding: 2rem;
+}
+
+.hsk1 {
+  color: #f8b51e;
+}
+
+.hsk2 {
+  color: #267f94;
+}
+
+.hsk3 {
+  color: #fd4f1c;
+}
+
+.hsk4 {
+  color: #bb1718
+}
+
+.hsk5 {
+  color: #1b3e76
+}
+
+.hsk6 {
+  color: #6a3669;
+}
+
+.label {
+  width: 4rem;
+}
+
+.bg-hsk6 {
+  color: white;
+  background-color: #6a3669;
+  text-align: center;
+  font-weight: bold;
+}
+
+.character-examples {
+  list-style: none;
+  padding: 0;
+}
+
+.character-examples li {
+  margin: 0.5rem 0;
+}
+
+.character-examples.collapsed li:nth-child(n+5) {
+  display: none;
+}
+
+
+.character-example-word {
+  font-size: 1.4rem;
+  font-weight: bold;
+  /* font-weight: bold; */
+}
+
+.character-example-pinyin {
+  color: #969696;
+}
+
+
+.character-example-english {
+  font-style: italic;
+  color: #c1c1c1;
+}
+
+.hidden {
+  display: none;
+}
+
+.show-more {
+  display: block;
+  background: #efefef;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  color: #8e8e8e;
+}
+
+
+
+.example-sentence {
+  margin-top: 1rem;
+}
+
+.example-sentence p {
+  margin: 0;
+}
+
+.example-sentence-word {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+
+.example-image {
+    max-width: 100%;
+}
+
+.mt1 {
+  margin-top: 1rem;
+}
+
+.mt2 {
+  margin-top: 2rem;
+}
