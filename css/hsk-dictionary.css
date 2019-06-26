@@ -21,49 +21,76 @@ body {
 
 .pinyin {
   font-size: 1.2rem;
-  text-align: center;
   margin-top: 2rem;
 }
 
 .word {
   font-size: 6rem;
-  text-align: center;
-  margin-bottom: 2rem;
 }
 
 .entry {
   padding: 2rem;
 }
 
-.hsk1 {
+.hsk1,
+[data-hsk="1"] {
   color: #f8b51e;
 }
 
-.hsk2 {
+.hsk2,
+[data-hsk="2"] {
   color: #267f94;
 }
 
-.hsk3 {
+.hsk3,
+[data-hsk="3"] {
   color: #fd4f1c;
 }
 
-.hsk4 {
+.hsk4,
+[data-hsk="4"] {
   color: #bb1718
 }
 
-.hsk5 {
+.hsk5,
+[data-hsk="5"] {
   color: #1b3e76
 }
 
-.hsk6 {
+.hsk6,
+[data-hsk="6"] {
   color: #6a3669;
 }
 
 .label {
   width: 4rem;
+  color: white;
+  text-align: center;
+  font-weight: bold;
 }
 
-.bg-hsk6 {
+.bg-hsk1,
+[data-bg-hsk="1"] {
+  background-color: #f8b51e;
+}
+.bg-hsk2,
+[data-bg-hsk="2"] {
+  background-color: #267f94;
+}
+.bg-hsk3,
+[data-bg-hsk="3"] {
+  background-color: #fd4f1c;
+}
+.bg-hsk4,
+[data-bg-hsk="4"] {
+  background-color: #bb1718;
+}
+.bg-hsk5,
+[data-bg-hsk="5"] {
+  background-color: #1b3e76;
+}
+.bg-hsk6,
+[data-bg-hsk="6"] {
   color: white;
   background-color: #6a3669;
   text-align: center;
