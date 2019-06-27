@@ -98,30 +98,32 @@
           <div class="col-sm-12">
               <h4>Browse Words by Course</h4>
           </div>
-            <div class="col-sm-12">
-              <ul class="books mt1">
-                <li class="book" v-for="book, index in books" :data-book="index">
-                  <div class="book-title" v-on:click='bookClick' :data-bg-hsk="index">HSK {{ index }} Course</div>
-                  <ul class="lessons collapsed">
-                    <li v-for="lesson, index in book" :data-lesson="index">
-                      <div class="lesson-title" v-on:click='lessonClick'>Lesson {{ index }}</div>
-                      <ul class="dialogs collapsed">
-                        <li class="dialog" v-for="dialog, index in lesson" :data-dialog="index">
-                          <div class="dialog-title" v-on:click='dialogClick'>Part {{ index }}</div>
-                          <ul class="browse-words collapsed">
-                              <li class="browse-words-item character-example" v-for="row in dialog">
-                                <span class="character-example-word" :data-hsk="row['Book']"><a :href="'#' + row['Word']">{{ row['Word'] }}</a></span>
+          <div class="col-sm-12">
+            <ul class="books mt1">
+              <li class="book" v-for="book, index in books" :data-book="index">
+                <div class="book-title" v-on:click='bookClick' :data-bg-hsk="index">HSK {{ index }} Course</div>
+                <ul class="lessons collapsed">
+                  <li v-for="lesson, index in book" :data-lesson="index">
+                    <div class="lesson-title" v-on:click='lessonClick'>Lesson {{ index }}</div>
+                    <ul class="dialogs collapsed">
+                      <li class="dialog" v-for="dialog, index in lesson" :data-dialog="index">
+                        <div class="dialog-title" v-on:click='dialogClick'>Part {{ index }}</div>
+                        <ul class="browse-words collapsed">
+                            <li class="browse-words-item character-example" v-for="row in dialog">
+                              <a :href="'#' + row['Word']" >
+                                <span class="character-example-word" :data-hsk="row['Book']">{{ row['Word'] }}</span>
                                 <span class="character-example-pinyin">{{ row['Pinyin'] }}</span>
                                 <span class="character-example-english">{{ row['English'] }}</span>
-                              </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+                              </a>
+                            </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
           </div>
     </div>
 
