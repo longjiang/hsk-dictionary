@@ -27,7 +27,7 @@
           <div class="col-sm-12">
             <h1 class="title">
               <a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a>HSK Dictionary</h1>
-            <input v-on:keyup.enter="lookup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
+            <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
           </div>
         </div>
       </div>
