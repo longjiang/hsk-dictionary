@@ -118,12 +118,17 @@ body {
   font-weight: bold;
 }
 
+.parts {
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
 .character-examples {
   list-style: none;
   padding: 0;
 }
 
-.character-examples li {
+.character-example {
   margin: 0.5rem 0;
 }
 
@@ -158,7 +163,6 @@ body {
   border: none;
   padding: 0.2rem 0.5rem;
   color: #8e8e8e;
-  margin: 0 auto;
 }
 
 

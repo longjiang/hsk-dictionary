@@ -10,17 +10,6 @@ function find(word, dictionary) {
   return results
 }
 
-function findCharacterExamples(word, dictionary) {
-  characterExamples = []
-  word.split('').forEach(function(character) {
-    characterExamples.push({
-      character: character,
-      examples: find(character, dictionary)
-    })
-  })
-  return characterExamples;
-}
-
 function getImage(entry, app) {
   $.ajax('img/words/' + entry['Word'] + '.jpg').done(function() {
     app.image = 'img/words/' + entry['Word'] + '.jpg'
@@ -44,23 +33,50 @@ function show(word, app) {
 }
 
 function highlightSentence(entry) {
-  console.log(entry)
   var sentence = entry['Example']
   var word = entry['Word']
   var hsk = entry['Book']
   $('.example-sentence-word').html(sentence.replace(word, '<b class="hsk' + hsk + '">' + word + '</b>'))
 }
 
-function main(dictionary) {
+function lookupCharacter(character, characterDictionary) {
+  results = []
+  characterDictionary.forEach(function(row) {
+    if (row.character == character) {
+      results.push(row)
+    }
+  })
+  return results[0]
+}
+
+function getCharactersInWord(word, hskDictionary, characterDictionary) {
+  characters = []
+  word.split('').forEach(function(character) {
+    var entry = lookupCharacter(character, characterDictionary)
+    entry.examples = find(character, hskDictionary)
+    entry.parts = []
+    var parts = entry.decomposition.substring(1).split('')
+    parts.forEach(function(part){
+      partObj = lookupCharacter(part, characterDictionary)
+      entry.parts.push(partObj)
+    })
+    characters.push(entry)
+  })
+  return characters
+}
+
+function main(hskDictionary, characterDictionary) {
   var startWord = '固有'
-  var entry = find(startWord, dictionary)[0]
-  var characterExamples = findCharacterExamples(startWord, dictionary)
+  var entry = find(startWord, hskDictionary)[0]
+  var characters = getCharactersInWord(startWord, hskDictionary, characterDictionary)
   var app = new Vue({
     el: '#hsk-dictionary',
     data: {
-      dictionary: dictionary,
+      character: {},
+      hskDictionary: hskDictionary,
+      characterDictionary: characterDictionary,
       entry: entry,
-      characterExamples: characterExamples,
+      characters: characters,
       image: 'img/words/' + entry['Word'] + '.jpg',
       unsplashImage: 'https://source.unsplash.com/300x300/?' + entry['English'],
       hasImage: true
@@ -68,10 +84,10 @@ function main(dictionary) {
     methods: {
       lookup() {
         var word = $('#lookup').val()
-        var entry = find(word, this.dictionary)[0];
+        var entry = find(word, this.hskDictionary)[0];
         if (entry) {
           this.entry = entry
-          this.characterExamples = findCharacterExamples(word, dictionary)
+          this.characters = getCharactersInWord(word, hskDictionary, characterDictionary)
         }
         getImage(entry, app)
       }
@@ -94,10 +110,15 @@ function main(dictionary) {
   }
 }
 
-Papa.parse('data/HSK Standard Course 1-6-Table 1.csv', {
+
+
+
+Papa.parse('data/HSK 1-6 Vocabulary/HSK Standard Course 1-6-Table 1.csv', {
   download: true,
   header: true,
-  complete: function(results) {
-    main(results.data)
+  complete: function(csv) {
+    $.getJSON('data/dictionary.txt').done(function(characterDictionary) {
+      main(csv.data, characterDictionary)
+    })
   }
 })
