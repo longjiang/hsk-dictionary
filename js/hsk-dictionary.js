@@ -113,7 +113,13 @@ function lookupCharacter(character, characterDictionary) {
 
 function show(word, app) {
   $('#lookup').val(word)
-  app.lookupKeyupEnter()
+  var entry = lookupHsk(word, app.hskDictionary)[0];
+  if (entry) {
+    app.entry = entry
+    app.characters = getCharactersInWord(word, app.hskDictionary, app.characterDictionary)
+  }
+  getImage(entry, app)
+  location.hash = word
   app.initialized = true
   app.suggestions = []
 }
@@ -138,14 +144,9 @@ function main(hskDictionary, characterDictionary) {
     },
     methods: {
       lookupKeyupEnter() {
-        var word = $('#lookup').val()
-        var entry = lookupHsk(word, this.hskDictionary)[0];
-        if (entry) {
-          this.entry = entry
-          this.characters = getCharactersInWord(word, hskDictionary, characterDictionary)
-        }
-        getImage(entry, app)
-        location.hash = word
+        const url = $('.suggestion:first-child').attr('href')
+        window.location = url
+        $('.suggestion:first-child').get(0).click()
       },
       lookupKeyup(e) {
         app.suggestions = []
@@ -156,6 +157,9 @@ function main(hskDictionary, characterDictionary) {
             app.suggestions = suggestions
           })
         }
+      },
+      suggestionClick(e) {
+        app.suggestions = []
       }
     },
     updated: function() {

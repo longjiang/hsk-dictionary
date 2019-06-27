@@ -278,6 +278,7 @@ a.suggestion {
   text-decoration: none;
 }
 
-a.suggestion:hover {
+a.suggestion:hover,
+a.suggestion:first-child:not(:hover) {
   background: #ececec;
 }
