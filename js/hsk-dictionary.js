@@ -79,9 +79,10 @@ function removeToneMarks(pinyin) {
 
 function lookupHsk(word, hskDictionary) {
   var results = [];
-  hskDictionary.forEach(function(row) {
+  hskDictionary.forEach(function(row, index) {
     if (row['Word'] == word) {
       if (row['OofC'] == '' && row['PN'] == '') {
+        row.index = index
         results.push(row)
       }
     }
@@ -113,17 +114,32 @@ function lookupCharacter(character, characterDictionary) {
   return results[0]
 }
 
-function show(word, app) {
-  $('#lookup').val(word)
-  var entry = lookupHsk(word, app.hskDictionary)[0];
-  if (entry) {
-    app.entry = entry
-    app.characters = getCharactersInWord(word, app.hskDictionary, app.characterDictionary)
-  }
+function displayEntry(entry, app) {
+  app.entry = entry
+  app.index = entry.index
+  app.characters = getCharactersInWord(word, app.hskDictionary, app.characterDictionary)
   getImage(entry, app)
-  location.hash = word
+  location.hash = entry['Word']
   app.initialized = true
   app.suggestions = []
+  $('#lookup').val(entry['Word'])
+}
+
+function showIndex(index, app) {
+  if (index > 0 && index < app.hskDictionary.length) {
+    var entry = app.hskDictionary[index]
+    if (entry) {
+      entry.index = index
+      displayEntry(entry, app)
+    }
+  }
+}
+
+function showWord(word, app) {
+  var entry = lookupHsk(word, app.hskDictionary)[0];
+  if (entry) {
+    displayEntry(entry, app)
+  }
 }
 
 function main(hskDictionary, characterDictionary) {
@@ -138,6 +154,7 @@ function main(hskDictionary, characterDictionary) {
       characterDictionary: characterDictionary,
       entry: entry,
       characters: characters,
+      index: entry.index,
       image: 'img/words/' + entry['Word'] + '.jpg',
       unsplashImage: 'https://source.unsplash.com/300x300/?' + entry['English'],
       hasImage: true,
@@ -166,6 +183,14 @@ function main(hskDictionary, characterDictionary) {
           }
         }
       },
+      previousClick(e) {
+        showIndex(app.index - 1, app)
+        console.log(app.index)
+      },
+      nextClick(e) {
+        showIndex(app.index + 1, app)
+        console.log(app.index)
+      },
       suggestionClick(e) {
         app.suggestions = []
       }
@@ -184,11 +209,11 @@ function main(hskDictionary, characterDictionary) {
   })
   window.onhashchange = function() {
     word = decodeURI(location.hash.substr(1));
-    show(word, app)
+    showWord(word, app)
   }
   if (location.hash && location.hash.length > 1) {
     word = decodeURI(location.hash.substr(1));
-    show(word, app)
+    showWord(word, app)
   }
 }
 

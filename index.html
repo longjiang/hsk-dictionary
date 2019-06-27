@@ -63,12 +63,15 @@
     <div class="container" v-cloak v-if="initialized">
       <div class="row text-center">
         <div class="col-md-12">
+            <button class="paginate-button previous" v-on:click="previousClick"><img src="img/angle-left.svg" alt=""></button>
+            <button class="paginate-button next" v-on:click="nextClick"><img src="img/angle-right.svg" alt=""></button>
             <div class="pinyin">{{ entry['Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Word']"></div>
             <h1 class="word"><span v-bind:data-hsk="entry['Book']">{{ entry['Word'] }}</h1>
             <p class="english">{{ entry['English'] }}</p>
             <p class="learn-this">Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a></p>
         </div>
       </div>
+
       <div class="row mt1 character-example-wrapper">
         <div class="col-md-6" v-for="character in characters">
           <div><b class="character-example-word" v-html="character.animatedSvgLink"></b><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</div></span>
