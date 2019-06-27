@@ -27,7 +27,7 @@ function getCharactersInWord(word, hskDictionary, characterDictionary) {
   word.split('').forEach(function(character) {
     var entry = lookupCharacter(character, characterDictionary)
     entry.animatedSvgLink = animatedSvgLink(character)
-    entry.examples = lookupHsk(character, hskDictionary)
+    entry.examples = lookupHskFussy(character, hskDictionary)
     entry.parts = []
     var parts = entry.decomposition.substring(1).split('')
     parts.forEach(function(part){
