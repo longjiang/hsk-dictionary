@@ -40,6 +40,16 @@ body {
   font-size: 4.8rem;
 }
 
+.word img {
+  width: 4.8rem;
+  border: 1px solid #ccc;
+}
+
+.word a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
 .entry {
   padding: 2rem;
 }
@@ -157,6 +167,12 @@ body {
   color: #c1c1c1;
 }
 
+.character-example-word a,
+.parts a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
 .hidden {
   display: none;
 }
@@ -224,4 +240,18 @@ body {
   border-top: 1px solid #e6e6e6;
   border-bottom: 1px solid #e6e6e6;
   padding: 0.3rem;
+}
+
+footer {
+  padding: 2rem 0;
+  background: #3e3e3e;
+  color: #ccc;
+}
+
+footer a {
+  color: white;
+}
+
+footer a:hover {
+  color: white;
 }

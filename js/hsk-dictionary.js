@@ -53,16 +53,19 @@ function getCharactersInWord(word, hskDictionary, characterDictionary) {
   characters = []
   word.split('').forEach(function(character) {
     var entry = lookupCharacter(character, characterDictionary)
+    entry.animatedSvgLink = animatedSvgLink(character)
     entry.examples = find(character, hskDictionary)
     entry.parts = []
     var parts = entry.decomposition.substring(1).split('')
     parts.forEach(function(part){
       partObj = lookupCharacter(part, characterDictionary)
       if (partObj) {
+        partObj.animatedSvgLink = animatedSvgLink(part)
         entry.parts.push(partObj)
       } else {
         entry.parts.push({
-          character: part
+          character: part,
+          animatedSvgLink: animatedSvgLink(part)
         })
       }
     })
@@ -102,6 +105,7 @@ function main(hskDictionary, characterDictionary) {
     updated: function() {
       recalculateExampleColumns(this.entry['Word'])
       highlightSentence(this.entry)
+      a()
     }
   })
   $('.show-more').click(function() {
@@ -117,8 +121,21 @@ function main(hskDictionary, characterDictionary) {
   }
 }
 
+function animatedSvgLink(char) {
+  var charCode = char.charCodeAt(0)
+  return '<a href="data/svgs/' + charCode + '.svg">' + char + '</a>'
+}
 
-
+function a() {
+  var $word = $('.word span')
+  var $word = $word.text()
+  var chars = word.split('')
+  var html = ''
+  chars.forEach(function(char) {
+    html = html + animatedSvgLink(char)
+  })
+  $('.word span').html(html)
+}
 
 Papa.parse('data/HSK 1-6 Vocabulary/HSK Standard Course 1-6-Table 1.csv', {
   download: true,

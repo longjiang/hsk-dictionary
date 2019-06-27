@@ -44,10 +44,10 @@
       </div>
       <div class="row mt1 character-example-wrapper">
         <div class="col-md-6" v-for="character in characters">
-          <div><b class="character-example-word">{{ character.character }}</b><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</div></span>
+          <div><b class="character-example-word" v-html="character.animatedSvgLink"></b><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</div></span>
           <div class="parts">
             <div class="part character-example" v-for="part in character.parts">
-              <span class="part-part" v-if="part"><b>{{ part.character }}</b></span>
+              <span class="part-part" v-if="part"><b v-html="part.animatedSvgLink"></b></span>
               <span class="part-pinyin character-example-pinyin" v-if="part.pinyin">{{ part.pinyin[0] }}</span>
               <span class="part-definition character-example-english" v-if="part.definition">{{ part.definition }}</span>
               <span class="part-pinyin character-example-english" v-if="part.character == '？'">Other elements</span>
@@ -80,6 +80,16 @@
         </div>
       </div>
     </div>
+
+    <footer class="container-fluid" v-cloak>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <b>Credits</b>: Images made possible with <a href="https://source.unsplash.com/">Unsplash Source</a>, <a href="https://www.canva.com/photos/">Canva</a> and <a href="https://pixabay.com/">Pixabay</a>. Character component breakdown and stroke animation made possible by <a href="https://github.com/skishore/makemeahanzi">Make Me a Hanzi</a>. Example sentences and translation from <a href="http://www.jukuu.com/">Jukuu</a>. Pinyin annotation made possible by <a href="https://mandarinspot.com/annotate">Mandarin Spot</a>.
+          </div>
+        </div>
+      </div>
+    </footer>
 
   </div>
 
