@@ -109,6 +109,7 @@ function main(hskDictionary, characterDictionary) {
       attachSpeakEventHandler()
     }
   })
+  show(startWord, app)
   $('.show-more').click(function() {
     $(this).parent().find('.character-examples').toggleClass('collapsed')
   })
