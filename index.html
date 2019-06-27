@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Chinese Zero to Hero Dictionary</title>
+  <title>HSK Glossary | Chinese Zero to Hero</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +26,7 @@
         <div class="row">
           <div class="col-sm-12">
             <h1 class="title">
-              <a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a>HSK Dictionary</h1>
+              <a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a>HSK Glossary</h1>
             <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" v-on:focus="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
             <div class="suggestions" v-cloak v-if="suggestions.length > 0">
               <a :href="suggestion.href" v-on:click="suggestionClick" class="suggestion" v-for="suggestion in suggestions">
@@ -107,7 +107,7 @@
                       <div class="lesson-title" v-on:click='lessonClick'>Lesson {{ index }}</div>
                       <ul class="dialogs collapsed">
                         <li class="dialog" v-for="dialog, index in lesson" :data-dialog="index">
-                          <div class="dialog-title" v-on:click='dialogClick'>Dialog {{ index }}</div>
+                          <div class="dialog-title" v-on:click='dialogClick'>Part {{ index }}</div>
                         </li>
                       </ul>
                     </li>
