@@ -160,7 +160,7 @@ function main(hskDictionary, characterDictionary) {
           } else if (suggestions.length == 0) {
             app.suggestions = [{
               notFound: true,
-              Word: text,
+              text: text,
               href: "https://en.wiktionary.org/w/index.php?search=" + text
             }]
           }
