@@ -306,7 +306,8 @@ a.suggestion:first-child:not(:hover) {
 }
 
 .lessons.collapsed,
-.dialogs.collapsed {
+.dialogs.collapsed,
+.browse-words.collapsed {
   display: none;
 }
 
@@ -323,7 +324,6 @@ a.suggestion:first-child:not(:hover) {
     padding: 0;
 }
 
-
 .book-title {
     padding: 0.5rem 1rem;
     color: white;
@@ -332,19 +332,25 @@ a.suggestion:first-child:not(:hover) {
 
 .lesson-title {
     padding: 0.5rem 1rem;
-    padding-left: 1.5rem;
-    border-bottom: 1px solid #a7a7a7;
-    background: #e6e6e6;
+    border: 1px solid #4c4c4c;
+    border-top: none;
+    background: #676666;
+    margin-left: 1rem;
+    color: #f1f1f1;
 }
 
 .dialog-title {
     padding: 0.5rem 1rem;
-    padding-left: 3rem;
-    border-bottom: 1px solid #a0a0a0;
-    background: #cacaca;
+    margin-left: 2rem;
+    border: 1px solid #c5c5c5;
+    border-top: none;
+    background: #e4e4e4;
 }
 
 .browse-words {
   list-style: none;
   padding: 0;
+  background-color: #f9f9f9;
+  padding: 0.5rem 1rem;
+    margin-left: 3rem;
 }

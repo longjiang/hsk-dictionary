@@ -240,11 +240,9 @@ function main(hskDictionary, characterDictionary) {
       },
       previousClick(e) {
         showIndex(app.index - 1, app)
-        console.log(app.index)
       },
       nextClick(e) {
         showIndex(app.index + 1, app)
-        console.log(app.index)
       },
       suggestionClick(e) {
         app.suggestions = []

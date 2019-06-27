@@ -98,7 +98,7 @@
           <div class="col-sm-12">
               <h4>Browse Words by Course</h4>
           </div>
-            <div class="col-md-4">
+            <div class="col-sm-12">
               <ul class="books mt1">
                 <li class="book" v-for="book, index in books" :data-book="index">
                   <div class="book-title" v-on:click='bookClick' :data-bg-hsk="index">HSK {{ index }} Course</div>
@@ -108,20 +108,18 @@
                       <ul class="dialogs collapsed">
                         <li class="dialog" v-for="dialog, index in lesson" :data-dialog="index">
                           <div class="dialog-title" v-on:click='dialogClick'>Part {{ index }}</div>
+                          <ul class="browse-words collapsed">
+                              <li class="browse-words-item character-example" v-for="row in dialog">
+                                <span class="character-example-word" :data-hsk="row['Book']"><a :href="'#' + row['Word']">{{ row['Word'] }}</a></span>
+                                <span class="character-example-pinyin">{{ row['Pinyin'] }}</span>
+                                <span class="character-example-english">{{ row['English'] }}</span>
+                              </li>
+                          </ul>
                         </li>
                       </ul>
                     </li>
                   </ul>
                 </li>
-              </ul>
-            </div>
-            <div class="col-md-8">
-              <ul class="browse-words">
-                  <li class="browse-words-item character-example" v-for="row in wordList">
-                    <span class="character-example-word" :data-hsk="row['Book']"><a :href="'#' + row['Word']">{{ row['Word'] }}</a></span>
-                    <span class="character-example-pinyin">{{ row['Pinyin'] }}</span>
-                    <span class="character-example-english">{{ row['English'] }}</span>
-                  </li>
               </ul>
             </div>
           </div>
