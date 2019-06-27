@@ -142,6 +142,59 @@ function showWord(word, app) {
   }
 }
 
+function compileBooks(hskDictionary) {
+  // https://www.consolelog.io/group-by-in-javascript/
+  Array.prototype.groupBy = function(prop) {
+    return this.reduce(function(groups, item) {
+      const val = item[prop]
+      groups[val] = groups[val] || []
+      groups[val].push(item)
+      return groups
+    }, {})
+  }
+  books = hskDictionary.groupBy('Book')
+  for(var book in books) {
+    books[book] = books[book].groupBy('Lesson')
+    for(var lesson in books[book]) {
+      books[book][lesson] = books[book][lesson].groupBy('Dialog')
+    }
+  }
+  return books
+}
+
+function filterBook(book, hskDictionary) {
+  var getFilterFunction = function(book) {
+    return function(row) {
+      return row['Book'] == book
+    }
+  }
+  return hskDictionary.filter(getFilterFunction(book))
+}
+
+function filterLesson(book, lesson, hskDictionary) {
+  var getFilterFunction = function(book, lesson) {
+    return function(row) {
+      return row['Book'] == book && row['Lesson'] == lesson
+    }
+  }
+  return hskDictionary.filter(getFilterFunction(book, lesson))
+}
+
+function filterDialog(book, lesson, dialog, hskDictionary) {
+  var getFilterFunction = function(book, lesson, dialog) {
+    return function(row) {
+      return row['Book'] == book && row['Lesson'] == lesson && row['Dialog'] == dialog
+    }
+  }
+  return hskDictionary.filter(getFilterFunction(book, lesson, dialog))
+}
+
+function filterOofC(hskDictionary) {
+  return hskDictionary.filter(function(row) {
+    return row['OofC'] === ''
+  })
+}
+
 function main(hskDictionary, characterDictionary) {
   var startWord = '固有'
   var entry = lookupHsk(startWord, hskDictionary)[0]
@@ -151,8 +204,10 @@ function main(hskDictionary, characterDictionary) {
     data: {
       character: {},
       hskDictionary: hskDictionary,
+      wordList: filterOofC(hskDictionary),
       characterDictionary: characterDictionary,
       entry: entry,
+      books: compileBooks(hskDictionary),
       characters: characters,
       index: entry.index,
       image: 'img/words/' + entry['Word'] + '.jpg',
@@ -193,6 +248,27 @@ function main(hskDictionary, characterDictionary) {
       },
       suggestionClick(e) {
         app.suggestions = []
+      },
+      toggleCollapsed(e) {
+        $(e.target).next('ul').toggleClass('collapsed')
+      },
+      bookClick(e) {
+        var book = $(e.target).parents('[data-book]').attr('data-book')
+        this.wordList = filterBook(book, this.hskDictionary)
+        $(e.target).next('ul').toggleClass('collapsed')
+      },
+      lessonClick(e) {
+        var lesson = $(e.target).parents('[data-lesson]').attr('data-lesson')
+        var book = $(e.target).parents('[data-book]').attr('data-book')
+        this.wordList = filterLesson(book, lesson, this.hskDictionary)
+        $(e.target).next('ul').toggleClass('collapsed')
+      },
+      dialogClick(e) {
+        var dialog = $(e.target).parents('[data-dialog]').attr('data-dialog')
+        var lesson = $(e.target).parents('[data-lesson]').attr('data-lesson')
+        var book = $(e.target).parents('[data-book]').attr('data-book')
+        this.wordList = filterDialog(book, lesson, dialog, this.hskDictionary)
+        $(e.target).next('ul').toggleClass('collapsed')
       }
     },
     updated: function() {
@@ -209,7 +285,12 @@ function main(hskDictionary, characterDictionary) {
   })
   window.onhashchange = function() {
     word = decodeURI(location.hash.substr(1));
-    showWord(word, app)
+    if (word) {
+      showWord(word, app)
+    } else {
+      app.initialized = false
+    }
+    
   }
   if (location.hash && location.hash.length > 1) {
     word = decodeURI(location.hash.substr(1));

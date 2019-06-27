@@ -126,10 +126,7 @@ body {
 }
 .bg-hsk6,
 [data-bg-hsk="6"] {
-  color: white;
   background-color: #6a3669;
-  text-align: center;
-  font-weight: bold;
 }
 
 .parts {
@@ -306,4 +303,48 @@ a.suggestion:first-child:not(:hover) {
 
 .paginate-button.next {
   right: 0;
+}
+
+.lessons.collapsed,
+.dialogs.collapsed {
+  display: none;
+}
+
+.book-title,
+.lesson-title,
+.dialog-title {
+  cursor: pointer;
+}
+
+.books,
+.lessons,
+.dialogs {
+    list-style: none;
+    padding: 0;
+}
+
+
+.book-title {
+    padding: 0.5rem 1rem;
+    color: white;
+    font-weight: 500;
+}
+
+.lesson-title {
+    padding: 0.5rem 1rem;
+    padding-left: 1.5rem;
+    border-bottom: 1px solid #a7a7a7;
+    background: #e6e6e6;
+}
+
+.dialog-title {
+    padding: 0.5rem 1rem;
+    padding-left: 3rem;
+    border-bottom: 1px solid #a0a0a0;
+    background: #cacaca;
+}
+
+.browse-words {
+  list-style: none;
+  padding: 0;
 }

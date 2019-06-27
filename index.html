@@ -61,6 +61,7 @@
     </div>
 
     <div class="container" v-cloak v-if="initialized">
+
       <div class="row text-center">
         <div class="col-md-12">
             <button class="paginate-button previous" v-on:click="previousClick"><img src="img/angle-left.svg" alt=""></button>
@@ -89,6 +90,41 @@
           <button class="show-more">Show more / less</button>
         </div>
       </div>
+
+    </div>
+
+    <div class="container" v-cloak v-if="!initialized">
+        <div class="row mt2">
+          <div class="col-sm-12">
+              <h4>Browse Words by Course</h4>
+          </div>
+            <div class="col-md-4">
+              <ul class="books mt1">
+                <li class="book" v-for="book, index in books" :data-book="index">
+                  <div class="book-title" v-on:click='bookClick' :data-bg-hsk="index">HSK {{ index }} Course</div>
+                  <ul class="lessons collapsed">
+                    <li v-for="lesson, index in book" :data-lesson="index">
+                      <div class="lesson-title" v-on:click='lessonClick'>Lesson {{ index }}</div>
+                      <ul class="dialogs collapsed">
+                        <li class="dialog" v-for="dialog, index in lesson" :data-dialog="index">
+                          <div class="dialog-title" v-on:click='dialogClick'>Dialog {{ index }}</div>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-8">
+              <ul class="browse-words">
+                  <li class="browse-words-item character-example" v-for="row in wordList">
+                    <span class="character-example-word" :data-hsk="row['Book']"><a :href="'#' + row['Word']">{{ row['Word'] }}</a></span>
+                    <span class="character-example-pinyin">{{ row['Pinyin'] }}</span>
+                    <span class="character-example-english">{{ row['English'] }}</span>
+                  </li>
+              </ul>
+            </div>
+          </div>
     </div>
 
     <footer class="container-fluid mt2" v-cloak v-if="initialized">
@@ -102,6 +138,7 @@
     </footer>
 
   </div>
+
 
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
