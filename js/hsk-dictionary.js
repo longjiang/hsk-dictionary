@@ -125,7 +125,7 @@ function main(hskDictionary, characterDictionary) {
 
 function animatedSvgLink(char) {
   var charCode = char.charCodeAt(0)
-  return '<a href="data/svgs/' + charCode + '.svg">' + char + '</a>'
+  return '<a href="data/svgs/' + charCode + '.svg" target="_blank">' + char + '</a>'
 }
 
 function addAnimatedSvgLinks() {
