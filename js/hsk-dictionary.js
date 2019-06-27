@@ -109,7 +109,6 @@ function main(hskDictionary, characterDictionary) {
       attachSpeakEventHandler()
     }
   })
-  show(startWord, app)
   $('.show-more').click(function() {
     $(this).parent().find('.character-examples').toggleClass('collapsed')
   })
@@ -120,12 +119,14 @@ function main(hskDictionary, characterDictionary) {
   if (location.hash && location.hash.length > 1) {
     word = decodeURI(location.hash.substr(1));
     show(word, app)
+  } else {
+    show(startWord, app)
   }
 }
 
 function animatedSvgLink(char) {
   var charCode = char.charCodeAt(0)
-  return '<a href="data/svgs/' + charCode + '.svg" target="_blank">' + char + '</a>'
+  return '<a href="data/svgs/' + charCode + '.svg">' + char + '</a>'
 }
 
 function addAnimatedSvgLinks() {
