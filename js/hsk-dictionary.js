@@ -94,6 +94,7 @@ function lookupHskFussy(word, hskDictionary) {
   hskDictionary.forEach(function(row) {
     if (row['Word'].includes(word) || removeToneMarks(row['Pinyin']).includes(word) || row['English'].includes(word)) {
       if (row['OofC'] == '') {
+        row.href = '#' + row['Word']
         results.push(row)
       }
     }
@@ -152,10 +153,14 @@ function main(hskDictionary, characterDictionary) {
         app.suggestions = []
         var text = e.target.value
         var suggestions = lookupHskFussy(text, hskDictionary)
-        if (suggestions) {
-          suggestions.forEach(function(row){
-            app.suggestions = suggestions
-          })
+        if (suggestions > 0) {
+          app.suggestions = suggestions
+        } else if (suggestions.length == 0) {
+          app.suggestions = [{
+            notFound: true,
+            text: text,
+            href: "https://en.wiktionary.org/w/index.php?search=" + text
+          }]
         }
       },
       suggestionClick(e) {
