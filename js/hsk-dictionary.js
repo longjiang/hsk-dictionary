@@ -72,11 +72,28 @@ function attachSpeakEventHandler() {
   })
 }
 
+function removeToneMarks(pinyin) {
+  // See https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+  return pinyin.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+}
+
 function lookupHsk(word, hskDictionary) {
   var results = [];
   hskDictionary.forEach(function(row) {
-    if (row['Word'].includes(word)) {
+    if (row['Word'] == word) {
       if (row['OofC'] == '' && row['PN'] == '') {
+        results.push(row)
+      }
+    }
+  })
+  return results
+}
+
+function lookupHskFussy(word, hskDictionary) {
+  var results = []
+  hskDictionary.forEach(function(row) {
+    if (row['Word'].includes(word) || removeToneMarks(row['Pinyin']).includes(word) || row['English'].includes(word)) {
+      if (row['OofC'] == '') {
         results.push(row)
       }
     }
@@ -97,6 +114,8 @@ function lookupCharacter(character, characterDictionary) {
 function show(word, app) {
   $('#lookup').val(word)
   app.lookupKeyupEnter()
+  app.initialized = true
+  app.suggestions = []
 }
 
 function main(hskDictionary, characterDictionary) {
@@ -113,7 +132,9 @@ function main(hskDictionary, characterDictionary) {
       characters: characters,
       image: 'img/words/' + entry['Word'] + '.jpg',
       unsplashImage: 'https://source.unsplash.com/300x300/?' + entry['English'],
-      hasImage: true
+      hasImage: true,
+      suggestions: [],
+      initialized: false
     },
     methods: {
       lookupKeyupEnter() {
@@ -127,14 +148,23 @@ function main(hskDictionary, characterDictionary) {
         location.hash = word
       },
       lookupKeyup(e) {
+        app.suggestions = []
         var text = e.target.value
+        var suggestions = lookupHskFussy(text, hskDictionary)
+        if (suggestions) {
+          suggestions.forEach(function(row){
+            app.suggestions = suggestions
+          })
+        }
       }
     },
     updated: function() {
-      recalculateExampleColumns(this.entry['Word'])
-      highlightSentence(this.entry)
-      addAnimatedSvgLinks()
-      attachSpeakEventHandler()
+      if (app.initialized) {
+        recalculateExampleColumns(this.entry['Word'])
+        highlightSentence(this.entry)
+        addAnimatedSvgLinks()
+        attachSpeakEventHandler()
+      }
     }
   })
   $('.show-more').click(function() {
@@ -147,8 +177,6 @@ function main(hskDictionary, characterDictionary) {
   if (location.hash && location.hash.length > 1) {
     word = decodeURI(location.hash.substr(1));
     show(word, app)
-  } else {
-    show(startWord, app)
   }
 }
 
