@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" v-cloak>
       <div class="row text-center">
         <div class="col-md-12">
             <div class="pinyin">{{ entry['Pinyin'] }}</div>
@@ -44,12 +44,13 @@
       </div>
       <div class="row mt1 character-example-wrapper">
         <div class="col-md-6" v-for="character in characters">
-          <div><b class="character-example-word">{{ character.character }}</b> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em>{{ character.etymology.type }}</em></b> character made up of:</div>
+          <div><b class="character-example-word">{{ character.character }}</b><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</div></span>
           <div class="parts">
             <div class="part character-example" v-for="part in character.parts">
               <span class="part-part" v-if="part"><b>{{ part.character }}</b></span>
-              <span class="part-pinyin character-example-pinyin" v-if="part">{{ part.pinyin[0] }}</span>
-              <span class="part-definition character-example-english" v-if="part">{{ part.definition }}</span>
+              <span class="part-pinyin character-example-pinyin" v-if="part.pinyin">{{ part.pinyin[0] }}</span>
+              <span class="part-definition character-example-english" v-if="part.definition">{{ part.definition }}</span>
+              <span class="part-pinyin character-example-english" v-if="part.character == '？'">Other elements</span>
             </div>
           </div>
           <ul class="character-examples collapsed">
@@ -61,7 +62,7 @@
     </div>
     
 
-    <div class="container-fluid example-bar mt2">
+    <div class="container-fluid example-bar mt2" v-cloak>
       <div class="container">
         <div class="row">
           <div class="col-md-3">

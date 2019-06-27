@@ -2,6 +2,10 @@ body {
   color: #717171;
 }
 
+[v-cloak] {
+  display: none
+}
+
 .logo {
   max-width: 15rem;
   margin: 0 auto;

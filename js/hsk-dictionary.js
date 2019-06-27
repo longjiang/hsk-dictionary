@@ -58,7 +58,13 @@ function getCharactersInWord(word, hskDictionary, characterDictionary) {
     var parts = entry.decomposition.substring(1).split('')
     parts.forEach(function(part){
       partObj = lookupCharacter(part, characterDictionary)
-      entry.parts.push(partObj)
+      if (partObj) {
+        entry.parts.push(partObj)
+      } else {
+        entry.parts.push({
+          character: part
+        })
+      }
     })
     characters.push(entry)
   })
@@ -90,6 +96,7 @@ function main(hskDictionary, characterDictionary) {
           this.characters = getCharactersInWord(word, hskDictionary, characterDictionary)
         }
         getImage(entry, app)
+        location.hash = word
       }
     },
     updated: function() {
