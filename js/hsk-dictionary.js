@@ -91,8 +91,9 @@ function lookupHsk(word, hskDictionary) {
 
 function lookupHskFussy(word, hskDictionary) {
   var results = []
+  word = word.toLowerCase()
   hskDictionary.forEach(function(row) {
-    if (row['Word'].includes(word) || removeToneMarks(row['Pinyin']).includes(word) || row['English'].includes(word)) {
+    if (row['Word'].includes(word) || removeToneMarks(row['Pinyin']).toLowerCase().includes(word) || row['English'].toLowerCase().includes(word)) {
       if (row['OofC'] == '') {
         row.href = '#' + row['Word']
         results.push(row)
@@ -152,15 +153,17 @@ function main(hskDictionary, characterDictionary) {
       lookupKeyup(e) {
         app.suggestions = []
         var text = e.target.value
-        var suggestions = lookupHskFussy(text, hskDictionary)
-        if (suggestions > 0) {
-          app.suggestions = suggestions
-        } else if (suggestions.length == 0) {
-          app.suggestions = [{
-            notFound: true,
-            text: text,
-            href: "https://en.wiktionary.org/w/index.php?search=" + text
-          }]
+        if (text !== '') {
+          var suggestions = lookupHskFussy(text, hskDictionary)
+          if (suggestions.length > 0) {
+            app.suggestions = suggestions
+          } else if (suggestions.length == 0) {
+            app.suggestions = [{
+              notFound: true,
+              Word: text,
+              href: "https://en.wiktionary.org/w/index.php?search=" + text
+            }]
+          }
         }
       },
       suggestionClick(e) {
