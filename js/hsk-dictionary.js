@@ -105,7 +105,8 @@ function main(hskDictionary, characterDictionary) {
     updated: function() {
       recalculateExampleColumns(this.entry['Word'])
       highlightSentence(this.entry)
-      a()
+      addAnimatedSvgLinks()
+      attachSpeakEventHandler()
     }
   })
   $('.show-more').click(function() {
@@ -126,7 +127,7 @@ function animatedSvgLink(char) {
   return '<a href="data/svgs/' + charCode + '.svg">' + char + '</a>'
 }
 
-function a() {
+function addAnimatedSvgLinks() {
   var $word = $('.word span')
   var $word = $word.text()
   var chars = word.split('')
@@ -135,6 +136,15 @@ function a() {
     html = html + animatedSvgLink(char)
   })
   $('.word span').html(html)
+}
+
+function attachSpeakEventHandler() {
+  $('.speak').off().click(function() {
+    var text = $(this).attr('data-speak')
+    var utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'zh-CN'
+    speechSynthesis.speak(utterance)
+  })
 }
 
 Papa.parse('data/HSK 1-6 Vocabulary/HSK Standard Course 1-6-Table 1.csv', {
