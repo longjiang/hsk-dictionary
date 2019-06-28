@@ -116,11 +116,31 @@
       </div>
     </div>
 
-    <div class="container-fluid example-bar mt1" v-cloak v-if="initialized">
+    <div class="container-fluid learn-this-bar mt1" :data-bg-hsk="entry['Book']" v-cloak v-if="initialized">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
             Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-flud lyrics-bar" v-cloak v-if="initialized && entry['Song Lyrics'] != ''">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="youtube">
+              <iframe :src="entry['Song YouTube'].replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="lyrics">
+              <h5 class="song-label">Learn with a song</h5>
+              <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
+              <p class="lyrics-word">{{ entry['Song Lyrics'] }}</p>
+              <p class="lyrics-english">{{ entry['Song Translation'] }}</p>
+            </div>
           </div>
         </div>
       </div>

@@ -25,7 +25,7 @@ body {
   margin-top: 0.5rem;
 }
 
-@media(max-width: 576px) {
+@media(max-width: 768px) {
   .logo {
     border-right: none;
     display: block;
@@ -106,7 +106,7 @@ body {
   font-weight: bold;
 }
 
-@media(max-width: 576px) {
+@media(max-width: 768px) {
   .label {
     margin: 0 auto;
     display: block;
@@ -202,11 +202,13 @@ body {
   margin-top: 1rem;
 }
 
-.example-sentence p {
+.example-sentence p,
+.lyrics p {
   margin: 0;
 }
 
-.example-sentence-word {
+.example-sentence-word,
+.lyrics-word {
   font-weight: bold;
   font-size: 1.5rem;
 }
@@ -217,11 +219,15 @@ body {
   margin: 0 auto;
 }
 
-@media(max-width: 576px) {
+@media(max-width: 768px) {
   .example-image {
     max-width: 14rem;
   }
   .example-wrapper {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  .lyrics {
     margin-top: 2rem;
     text-align: center;
   }
@@ -388,4 +394,42 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 
 #character-table th {
   cursor: pointer;
+}
+
+
+.lyrics-bar {
+  background: #ececec;
+  padding: 3rem 0;
+}
+
+.youtube {
+  padding-bottom: 56.25%;
+  position: relative;
+}
+
+.youtube iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.lyrics {
+  padding-left: 2rem;
+}
+
+.song-label {
+  background: #4e4e4e;
+  color: white;
+  padding: 0.5rem;
+  display: inline-block;
+  font-size: 1rem;
+}
+
+.learn-this-bar,
+.learn-this-bar a {
+  padding: 1.5rem 0;
+  color: white;
+  font-size: 1.2rem;
 }

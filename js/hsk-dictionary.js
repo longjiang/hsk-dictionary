@@ -20,6 +20,10 @@ function highlightSentence(entry) {
   var word = entry['Word']
   var hsk = entry['Book']
   $('.example-sentence-word').html(sentence.replace(word, '<b class="hsk' + hsk + '">' + word + '</b>'))
+  if (entry['Song Lyrics'] != '') {
+    var sentence = entry['Song Lyrics']
+    $('.lyrics-word').html(sentence.replace(word, '<b class="hsk' + hsk + '">' + word + '</b>'))
+  }
 }
 
 function getCharactersInWord(word, hskDictionary, characterDictionary) {
