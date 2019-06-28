@@ -243,6 +243,9 @@ function main(hskDictionary, characterDictionary) {
           }
         }
       },
+      backToBrowse() {
+        this.initialized = false
+      },
       previousClick(e) {
         showIndex(app.index - 1, app)
       },
