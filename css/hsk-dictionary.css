@@ -167,6 +167,10 @@ body {
   margin: 0.5rem 0;
 }
 
+.character-example a {
+  text-decoration: none;
+}
+
 .character-examples.collapsed li:nth-child(n+5) {
   display: none;
 }
