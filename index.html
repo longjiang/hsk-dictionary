@@ -28,7 +28,7 @@
             <h1 class="title">
               <a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a>HSK Glossary</h1>
             <div class="input-group">
-              <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" v-on:focus="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
+              <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" v-on:change="lookupKeyup" v-on:focus="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
               <div class="input-group-append">
                 <button class="btn btn-primary lookup-button" v-on:click="lookupButtonClick" type="button">Search</button>
               </div>
