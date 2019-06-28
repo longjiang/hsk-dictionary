@@ -244,7 +244,7 @@ function main(hskDictionary, characterDictionary) {
         }
       },
       backToBrowse() {
-        this.initialized = false
+        location.hash = ""
       },
       previousClick(e) {
         showIndex(app.index - 1, app)
