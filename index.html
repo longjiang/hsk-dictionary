@@ -79,8 +79,18 @@
     <div class="container-fluid example-bar mt1" v-cloak v-if="initialized && entry['OofC'] !== ''">
       <div class="container">
         <div class="row">
-          <div class="col-sm-12">
-            This word is not required in HSK {{ entry['Book'] }} but is covered in our <a href="https://courses.chinesezerotohero.com/" data-hsk="5" class="video-course">HSK {{ entry['Book'] }} Video Course</a> as an optional vocabulary word.
+          <div class="col-sm-12 text-center">
+            This word is not required in HSK {{ entry['Book'] }} but is covered in our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry['Book']" class="video-course">HSK {{ entry['Book'] }} Video Course</a> as an optional vocabulary word.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid example-bar mt1" v-cloak v-if="initialized && entry['PN'] !== ''">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 text-center">
+            This is a <b><em>proper noun</em></b> that appeared in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry['Book']" class="video-course">HSK {{ entry['Book'] }} Video Course</a>.
           </div>
         </div>
       </div>
@@ -104,10 +114,15 @@
           <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick"><span class="label-expand">More</span><span class="label-collapse">Collapse</span></button>
         </div>
       </div>
-      <div class="row mt2">
-        <div class="col-sm-12 text-center">
-            <p class="learn-this">Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a></p>
+    </div>
+
+    <div class="container-fluid example-bar mt1" v-cloak v-if="initialized">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 text-center">
+            Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a>
           </div>
+        </div>
       </div>
     </div>
 
@@ -145,7 +160,7 @@
           </div>
     </div>
 
-    <footer class="container-fluid mt1" v-cloak v-if="initialized">
+    <footer class="container-fluid" v-cloak v-if="initialized">
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
