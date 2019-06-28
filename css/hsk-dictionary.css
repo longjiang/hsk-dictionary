@@ -44,7 +44,6 @@ body {
 .top-bar {
   background-color: #3a3a3a;
   color: white;
-  padding-bottom: 2rem;
 }
 
 .example-bar {
@@ -234,6 +233,22 @@ body {
 
 .mt2 {
   margin-top: 2rem;
+}
+
+.mb1 {
+  margin-bottom: 1rem;
+}
+
+.mb2 {
+  margin-bottom: 2rem;
+}
+
+.pb1 {
+  padding-bottom: 1rem;
+}
+
+.pb2 {
+  padding-bottom: 2rem;
 }
 
 .video-course {
