@@ -313,6 +313,10 @@ a.suggestion:first-child:not(:hover) {
   display: none;
 }
 
+.browse-words a {
+  text-decoration: none;
+}
+
 .book-title,
 .lesson-title,
 .dialog-title {
