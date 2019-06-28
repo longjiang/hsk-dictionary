@@ -365,3 +365,7 @@ a.suggestion:first-child:not(:hover) {
   padding: 0.5rem 1rem;
     margin-left: 3rem;
 }
+
+.title-text {
+  display: inline-block;
+}
