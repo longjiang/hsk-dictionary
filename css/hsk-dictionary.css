@@ -14,6 +14,34 @@ body {
   border-right: 1px solid rgba(255, 255, 255, 0.5);
 }
 
+
+.title {
+  margin: 1rem 0;
+  text-align: left;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.title-text {
+  margin-top: 0.5rem;
+}
+
+@media(max-width: 576px) {
+  .logo {
+    border-right: none;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .title-text {
+    padding-top: 0.5rem;
+    display: block;
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    text-align: center;
+  }
+}
+
+
 .top-bar {
   background-color: #3a3a3a;
   color: white;
@@ -24,13 +52,6 @@ body {
   background-color: #ececec;
   overflow: hidden;
   padding: 2rem 0;
-}
-
-.title {
-  margin: 1rem 0;
-  text-align: left;
-  font-size: 1.5rem;
-  cursor: pointer;
 }
 
 .pinyin {
@@ -364,8 +385,4 @@ a.suggestion:first-child:not(:hover) {
   background-color: #f9f9f9;
   padding: 0.5rem 1rem;
     margin-left: 3rem;
-}
-
-.title-text {
-  display: inline-block;
 }
