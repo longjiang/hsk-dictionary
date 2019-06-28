@@ -61,7 +61,11 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="character in characters" v-if="character.data">
+                <tr
+                  v-for="character in characters"
+                  v-if="character.data"
+                  v-cloak
+                >
                   <td>
                     <b>{{ character.character }}</b>
                     <span class="character-example-pinyin">{{
@@ -146,6 +150,11 @@
                         >
                       </li>
                     </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Loading...
                   </td>
                 </tr>
               </tbody>
