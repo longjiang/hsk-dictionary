@@ -47,7 +47,6 @@
     </div>
 
     <div class="container" v-cloak v-if="initialized">
-
       <div class="row text-center">
         <div class="col-md-12">
             <button class="paginate-button previous" v-on:click="previousClick"><img src="img/angle-left.svg" alt=""></button>
@@ -55,10 +54,30 @@
             <div class="pinyin">{{ entry['Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Word']"></div>
             <h1 class="word"><span v-bind:data-hsk="entry['Book']">{{ entry['Word'] }}</h1>
             <p class="english">{{ entry['English'] }}</p>
-            <p class="learn-this">Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a></p>
         </div>
       </div>
+    </div>
 
+    <div class="container-fluid example-bar mt1" v-cloak v-if="initialized">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+              <img v-bind:src="image" class="example-image" v-if="hasImage">
+              <img v-bind:src="unsplashImage" class="example-image" alt="" v-else="hasImage">
+          </div>
+          <div class="col-md-9 example-wrapper">
+              <div class="label" v-bind:data-bg-hsk="entry['Book']">HSK {{ entry['Book'] }}</div>
+              <div class="example-sentence">
+                <p class="example-sentence-pinyin">{{ entry['Example Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Example']"></p>
+                <p class="example-sentence-word">{{ entry['Example'] }}</p>
+                <p class="example-sentence-english">{{ entry['Translation'] }}</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container mt2" v-cloak v-if="initialized">
       <div class="row mt1 character-example-wrapper">
         <div class="col-md-6" v-for="character in characters">
           <div><b class="character-example-word" v-html="character.animatedSvgLink"></b><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</div></span>
@@ -76,11 +95,15 @@
           <button class="show-more">Show more / less</button>
         </div>
       </div>
-
+      <div class="row mt2">
+        <div class="col-sm-12 text-center">
+            <p class="learn-this">Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a></p>
+          </div>
+      </div>
     </div>
 
-    <div class="container" v-cloak v-if="!initialized">
-        <div class="row mt2">
+    <div class="container mt2" v-cloak v-if="!initialized">
+        <div class="row">
           <div class="col-sm-12">
               <h4>Browse Words by Course</h4>
           </div>
@@ -113,26 +136,7 @@
           </div>
     </div>
 
-    <div class="container-fluid example-bar mt2" v-cloak  v-if="initialized">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3">
-              <img v-bind:src="image" class="example-image" v-if="hasImage">
-              <img v-bind:src="unsplashImage" class="example-image" alt="" v-else="hasImage">
-          </div>
-          <div class="col-md-9 example-wrapper">
-              <div class="label" v-bind:data-bg-hsk="entry['Book']">HSK {{ entry['Book'] }}</div>
-              <div class="example-sentence">
-                <p class="example-sentence-pinyin">{{ entry['Example Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Example']"></p>
-                <p class="example-sentence-word">{{ entry['Example'] }}</p>
-                <p class="example-sentence-english">{{ entry['Translation'] }}</p>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <footer class="container-fluid" v-cloak v-if="initialized">
+    <footer class="container-fluid mt1" v-cloak v-if="initialized">
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
