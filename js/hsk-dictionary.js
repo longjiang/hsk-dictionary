@@ -243,6 +243,10 @@ function main(hskDictionary, characterDictionary) {
           }
         }
       },
+      showMoreClick(e) {
+        $(e.target).parents().find('.character-examples').toggleClass('collapsed')
+        $(e.target).parents().find('.show-more').toggleClass('collapsed')
+      },
       backToBrowse() {
         location.hash = ""
       },
@@ -285,9 +289,6 @@ function main(hskDictionary, characterDictionary) {
         attachSpeakEventHandler()
       }
     }
-  })
-  $('.show-more').click(function() {
-    $(this).parent().lookupHsk('.character-examples').toggleClass('collapsed')
   })
   window.onhashchange = function() {
     word = decodeURI(location.hash.substr(1));

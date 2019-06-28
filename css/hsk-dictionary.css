@@ -184,6 +184,11 @@ body {
   color: #8e8e8e;
 }
 
+.collapsed > .label-collapse,
+:not(.collapsed) > .label-expand {
+  display: none;
+}
+
 .example-sentence {
   margin-top: 1rem;
 }
