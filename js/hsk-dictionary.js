@@ -242,8 +242,9 @@ function main(hskDictionary, characterDictionary) {
         }
       },
       showMoreClick(e) {
-        $(e.target).parents().find('.character-examples').first().toggleClass('collapsed')
-        $(e.target).parents().find('.show-more').first().toggleClass('collapsed')
+        $button = $(e.currentTarget);
+        $button.prev().toggleClass('collapsed')
+        $button.toggleClass('collapsed')
       },
       backToBrowse() {
         location.hash = ""
