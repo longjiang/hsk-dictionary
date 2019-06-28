@@ -46,25 +46,6 @@
       </div>
     </div>
 
-    <div class="container-fluid example-bar" v-cloak  v-if="initialized">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3">
-              <img v-bind:src="image" class="example-image" v-if="hasImage">
-              <img v-bind:src="unsplashImage" class="example-image" alt="" v-else="hasImage">
-          </div>
-          <div class="col-md-9 example-wrapper">
-              <div class="label" v-bind:data-bg-hsk="entry['Book']">HSK {{ entry['Book'] }}</div>
-              <div class="example-sentence">
-                <p class="example-sentence-pinyin">{{ entry['Example Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Example']"></p>
-                <p class="example-sentence-word">{{ entry['Example'] }}</p>
-                <p class="example-sentence-english">{{ entry['Translation'] }}</p>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="container" v-cloak v-if="initialized">
 
       <div class="row text-center">
@@ -132,7 +113,26 @@
           </div>
     </div>
 
-    <footer class="container-fluid mt2" v-cloak v-if="initialized">
+    <div class="container-fluid example-bar mt2" v-cloak  v-if="initialized">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">
+              <img v-bind:src="image" class="example-image" v-if="hasImage">
+              <img v-bind:src="unsplashImage" class="example-image" alt="" v-else="hasImage">
+          </div>
+          <div class="col-md-9 example-wrapper">
+              <div class="label" v-bind:data-bg-hsk="entry['Book']">HSK {{ entry['Book'] }}</div>
+              <div class="example-sentence">
+                <p class="example-sentence-pinyin">{{ entry['Example Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Example']"></p>
+                <p class="example-sentence-word">{{ entry['Example'] }}</p>
+                <p class="example-sentence-english">{{ entry['Translation'] }}</p>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="container-fluid" v-cloak v-if="initialized">
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
