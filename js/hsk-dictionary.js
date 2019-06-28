@@ -242,8 +242,8 @@ function main(hskDictionary, characterDictionary) {
         }
       },
       showMoreClick(e) {
-        $(e.target).parents().find('.character-examples').toggleClass('collapsed')
-        $(e.target).parents().find('.show-more').toggleClass('collapsed')
+        $(e.target).parents().find('.character-examples').first().toggleClass('collapsed')
+        $(e.target).parents().find('.show-more').first().toggleClass('collapsed')
       },
       backToBrowse() {
         location.hash = ""
