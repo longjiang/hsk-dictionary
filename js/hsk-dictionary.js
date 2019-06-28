@@ -293,7 +293,7 @@ function main(hskDictionary, characterDictionary) {
     } else {
       app.initialized = false
     }
-    
+    window.scrollTo(0,0)
   }
   if (location.hash && location.hash.length > 1) {
     word = decodeURI(location.hash.substr(1));
