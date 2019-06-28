@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>HSK Glossary | Chinese Zero to Hero</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/hsk-dictionary.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- Page Content -->
+
+    <div id="roots">
+      <div class="container-fluid top-bar">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <h1 class="title">
+                <a href="https://www.chinesezerotohero.com">
+                  <img src="img/logo-mark.png" class="logo" alt="" />
+                </a>
+                <span class="title-text">Roots</span>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt2">
+        <div class="row">
+          <div class="col-sm-12">
+            <p>Click on table headers to <b>sort</b>.</p>
+            <p><b>Click on a number</b> to see examples.</p>
+            <table class="table" id="character-table">
+              <thead>
+                <tr>
+                  <th v-on:click="tableHeadingClick" data-field="character">
+                    Character
+                  </th>
+                  <th v-on:click="tableHeadingClick" data-field="first">
+                    As First Char.
+                  </th>
+                  <th v-on:click="tableHeadingClick" data-field="middle">
+                    As Middle Char.
+                  </th>
+                  <th v-on:click="tableHeadingClick" data-field="last">
+                    As Last Char.
+                  </th>
+                  <th v-on:click="tableHeadingClick" data-field="any">
+                    Anywhere
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="character in characters" v-if="character.data">
+                  <td>
+                    <b>{{ character.character }}</b>
+                    <span class="character-example-pinyin">{{
+                      character.data.pinyin[0]
+                    }}</span>
+                  </td>
+                  <td>
+                    <div class="count" v-on:click="countClick">
+                      {{ character["first"].length }}
+                    </div>
+                    <ul class="character-examples hidden">
+                      <li
+                        v-for="word in character['first']"
+                        class="character-example"
+                      >
+                        <a
+                          class="character-example-word"
+                          :data-hsk="word['Book']"
+                          :href="'index.html#' + word['Word']"
+                          >{{ word["Word"] }}</a
+                        >
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <div class="count" v-on:click="countClick">
+                      {{ character["middle"].length }}
+                    </div>
+                    <ul class="character-examples hidden">
+                      <li
+                        v-for="word in character['middle']"
+                        class="character-example"
+                      >
+                        <a
+                          class="character-example-word"
+                          :data-hsk="word['Book']"
+                          :href="'index.html#' + word['Word']"
+                          >{{ word["Word"] }}</a
+                        >
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <div class="count" v-on:click="countClick">
+                      {{ character["last"].length }}
+                    </div>
+                    <ul class="character-examples hidden">
+                      <li
+                        v-for="word in character['last']"
+                        class="character-example"
+                      >
+                        <a
+                          class="character-example-word"
+                          :data-hsk="word['Book']"
+                          :href="'index.html#' + word['Word']"
+                          >{{ word["Word"] }}</a
+                        >
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <div
+                      class="count"
+                      v-on:click="countClick"
+                      style="font-weight: bold"
+                    >
+                      {{ character["any"].length }}
+                    </div>
+                    <ul class="character-examples hidden">
+                      <li
+                        v-for="word in character['any']"
+                        class="character-example"
+                      >
+                        <a
+                          class="character-example-word"
+                          :data-hsk="word['Book']"
+                          :href="'index.html#' + word['Word']"
+                          >{{ word["Word"] }}</a
+                        >
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/vue/vue.js"></script>
+    <script src="vendor/papaparse/papaparse.min.js"></script>
+    <script src="js/roots.js"></script>
+    <script></script>
+  </body>
+</html>
