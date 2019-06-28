@@ -81,10 +81,8 @@ function lookupHsk(word, hskDictionary) {
   var results = [];
   hskDictionary.forEach(function(row, index) {
     if (row['Word'] == word) {
-      if (row['OofC'] == '' && row['PN'] == '') {
-        row.index = index
-        results.push(row)
-      }
+      row.index = index
+      results.push(row)
     }
   })
   return results
