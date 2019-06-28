@@ -27,7 +27,12 @@
           <div class="col-sm-12">
             <h1 class="title">
               <a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a>HSK Glossary</h1>
-            <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" v-on:focus="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
+            <div class="input-group">
+              <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" v-on:focus="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
+              <div class="input-group-append">
+                <button class="btn btn-primary lookup-button" v-on:click="lookupButtonClick" type="button">Search</button>
+              </div>
+            </div>
             <div class="suggestions" v-cloak v-if="suggestions.length > 0">
               <a :href="suggestion.href" v-on:click="suggestionClick" class="suggestion" v-for="suggestion in suggestions">
                 <span class="character-example-word" v-bind:data-hsk="suggestion['Book']">{{ suggestion['Word'] }}</span>

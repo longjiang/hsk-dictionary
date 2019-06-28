@@ -222,6 +222,11 @@ function main(hskDictionary, characterDictionary) {
         window.location = url
         $('.suggestion:first-child').get(0).click()
       },
+      lookupButtonClick() {
+        const url = $('.suggestion:first-child').attr('href')
+        window.location = url
+        $('.suggestion:first-child').get(0).click()
+      },
       lookupKeyup(e) {
         app.suggestions = []
         var text = e.target.value
