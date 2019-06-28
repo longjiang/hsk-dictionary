@@ -370,3 +370,7 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 .count {
   cursor: pointer;
 }
+
+#character-table th {
+  cursor: pointer;
+}
