@@ -16,23 +16,6 @@ function recalculateExampleColumns(word) {
   $div.addClass("col-md-" + span);
 }
 
-function highlightSentence(entry, app) {
-  var sentence = entry["Example"];
-  var word = entry["Word"];
-  var hsk = entry["Book"];
-  $(".example-sentence-word").html(
-    sentence.replace(word, '<b class="hsk' + hsk + '">' + word + "</b>")
-  );
-  if (entry["Song Lyrics"] != "" || app.lrcMatches) {
-    $(".lyrics-word").each(function() {
-      var sentence = $(this).html();
-      $(this).html(
-        sentence.replace(word, '<b class="hsk' + hsk + '">' + word + "</b>")
-      );
-    });
-  }
-}
-
 function getCharactersInWord(word, hskDictionary, characterDictionary) {
   characters = [];
   word.split("").forEach(function(character) {
@@ -140,47 +123,22 @@ function displayEntry(entry, app) {
     app.characterDictionary
   );
   app.lrcMatches = findWordInLrcs(entry["Word"], app.lrcs);
+  console.log(entry["Word"]);
+  console.log(app.lrcs);
+  console.log(app.lrcMatches);
   getImage(entry, app);
-  location.hash = entry["Word"];
   app.initialized = true;
   app.suggestions = [];
   $("#lookup").val(entry["Word"]);
-  doYouTube(app);
+  app.$forceUpdate();
 }
 
-function callYouTubeAndThen(searchTerm, callback) {
-  var request = gapi.client.youtube.search.list({
-    part: "snippet",
-    type: "video",
-    q: searchTerm
-  });
-  request.execute(callback);
-}
-
-function doYouTube(app) {
-  gapi.client.setApiKey("AIzaSyA1rkL-Dgik_gfko1beR8F_nnNJS6CEDkY");
-  gapi.client.load("youtube", "v3", function() {
-    if (app.lrcMatches) {
-      app.lrcMatches.forEach(function(match, index) {
-        callYouTubeAndThen(match.artist + " 《" + match.title + "》", function(
-          response
-        ) {
-          if (response.items && response.items.length > 0) {
-            app.lrcMatches[index].youtube = response.items[0].id.videoId;
-            app.$forceUpdate();
-          }
-        });
-      });
-    }
-  });
-}
-
-function showIndex(index, app) {
+function showByIndex(index, app) {
   if (index > 0 && index < app.hskDictionary.length) {
     var entry = app.hskDictionary[index];
     if (entry) {
       entry.index = index;
-      displayEntry(entry, app);
+      location.hash = entry["Word"];
     }
   }
 }
@@ -262,7 +220,8 @@ function findWordInLrcs(word, lrcs) {
             starttime: line.starttime,
             line: line.line,
             artist: song.artist,
-            title: song.title
+            title: song.title,
+            youtube: song.youtube
           };
         }
       });
@@ -332,6 +291,16 @@ function main(hskDictionary, characterDictionary, lrcs) {
           }
         }
       },
+      highlight(text) {
+        return text.replace(
+          this.entry["Word"],
+          '<b data-hsk="' +
+            this.entry["Book"] +
+            '">' +
+            this.entry["Word"] +
+            "</b>"
+        );
+      },
       showMoreClick(e) {
         $button = $(e.currentTarget);
         $button.prev().toggleClass("collapsed");
@@ -341,10 +310,10 @@ function main(hskDictionary, characterDictionary, lrcs) {
         location.hash = "";
       },
       previousClick(e) {
-        showIndex(app.index - 1, app);
+        showByIndex(app.index - 1, app);
       },
       nextClick(e) {
-        showIndex(app.index + 1, app);
+        showByIndex(app.index + 1, app);
       },
       suggestionClick(e) {
         app.suggestions = [];
@@ -390,21 +359,12 @@ function main(hskDictionary, characterDictionary, lrcs) {
           .next("ul")
           .toggleClass("collapsed");
       },
-      songNextClick(e) {
-        var $songs = $(".song-caroussel .songs");
-        var $firstSong = $songs.find(".song:first-child");
-        $firstSong.appendTo($songs); // move to the last
-      },
-      songPreviousClick(e) {
-        var $songs = $(".song-caroussel .songs");
-        var $firstSong = $songs.find(".song:last-child");
-        $firstSong.prependTo($songs); // move to the last
-      }
+      songNextClick(e) {},
+      songPreviousClick(e) {}
     },
     updated: function() {
       if (app.initialized) {
         recalculateExampleColumns(this.entry["Word"]);
-        highlightSentence(this.entry, app);
         addAnimatedSvgLinks();
         attachSpeakEventHandler();
       }

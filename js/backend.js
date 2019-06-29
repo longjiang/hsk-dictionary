@@ -27,7 +27,7 @@ var vue = new Vue({
         reader.readAsText(fileList[i], "gb2312");
       }
       reader.onloadend = function() {
-        json.forEach(function(file) {
+        json.forEach(function(file, index) {
           var lyricer = new Lyricer();
           lyricer.setLrc(file.content);
           if (lyricer.tags.ar) {
@@ -37,9 +37,31 @@ var vue = new Vue({
             file.title = lyricer.tags.ti;
           }
           file.content = lyricer.lrc;
+          searchYouTubeThen(file.artist + " 《" + file.title + "》", function(
+            response
+          ) {
+            if (response.items && response.items.length > 0) {
+              response.items.forEach(function(item) {
+                file.youtube = file.youtube || [];
+                file.youtube.push(item.id.videoId);
+              });
+            }
+          });
         });
         console.log(json);
       };
     }
   }
 });
+
+function searchYouTubeThen(searchTerm, callback) {
+  gapi.client.setApiKey("AIzaSyDkooB1uWHG72DeDSHrMnPeSEqbeEKWnSU");
+  gapi.client.load("youtube", "v3", function() {
+    var request = gapi.client.youtube.search.list({
+      part: "snippet",
+      type: "video",
+      q: searchTerm
+    });
+    request.execute(callback);
+  });
+}
