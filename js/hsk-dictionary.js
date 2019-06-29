@@ -366,6 +366,10 @@ function main(hskDictionary, characterDictionary, lrcs) {
         var $songs = $(".song-caroussel .songs");
         var $firstSong = $songs.find(".song:last-child");
         $firstSong.prependTo($songs); // move to the last
+      },
+      cycleYouTubeClick(e) {
+        var $versions = $(e.target).prev(".youtube-versions");
+        $versions.find(".youtube:first-child").appendTo($versions);
       }
     },
     updated: function() {

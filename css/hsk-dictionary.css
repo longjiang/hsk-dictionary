@@ -444,3 +444,15 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 .song-caroussel .row:not(:first-child) {
   display: none;
 }
+
+.youtube:not(:first-child) {
+  display: none;
+}
+
+.youtube-version-button {
+  background: #9a9a9a;
+  color: white;
+  border: none;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}

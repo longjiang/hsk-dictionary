@@ -45,49 +45,6 @@
       </div>
     </div>
 
-    <div class="container-flud lyrics-bar" v-cloak v-if="initialized && lrcMatches && lrcMatches.length > 0 ">
-        <div class="container">
-  
-          <div class="song-caroussel">
-            <nav>
-              <button class="paginate-button previous" v-on:click="songPreviousClick"><img src="img/angle-left.svg" alt=""></button>
-              <button class="paginate-button next" v-on:click="songNextClick"><img src="img/angle-right.svg" alt=""></button>
-            </nav>
-            <div class="songs">
-              <div class="row song" v-if="initialized && entry['Song Lyrics'] != ''">
-                <div class="col-md-6">
-                  <div class="youtube">
-                    <iframe :src="entry['Song YouTube'].replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
-                  <div class="lyrics">
-                    <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
-                    <p class="lyrics-word" v-html="highlight(entry['Song Lyrics'])"></p>
-                    <p class="lyrics-english">{{ entry['Song Translation'] }}</p>
-                  </div>
-                </div>
-              </div>
-              <div class="row song" v-for="match, index in lrcMatches" v-if="match.youtube">
-                <div class="col-md-6">
-                  <div class="youtube">
-                    <iframe :src="'https://www.youtube.com/embed/' + match.youtube[0] + '?start=' + Math.floor(match.starttime)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
-                  <div class="lyrics">
-                    <p class="lyrics-word" v-html="highlight(match.line)"></p>
-                  </div>
-                </div>
-              </div>
-            </div>         
-          </div>
-  
-        </div>
-      </div>
-
     <div class="container mb1" v-cloak v-if="initialized">
       <div class="row text-center">
         <div class="col-md-12">
@@ -166,6 +123,53 @@
             Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="container-flud lyrics-bar" v-cloak v-if="initialized && lrcMatches && lrcMatches.length > 0 ">
+      <div class="container">
+
+        <div class="song-caroussel">
+          <nav>
+            <button v-if="lrcMatches.length > 1" class="paginate-button previous" v-on:click="songPreviousClick"><img src="img/angle-left.svg" alt=""></button>
+            <button v-if="lrcMatches.length > 1" class="paginate-button next" v-on:click="songNextClick"><img src="img/angle-right.svg" alt=""></button>
+          </nav>
+          <div class="songs">
+            <div class="row song" v-if="initialized && entry['Song Lyrics'] != ''">
+              <div class="col-md-6">
+                <div class="youtube">
+                  <iframe :src="entry['Song YouTube'].replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
+                <div class="lyrics">
+                  <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
+                  <p class="lyrics-word" v-html="highlight(entry['Song Lyrics'])"></p>
+                  <p class="lyrics-english">{{ entry['Song Translation'] }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row song" v-for="match, index in lrcMatches.slice(0, 10)" v-if="match.youtube">
+              <div class="col-md-6 text-right">
+                <div class="youtube-versions">
+                  <div class="youtube" v-for="youtube in match.youtube.slice(0, 3)">
+                    <iframe :src="'https://www.youtube.com/embed/' + youtube + '?start=' + Math.floor(match.starttime)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  </div>
+                </div>
+                <button v-on:click="cycleYouTubeClick" class="youtube-version-button">See Another Version of the Song</button>
+              </div>
+              <div class="col-md-6">
+                <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
+                <div class="lyrics">
+                  <div class="lyrics-word" v-html="highlight(match.line)"></div>
+                  <div class="lyrics-english mt1">{{ match.artist }} 《{{ match.title }}》</div>
+                </div>
+              </div>
+            </div>
+          </div>         
+        </div>
+
       </div>
     </div>
 
