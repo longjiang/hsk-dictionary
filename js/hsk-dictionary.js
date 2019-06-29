@@ -123,8 +123,6 @@ function displayEntry(entry, app) {
     app.characterDictionary
   );
   app.lrcMatches = findWordInLrcs(entry["Word"], app.lrcs);
-  console.log(entry["Word"]);
-  console.log(app.lrcs);
   console.log(app.lrcMatches);
   getImage(entry, app);
   app.initialized = true;
@@ -359,8 +357,16 @@ function main(hskDictionary, characterDictionary, lrcs) {
           .next("ul")
           .toggleClass("collapsed");
       },
-      songNextClick(e) {},
-      songPreviousClick(e) {}
+      songNextClick(e) {
+        var $songs = $(".song-caroussel .songs");
+        var $firstSong = $songs.find(".song:first-child");
+        $firstSong.appendTo($songs); // move to the last
+      },
+      songPreviousClick(e) {
+        var $songs = $(".song-caroussel .songs");
+        var $firstSong = $songs.find(".song:last-child");
+        $firstSong.prependTo($songs); // move to the last
+      }
     },
     updated: function() {
       if (app.initialized) {

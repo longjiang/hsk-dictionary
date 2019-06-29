@@ -440,3 +440,7 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 .song-caroussel .paginate-button.previous {
   margin-left: -4rem;
 }
+
+.song-caroussel .row:not(:first-child) {
+  display: none;
+}

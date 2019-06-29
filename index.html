@@ -69,13 +69,13 @@
                   </div>
                 </div>
               </div>
-              <div class="row song" v-for="match, index in lrcMatches">
-                <div class="col-md-6" v-if="match">
-                  <!-- <div class="youtube" v-if="match.youtube">
+              <div class="row song" v-for="match, index in lrcMatches" v-if="match.youtube">
+                <div class="col-md-6">
+                  <div class="youtube">
                     <iframe :src="'https://www.youtube.com/embed/' + match.youtube[0] + '?start=' + Math.floor(match.starttime)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                  </div> -->
+                  </div>
                 </div>
-                <div class="col-md-6" v-if="match">
+                <div class="col-md-6">
                   <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
                   <div class="lyrics">
                     <p class="lyrics-word" v-html="highlight(match.line)"></p>
