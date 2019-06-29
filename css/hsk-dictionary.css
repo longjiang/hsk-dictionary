@@ -100,7 +100,8 @@ body {
 }
 
 .label {
-  width: 4rem;
+  display: inline-block;
+  padding: 0 1rem;
   color: white;
   text-align: center;
   font-weight: bold;
@@ -198,17 +199,15 @@ body {
   display: none;
 }
 
-.example-sentence {
+.example-sentence, .lyrics {
   margin-top: 1rem;
 }
 
-.example-sentence p,
-.lyrics p {
+.example-sentence p, .lyrics p {
   margin: 0;
 }
 
-.example-sentence-word,
-.lyrics-word {
+.example-sentence-word, .lyrics-word {
   font-weight: bold;
   font-size: 1.5rem;
 }
@@ -396,10 +395,9 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   cursor: pointer;
 }
 
-
 .lyrics-bar {
-  background: #ececec;
-  padding: 3rem 0;
+  background: #dedede;
+  padding: 2rem 0;
 }
 
 .youtube {
@@ -415,26 +413,17 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   left: 0;
 }
 
-.lyrics {
-  padding-left: 2rem;
-}
-
 @media(max-width: 768px) {
   .lyrics {
     padding-left: 0;
-  }  
+  }
 }
 
 .song-label {
   background: #4e4e4e;
-  color: white;
-  padding: 0.5rem;
-  display: inline-block;
-  font-size: 1rem;
 }
 
-.learn-this-bar,
-.learn-this-bar a {
+.learn-this-bar, .learn-this-bar a {
   padding: 1.5rem 0;
   color: white;
   font-size: 1.2rem;

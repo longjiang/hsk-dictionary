@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div class="container" v-cloak v-if="initialized">
+    <div class="container mb1" v-cloak v-if="initialized">
       <div class="row text-center">
         <div class="col-md-12">
             <button class="paginate-button previous" v-on:click="previousClick"><img src="img/angle-left.svg" alt=""></button>
@@ -57,14 +57,34 @@
       </div>
     </div>
 
-    <div class="container-fluid example-bar mt1" v-cloak v-if="initialized && entry['Example'] !== ''">
+    <div class="container-fluid mb2" v-cloak v-if="initialized && entry['OofC'] !== ''">
       <div class="container">
         <div class="row">
-          <div class="col-md-3">
-              <img v-bind:src="image" class="example-image" v-if="hasImage">
-              <img v-bind:src="unsplashImage" class="example-image" alt="" v-else="hasImage">
+          <div class="col-sm-12 text-center">
+            This word is not required in HSK {{ entry['Book'] }} but is covered in our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry['Book']" class="video-course">HSK {{ entry['Book'] }} Video Course</a> as an optional vocabulary word.
           </div>
-          <div class="col-md-9 example-wrapper">
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid mb2" v-cloak v-if="initialized && entry['PN'] !== ''">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12 text-center">
+            This is a <b><em>proper noun</em></b> that appeared in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry['Book']" class="video-course">HSK {{ entry['Book'] }} Video Course</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid example-bar" v-cloak v-if="initialized && entry['Example'] !== ''">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+              <img v-bind:src="image" class="example-image" v-if="hasImage">
+              <img :src="'https://source.unsplash.com/540x303/?' + entry['English']" class="example-image" alt="" v-else="hasImage">
+          </div>
+          <div class="col-md-6 example-wrapper">
               <div class="label" v-bind:data-bg-hsk="entry['Book']" v-if="entry['OofC'] == ''">HSK {{ entry['Book'] }}</div>
               <div class="example-sentence">
                 <p class="example-sentence-pinyin">{{ entry['Example Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Example']"></p>
@@ -75,28 +95,8 @@
         </div>
       </div>
     </div>
-
-    <div class="container-fluid example-bar mt1" v-cloak v-if="initialized && entry['OofC'] !== ''">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 text-center">
-            This word is not required in HSK {{ entry['Book'] }} but is covered in our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry['Book']" class="video-course">HSK {{ entry['Book'] }} Video Course</a> as an optional vocabulary word.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container-fluid example-bar mt1" v-cloak v-if="initialized && entry['PN'] !== ''">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12 text-center">
-            This is a <b><em>proper noun</em></b> that appeared in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry['Book']" class="video-course">HSK {{ entry['Book'] }} Video Course</a>.
-          </div>
-        </div>
-      </div>
-    </div>
     
-    <div class="container mt2" v-cloak v-if="initialized">
+    <div class="container mt2 mb2" v-cloak v-if="initialized">
       <div class="row mt1 character-example-wrapper">
         <div class="col-md-6" v-for="character in characters">
           <div><b class="character-example-word" v-html="character.animatedSvgLink"></b><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</div></span>
@@ -116,7 +116,7 @@
       </div>
     </div>
 
-    <div class="container-fluid learn-this-bar mt1" :data-bg-hsk="entry['Book']" v-cloak v-if="initialized">
+    <div class="container-fluid learn-this-bar" :data-bg-hsk="entry['Book']" v-cloak v-if="initialized">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
@@ -135,8 +135,8 @@
             </div>
           </div>
           <div class="col-md-6">
+            <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
             <div class="lyrics">
-              <h5 class="song-label">Learn with a song</h5>
               <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
               <p class="lyrics-word">{{ entry['Song Lyrics'] }}</p>
               <p class="lyrics-english">{{ entry['Song Translation'] }}</p>
