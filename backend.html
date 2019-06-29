@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>HSK Glossary Backend | Chinese Zero to Hero</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/hsk-dictionary.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <!-- Page Content -->
+
+    <div id="backend">
+      <div class="container-fluid top-bar">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-12">
+              <h1 class="title">
+                <a href="https://www.chinesezerotohero.com">
+                  <img src="img/logo-mark.png" class="logo" alt="" />
+                </a>
+                <span class="title-text">HSK Character Frequency</span>
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container mt2">
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Concatenate LRC files to JSON</h4>
+            <div class="input-group mb-3">
+              <input type="file" id="lrc-file-input" multiple />
+              <div class="input-group-append">
+                <button
+                  v-on:click="concatenateButtonClick"
+                  class="btn btn-primary"
+                  type="button"
+                >
+                  Concatenate
+                </button>
+              </div>
+            </div>
+            After clicking "Concatenate," wait for a few seconds, then type
+            'json' in the console to get the data
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="lyricer"></div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/vue/vue.js"></script>
+    <script src="vendor/papaparse/papaparse.min.js"></script>
+    <script src="vendor/lyricer/lyricer.js"></script>
+    <script src="js/backend.js"></script>
+    <script></script>
+  </body>
+</html>

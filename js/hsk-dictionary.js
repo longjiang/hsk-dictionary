@@ -16,18 +16,20 @@ function recalculateExampleColumns(word) {
   $div.addClass("col-md-" + span);
 }
 
-function highlightSentence(entry) {
+function highlightSentence(entry, app) {
   var sentence = entry["Example"];
   var word = entry["Word"];
   var hsk = entry["Book"];
   $(".example-sentence-word").html(
     sentence.replace(word, '<b class="hsk' + hsk + '">' + word + "</b>")
   );
-  if (entry["Song Lyrics"] != "") {
-    var sentence = entry["Song Lyrics"];
-    $(".lyrics-word").html(
-      sentence.replace(word, '<b class="hsk' + hsk + '">' + word + "</b>")
-    );
+  if (entry["Song Lyrics"] != "" || app.lrcMatches) {
+    $(".lyrics-word").each(function() {
+      var sentence = $(this).html();
+      $(this).html(
+        sentence.replace(word, '<b class="hsk' + hsk + '">' + word + "</b>")
+      );
+    });
   }
 }
 
@@ -137,11 +139,40 @@ function displayEntry(entry, app) {
     app.hskDictionary,
     app.characterDictionary
   );
+  app.lrcMatches = findWordInLrcs(entry["Word"], app.lrcs);
   getImage(entry, app);
   location.hash = entry["Word"];
   app.initialized = true;
   app.suggestions = [];
   $("#lookup").val(entry["Word"]);
+  doYouTube(app);
+}
+
+function callYouTubeAndThen(searchTerm, callback) {
+  var request = gapi.client.youtube.search.list({
+    part: "snippet",
+    type: "video",
+    q: searchTerm
+  });
+  request.execute(callback);
+}
+
+function doYouTube(app) {
+  gapi.client.setApiKey("AIzaSyA1rkL-Dgik_gfko1beR8F_nnNJS6CEDkY");
+  gapi.client.load("youtube", "v3", function() {
+    if (app.lrcMatches) {
+      app.lrcMatches.forEach(function(match, index) {
+        callYouTubeAndThen(match.artist + " 《" + match.title + "》", function(
+          response
+        ) {
+          if (response.items && response.items.length > 0) {
+            app.lrcMatches[index].youtube = response.items[0].id.videoId;
+            app.$forceUpdate();
+          }
+        });
+      });
+    }
+  });
 }
 
 function showIndex(index, app) {
@@ -218,7 +249,32 @@ function filterOofC(hskDictionary) {
   });
 }
 
-function main(hskDictionary, characterDictionary) {
+function findWordInLrcs(word, lrcs) {
+  results = [];
+  for (var i = 0; i < lrcs.length; i++) {
+    var song = lrcs[i];
+    if (Array.isArray(song.content)) {
+      song.content.splice(0, 4); // Reject first four lines
+      song.content.splice(song.content.length - 4, 4); // Reject last four lines
+      song.content.forEach(function(line) {
+        if (line.line.includes(word)) {
+          results[i] = {
+            starttime: line.starttime,
+            line: line.line,
+            artist: song.artist,
+            title: song.title
+          };
+        }
+      });
+    }
+  }
+  results = results.filter(function(item) {
+    return item !== undefined;
+  });
+  return results;
+}
+
+function main(hskDictionary, characterDictionary, lrcs) {
   var startWord = "固有";
   var entry = lookupHsk(startWord, hskDictionary)[0];
   var characters = getCharactersInWord(
@@ -231,8 +287,9 @@ function main(hskDictionary, characterDictionary) {
     data: {
       character: {},
       hskDictionary: hskDictionary,
-      wordList: filterOofC(hskDictionary),
       characterDictionary: characterDictionary,
+      lrcs: lrcs,
+      wordList: filterOofC(hskDictionary),
       entry: entry,
       books: compileBooks(hskDictionary),
       characters: characters,
@@ -332,17 +389,28 @@ function main(hskDictionary, characterDictionary) {
         $(e.target)
           .next("ul")
           .toggleClass("collapsed");
+      },
+      songNextClick(e) {
+        var $songs = $(".song-caroussel .songs");
+        var $firstSong = $songs.find(".song:first-child");
+        $firstSong.appendTo($songs); // move to the last
+      },
+      songPreviousClick(e) {
+        var $songs = $(".song-caroussel .songs");
+        var $firstSong = $songs.find(".song:last-child");
+        $firstSong.prependTo($songs); // move to the last
       }
     },
     updated: function() {
       if (app.initialized) {
         recalculateExampleColumns(this.entry["Word"]);
-        highlightSentence(this.entry);
+        highlightSentence(this.entry, app);
         addAnimatedSvgLinks();
         attachSpeakEventHandler();
       }
     }
   });
+
   window.onhashchange = function() {
     word = decodeURI(location.hash.substr(1));
     if (word) {
@@ -363,7 +431,9 @@ Papa.parse("data/HSK 1-6 Vocabulary/HSK Standard Course 1-6-Table 1.csv", {
   header: true,
   complete: function(csv) {
     $.getJSON("data/dictionary.txt").done(function(characterDictionary) {
-      main(csv.data, characterDictionary);
+      $.getJSON("data/lrcs-compiled.json").done(function(lrcs) {
+        main(csv.data, characterDictionary, lrcs);
+      });
     });
   }
 });

@@ -126,23 +126,46 @@
       </div>
     </div>
 
-    <div class="container-flud lyrics-bar" v-cloak v-if="initialized && entry['Song Lyrics'] != ''">
+    <div class="container-flud lyrics-bar" v-cloak v-if="initialized && lrcMatches && lrcMatches.length > 0 ">
       <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="youtube">
-              <iframe :src="entry['Song YouTube'].replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <div class="song-caroussel">
+          <nav>
+            <button class="paginate-button previous" v-on:click="songPreviousClick"><img src="img/angle-left.svg" alt=""></button>
+            <button class="paginate-button next" v-on:click="songNextClick"><img src="img/angle-right.svg" alt=""></button>
+          </nav>
+          <div class="songs">
+            <div class="row song" v-if="initialized && entry['Song Lyrics'] != ''">
+              <div class="col-md-6">
+                <div class="youtube">
+                  <iframe :src="entry['Song YouTube'].replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
+                <div class="lyrics">
+                  <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
+                  <p class="lyrics-word">{{ entry['Song Lyrics'] }}</p>
+                  <p class="lyrics-english">{{ entry['Song Translation'] }}</p>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="col-md-6">
-            <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
-            <div class="lyrics">
-              <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
-              <p class="lyrics-word">{{ entry['Song Lyrics'] }}</p>
-              <p class="lyrics-english">{{ entry['Song Translation'] }}</p>
+            <div class="row song" v-for="match, index in lrcMatches">
+              <div class="col-md-6" v-if="match">
+                <div class="youtube">
+                  <iframe :src="'https://www.youtube.com/embed/' + match.youtube + '?start=' + Math.floor(match.starttime)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              </div>
+              <div class="col-md-6" v-if="match">
+                <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
+                <div class="lyrics">
+                  <p class="lyrics-word">{{ match.line }}</p>
+                </div>
+              </div>
             </div>
-          </div>
+          </div>         
         </div>
+
       </div>
     </div>
 
@@ -199,6 +222,7 @@
   <script src="vendor/vue/vue.js"></script>
   <script src="vendor/papaparse/papaparse.min.js"></script>
   <script src="js/hsk-dictionary.js"></script>
+  <script src="https://apis.google.com/js/client.js?onload=init"></script>
 </body>
 
 </html>
