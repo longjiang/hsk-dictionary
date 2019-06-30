@@ -209,9 +209,9 @@ function findWordInLrcs(word, lrcs) {
   for (var i = 0; i < lrcs.length; i++) {
     var song = lrcs[i];
     if (Array.isArray(song.content)) {
-      song.content.splice(0, 1); // Reject first 1 lines
-      song.content.splice(song.content.length - 1, 1); // Reject last 1 lines
-      song.content.forEach(function(line) {
+      song.content.splice(0, 8); // Reject first 4 lines
+      song.content.splice(song.content.length - 4, 4); // Reject last 2 lines
+      song.content.forEach(function(line, index) {
         if (
           line.line.includes(word) &&
           song.youtube &&
@@ -220,6 +220,13 @@ function findWordInLrcs(word, lrcs) {
           results[i] = {
             starttime: line.starttime,
             line: line.line,
+            context: [
+              song.content[index - 2] || "",
+              song.content[index - 1] || "",
+              song.content[index],
+              song.content[index + 1] || "",
+              song.content[index + 2] || ""
+            ],
             artist: song.artist,
             title: song.title,
             youtube: song.youtube

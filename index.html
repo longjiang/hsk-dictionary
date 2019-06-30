@@ -163,7 +163,11 @@
               <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
                 <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
                 <div class="lyrics">
-                  <div class="lyrics-word" v-html="highlight(match.line)"></div>
+                  <div class="lyrics-word-context">{{ match.context[0].line }}</div>
+                  <div class="lyrics-word-context">{{ match.context[1].line }}</div>
+                  <div class="lyrics-word" v-html="highlight(match.context[2].line)"></div>
+                  <div class="lyrics-word-context">{{ match.context[3].line }}</div>
+                  <div class="lyrics-word-context">{{ match.context[4].line }}</div>
                   <div class="lyrics-english mt1">{{ match.artist }} 《{{ match.title }}》</div>
                 </div>
               </div>
