@@ -123,7 +123,6 @@ function displayEntry(entry, app) {
     app.characterDictionary
   );
   app.lrcMatches = findWordInLrcs(entry["Word"], app.lrcs);
-  console.log(app.lrcMatches);
   getImage(entry, app);
   app.initialized = true;
   app.suggestions = [];

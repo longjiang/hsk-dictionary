@@ -84,7 +84,7 @@
               <img v-bind:src="image" class="example-image" v-if="hasImage">
               <img :src="'https://source.unsplash.com/540x303/?' + entry['English']" class="example-image" alt="" v-else="hasImage">
           </div>
-          <div class="col-md-6 example-wrapper">
+          <div class="col-md-6 example-wrapper text-left text-sm-center sm-mt2">
               <div class="label" v-bind:data-bg-hsk="entry['Book']" v-if="entry['OofC'] == ''">HSK {{ entry['Book'] }}</div>
               <div class="example-sentence">
                 <p class="example-sentence-pinyin">{{ entry['Example Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Example']"></p>
@@ -141,7 +141,7 @@
                   <iframe :src="entry['Song YouTube'].replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6 text-left text-sm-center lyrics-wrapper sm-mt2">
                 <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
                 <div class="lyrics">
                   <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
@@ -151,15 +151,15 @@
               </div>
             </div>
             <div class="row song" v-for="match, index in lrcMatches.slice(0, 10)" v-if="match.youtube">
-              <div class="col-md-6 text-right">
+              <div class="col-md-6 text-center">
                 <div class="youtube-versions">
                   <div class="youtube" v-for="youtube in match.youtube.slice(0, 3)">
                     <iframe :src="'https://www.youtube.com/embed/' + youtube + '?start=' + Math.floor(match.starttime)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                   </div>
                 </div>
-                <button v-on:click="cycleYouTubeClick" class="youtube-version-button">See Another Version of the Song</button>
+                <button v-on:click="cycleYouTubeClick" class="youtube-version-button">Switch to Another Version of the Song</button>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-6 text-left text-sm-center lyrics-wrapper sm-mt2">
                 <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
                 <div class="lyrics">
                   <div class="lyrics-word" v-html="highlight(match.line)"></div>

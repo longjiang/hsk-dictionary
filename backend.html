@@ -14,12 +14,13 @@
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="css/hsk-dictionary.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.css"/>
   </head>
 
   <body>
     <!-- Page Content -->
 
-    <div id="backend">
+    <div id="concat">
       <div class="container-fluid top-bar">
         <div class="container">
           <div class="row">
@@ -28,13 +29,12 @@
                 <a href="https://www.chinesezerotohero.com">
                   <img src="img/logo-mark.png" class="logo" alt="" />
                 </a>
-                <span class="title-text">HSK Character Frequency</span>
+                <span class="title-text">HSK Backend Tools</span>
               </h1>
             </div>
           </div>
         </div>
       </div>
-
       <div class="container mt2">
         <div class="row">
           <div class="col-sm-12">
@@ -51,11 +51,59 @@
                 </button>
               </div>
             </div>
-            After clicking "Concatenate," wait for a few seconds, then type
-            'json' in the console to get the data
           </div>
         </div>
       </div>
+    </div><!-- #concat -->
+
+      <div id="audit">
+        <div class="container">
+          <div class="row mt2">
+            <div class="col-sm-12">
+              <h4>Audit LRCs</h4>
+              <p>Audit the lrc-compiled.json file .</p>
+              <button
+                v-on:click="auditeButtonClick"
+                class="btn btn-primary"
+                type="button"
+              >
+                Audit
+              </button>
+              <table v-if="audited" class="table mt2 datatable">
+                <thead>
+                  <tr>
+                    <th>Songs</th>
+                    <th>Songs with YouTube</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ totalCount }}</td>
+                    <td>{{ youtubeCount }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              {{ wordsWithNoSong.length }}
+              <table v-if="audited" class="table mt2 datatable">
+                <thead>
+                  <tr>
+                    <th>Word</th>
+                    <th v-on:click="tableHeadingClick">Has LRC with YouTube</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="word in words">
+                    <td>{{ word.word }}</td>
+                    <td>{{ word.matches.length }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div><!-- #audit -->
+
+
     </div>
 
     <div id="lyricer"></div>
@@ -66,6 +114,7 @@
     <script src="vendor/vue/vue.js"></script>
     <script src="vendor/papaparse/papaparse.min.js"></script>
     <script src="vendor/lyricer/lyricer.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
     <script src="js/backend.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=init"></script>
     <script></script>
