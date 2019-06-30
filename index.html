@@ -127,6 +127,7 @@
     </div>
 
     <div class="container-flud lyrics-bar" v-cloak v-if="initialized && lrcMatches && lrcMatches.length > 0 ">
+      
       <div class="container">
 
         <div class="song-caroussel">
@@ -150,7 +151,7 @@
                 </div>
               </div>
             </div>
-            <div class="row song" v-for="match, index in lrcMatches.slice(0, 10)" v-if="match.youtube">
+            <div class="row song" v-for="match, index in lrcMatches.slice(0, 10)">
               <div class="col-md-6 text-center">
                 <div class="youtube-versions">
                   <div class="youtube" v-for="youtube in match.youtube.slice(0, 3)">
