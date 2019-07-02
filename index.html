@@ -126,14 +126,14 @@
       </div>
     </div>
 
-    <div class="container-flud lyrics-bar" v-cloak v-if="initialized && lrcMatches && lrcMatches.length > 0 ">
+    <div class="container-flud lyrics-bar" v-cloak v-if="initialized && lrcs && lrcs.length > 0 ">
       
       <div class="container">
 
         <div class="song-caroussel">
           <nav>
-            <button v-if="lrcMatches.length > 1" class="paginate-button previous" v-on:click="songPreviousClick"><img src="img/angle-left.svg" alt=""></button>
-            <button v-if="lrcMatches.length > 1" class="paginate-button next" v-on:click="songNextClick"><img src="img/angle-right.svg" alt=""></button>
+            <button v-if="lrcs.length > 1" class="paginate-button previous" v-on:click="songPreviousClick"><img src="img/angle-left.svg" alt=""></button>
+            <button v-if="lrcs.length > 1" class="paginate-button next" v-on:click="songNextClick"><img src="img/angle-right.svg" alt=""></button>
           </nav>
           <div class="songs">
             <div class="row song" v-if="initialized && entry['Song Lyrics'] != ''">
@@ -146,37 +146,34 @@
                 <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
                 <div class="lyrics">
                   <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
-                  <p class="lyrics-word" v-html="highlight(entry['Song Lyrics'])"></p>
+                  <p class="lyrics-line matched" v-html="highlight(entry['Song Lyrics'])"></p>
                   <p class="lyrics-english">{{ entry['Song Translation'] }}</p>
                 </div>
               </div>
             </div>
-            <div class="row song" v-for="match, index in lrcMatches.slice(0, 10)" v-if="match.youtube">
+            <div class="row song" v-for="lrc, index in lrcs" v-if="lrc.youtube">
               <div class="col-md-6 text-center">
                 <div class="youtube-versions">
-                  <div class="youtube" v-for="youtube in match.youtube.slice(0, 3)">
-                    <iframe :src="'https://www.youtube.com/embed/' + youtube + '?start=' + Math.floor(match.starttime)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  <div class="youtube" v-for="youtube in lrc.youtube.slice(0, 3)">
+                    <iframe :src="'https://www.youtube.com/embed/' + youtube + '?start=' + Math.floor(lrc.content[lrc.matchedLines[0]].starttime)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                   </div>
                 </div>
                 <button v-on:click="cycleYouTubeClick" class="youtube-version-button">Switch to Another Version of the Song</button>
               </div>
               <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
                 <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
-                <div class="lyrics">
-                  <div class="lyrics-word-context">{{ match.context[0].line }}</div>
-                  <div class="lyrics-word-context">{{ match.context[1].line }}</div>
-                  <div class="lyrics-word" v-html="highlight(match.context[2].line)"></div>
-                  <div class="lyrics-word-context">{{ match.context[3].line }}</div>
-                  <div class="lyrics-word-context">{{ match.context[4].line }}</div>
-                  <div class="lyrics-english mt1">{{ match.artist }} 《{{ match.title }}》</div>
+                <div class="lyrics collapsed">
+                  <div class="lyrics-english mt1">{{ lrc.artist }} 《{{ lrc.title }}》</div>
+                  <div class="lyrics-line" v-for="line, index in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(index), 'matched-context': inContext(index, 2, lrc) }" v-html="highlight(line.line)"></div>
                 </div>
+                <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">More</span><span class="label-collapse">Collapse</span></button>
               </div>
             </div>
           </div>         
         </div>
 
       </div>
-    </div>
+    </div><!-- .lyrics-bar -->
 
     
 

@@ -165,6 +165,7 @@ function searchYouTubeByProxy(searchTerm, callback) {
         $(this)
           .attr("href")
           .replace("/watch?v=", "")
+          .replace(/&list=.*/, "")
       );
     });
     callback(videoIds);

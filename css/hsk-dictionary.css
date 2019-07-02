@@ -207,13 +207,9 @@ body {
   margin: 0;
 }
 
-.example-sentence-word, .lyrics-word, .lyrics-word-context {
+.example-sentence-word, .lyrics-line {
   font-weight: bold;
   font-size: 1.5rem;
-}
-
-.lyrics-word-context {
-  color: #b1b1b1;
 }
 
 .example-image {
@@ -493,4 +489,20 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   .text-sm-center {
     text-align: center!important;
   }
+}
+
+.lyrics-line {
+  color: #b7b7b7;
+}
+
+.lyrics-line.matched {
+  color: #868686;
+}
+
+.lyrics.collapsed .lyrics-line {
+  display: none;
+}
+
+.lyrics.collapsed .lyrics-line.matched-context {
+  display: block;
 }

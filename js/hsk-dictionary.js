@@ -122,7 +122,18 @@ function displayEntry(entry, app) {
     app.hskDictionary,
     app.characterDictionary
   );
-  app.lrcMatches = findWordInLrcs(entry["Word"], app.lrcs);
+  findWordInLrcs(entry["Word"], function(lrcs) {
+    lrcs.forEach(function(lrc) {
+      lrc.matchedLines = [];
+      lrc.content.forEach(function(line, index) {
+        if (line.line.includes(entry["Word"])) {
+          lrc.matchedLines.push(index);
+        }
+      });
+    });
+    console.log(lrcs);
+    app.lrcs = lrcs;
+  });
   getImage(entry, app);
   app.initialized = true;
   app.suggestions = [];
@@ -204,44 +215,18 @@ function filterOofC(hskDictionary) {
   });
 }
 
-function findWordInLrcs(word, lrcs) {
-  results = [];
-  for (var i = 0; i < lrcs.length; i++) {
-    var song = lrcs[i];
-    if (Array.isArray(song.content)) {
-      song.content.splice(0, 8); // Reject first 4 lines
-      song.content.splice(song.content.length - 4, 4); // Reject last 2 lines
-      song.content.forEach(function(line, index) {
-        if (
-          line.line.includes(word) &&
-          song.youtube &&
-          song.youtube.length > 0
-        ) {
-          results[i] = {
-            starttime: line.starttime,
-            line: line.line,
-            context: [
-              song.content[index - 2] || "",
-              song.content[index - 1] || "",
-              song.content[index],
-              song.content[index + 1] || "",
-              song.content[index + 2] || ""
-            ],
-            artist: song.artist,
-            title: song.title,
-            youtube: song.youtube
-          };
-        }
-      });
+function findWordInLrcs(word, callback) {
+  $.getJSON(
+    "https://www.chinesezerotohero.com/lyrics-search/lrc/search/" +
+      word +
+      "/10",
+    function(results) {
+      callback(results);
     }
-  }
-  results = results.filter(function(item) {
-    return item !== undefined;
-  });
-  return results;
+  );
 }
 
-function main(hskDictionary, characterDictionary, lrcs) {
+function main(hskDictionary, characterDictionary) {
   var startWord = "固有";
   var entry = lookupHsk(startWord, hskDictionary)[0];
   var characters = getCharactersInWord(
@@ -255,7 +240,7 @@ function main(hskDictionary, characterDictionary, lrcs) {
       character: {},
       hskDictionary: hskDictionary,
       characterDictionary: characterDictionary,
-      lrcs: lrcs,
+      lrcs: [], // matched song lyrics, pulled from another server
       wordList: filterOofC(hskDictionary),
       entry: entry,
       books: compileBooks(hskDictionary),
@@ -380,6 +365,36 @@ function main(hskDictionary, characterDictionary, lrcs) {
       cycleYouTubeClick(e) {
         var $versions = $(e.target).prev(".youtube-versions");
         $versions.find(".youtube:first-child").appendTo($versions);
+      },
+      rejectLine(line) {
+        (bannedPatterns = [
+          "www",
+          "LRC",
+          " - ",
+          "歌词",
+          "QQ",
+          "演唱：",
+          "编辑：",
+          "☆"
+        ]),
+          (rejected = false);
+        bannedPatterns.forEach(function(pattern) {
+          if (line.includes(pattern)) {
+            rejected = true;
+          }
+        });
+        return rejected;
+      },
+      /**
+       *
+       * @param {*} index the index of the lrc line
+       * @param {*} margin show 'margin' number of lines above and below the first matched line
+       * @param {*} lrc the lrc object
+       */
+      inContext(index, margin, lrc) {
+        var min = lrc.matchedLines[0] - margin;
+        var max = lrc.matchedLines[0] + margin;
+        return index >= min && index <= max;
       }
     },
     updated: function() {
@@ -411,9 +426,7 @@ Papa.parse("data/HSK 1-6 Vocabulary/HSK Standard Course 1-6-Table 1.csv", {
   header: true,
   complete: function(csv) {
     $.getJSON("data/dictionary.txt").done(function(characterDictionary) {
-      $.getJSON("data/lrcs-compiled.json").done(function(lrcs) {
-        main(csv.data, characterDictionary, lrcs);
-      });
+      main(csv.data, characterDictionary);
     });
   }
 });
