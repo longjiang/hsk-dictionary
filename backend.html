@@ -19,26 +19,56 @@
 
   <body>
     <!-- Page Content -->
-
-    <div id="concat">
-      <div class="container-fluid top-bar">
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12">
-              <h1 class="title">
-                <a href="https://www.chinesezerotohero.com">
-                  <img src="img/logo-mark.png" class="logo" alt="" />
-                </a>
-                <span class="title-text">HSK Backend Tools</span>
-              </h1>
-            </div>
+    <div class="container-fluid top-bar">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <h1 class="title">
+              <a href="https://www.chinesezerotohero.com">
+                <img src="img/logo-mark.png" class="logo" alt="" />
+              </a>
+              <span class="title-text">HSK Backend Tools</span>
+            </h1>
           </div>
         </div>
       </div>
+    </div>
+
+    <div id="save-images">
+      <div class="container mt2 mb2">
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>Save Images for Words</h4>
+            <button class="btn btn-primary" v-on:click="loadWordsClick">Load Words</button>
+            <table class="table mt2" v-if="words.length > 0">
+              <thead>
+                <tr>
+                  <th>Word</th>
+                  <th>Photo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="word in words" :data-id="word.id">
+                  <td>{{ word.word }}</td>
+                  <td>
+                    <button class="btn btn-primary" v-if="!word.hasPhoto" :data-id="word.id" v-on:click="getPhotoClick">Get photo</button>
+                    <span v-else>Has photo: {{ word.photo }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- #save-images -->
+
+    <hr>
+
+    <div id="concat">
       <div class="container mt2">
         <div class="row">
           <div class="col-sm-12">
-            <h4>Concatenate LRC files to JSON</h4>
+            <h4>Concatenate LRC files to JSON (Deprecated)</h4>
             <div class="input-group mb-3">
               <input type="file" id="lrc-file-input" multiple />
               <div class="input-group-append">
@@ -56,11 +86,13 @@
       </div>
     </div><!-- #concat -->
 
+    <hr>
+
       <div id="audit">
         <div class="container">
           <div class="row mt2">
             <div class="col-sm-12">
-              <h4>Audit LRCs</h4>
+              <h4>Audit LRCs (Deprecated)</h4>
               <p>Audit the lrc-compiled.json file .</p>
               <button
                 v-on:click="auditeButtonClick"
@@ -115,6 +147,7 @@
     <script src="vendor/papaparse/papaparse.min.js"></script>
     <script src="vendor/lyricer/lyricer.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
+    <script src="js/hsk.js"></script>
     <script src="js/backend.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=init"></script>
     <script></script>

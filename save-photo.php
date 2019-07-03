@@ -19,3 +19,8 @@ $filename = $id . '-' . $word . '.jpg';
 $dir = dirname(__FILE__) . '/img/words/';
 
 get_photo_and_save($url, $dir . $filename);
+
+header('Content-Type: application/json');
+echo json_encode([
+	'status' => 'success',
+]);
