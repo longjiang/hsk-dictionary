@@ -1,4 +1,4 @@
-(function() {
+$(document).ready(function() {
   function analyzeWords(lrcs) {
     Papa.parse(
       "data/HSK 1-6 Vocabulary/Official Word List-Source: http:  www.chinesetest.cn userfiles file HSK HSK-2012.xls.csv",
@@ -203,22 +203,80 @@
           $button = $(e.target);
           var id = $button.attr("data-id");
           var word = hsk.get(id);
-          $.getJSON(
-            "save-photo.php?id=" +
-              word.id +
-              "&word=" +
-              word.word +
-              "&url=https://source.unsplash.com/?" +
-              word.english,
-            function(result) {
+          // savePhotoFromUnsplashSource(word, function(result) {
+          // if (result.status === "success") {
+          //   $button.after("Success");
+          //   $button.remove();
+          // }
+          // });
+          getSrcsFromSplash(word.english, function(srcs) {
+            var url =
+              srcs[Math.floor(Math.min(3, srcs.length) * Math.random())];
+            savePhoto(word, url, function(result) {
               if (result.status === "success") {
                 $button.after("Success");
                 $button.remove();
               }
+            });
+          });
+        },
+        getAllClick: function(e) {
+          timeout = 0;
+          $(".get-photo-button").each(function() {
+            $button = $(this);
+            index = $(this).attr("data-index");
+            timeout += Math.random() * 1000;
+            function getFunc($button) {
+              return function() {
+                $button.click();
+              };
             }
-          );
+            setTimeout(getFunc($button), timeout);
+          });
         }
       }
     });
   });
-})();
+
+  $(".load-words-button").click();
+
+  function savePhotoFromUnsplashSource(word, callback) {
+    savePhoto(
+      word,
+      "https://source.unsplash.com/1280x720/?" + word.english,
+      callback
+    );
+  }
+
+  function savePhoto(word, url, callback) {
+    $.getJSON(
+      "save-photo.php?id=" +
+        word.id +
+        "&word=" +
+        word.word +
+        "&url=" +
+        encodeURIComponent(url),
+      callback
+    );
+  }
+
+  function getSrcsFromSplash(term, callcback) {
+    scrape("https://unsplash.com/search/photos/" + term, function($html) {
+      var srcs = [];
+      $html.find("img._2zEKz").each(function() {
+        srcs.push($(this).attr("src"));
+      });
+      callcback(srcs);
+    });
+  }
+
+  function scrape(url, callback) {
+    $.ajax("proxy.php?" + url).done(function(response) {
+      // We use 'ownerDocument' so we don't load the images and scripts!
+      // https://stackoverflow.com/questions/15113910/jquery-parse-html-without-loading-images
+      var ownerDocument = document.implementation.createHTMLDocument("virtual");
+      $html = $(response, ownerDocument);
+      callback($html);
+    });
+  }
+});

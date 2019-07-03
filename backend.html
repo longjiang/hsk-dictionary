@@ -39,19 +39,19 @@
         <div class="row">
           <div class="col-sm-12">
             <h4>Save Images for Words</h4>
-            <button class="btn btn-primary" v-on:click="loadWordsClick">Load Words</button>
+            <button class="btn btn-primary load-words-button" v-on:click="loadWordsClick">Load Words</button>
             <table class="table mt2" v-if="words.length > 0">
               <thead>
                 <tr>
                   <th>Word</th>
-                  <th>Photo</th>
+                  <th><button class="btn btn-primary" v-on:click="getAllClick">Get All</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="word in words" :data-id="word.id">
                   <td>{{ word.word }}</td>
                   <td>
-                    <button class="btn btn-primary" v-if="!word.hasPhoto" :data-id="word.id" v-on:click="getPhotoClick">Get photo</button>
+                    <button class="btn btn-primary get-photo-button" v-if="!word.hasPhoto" :data-id="word.id" v-on:click="getPhotoClick">Get photo</button>
                     <span v-else>Has photo: {{ word.photo }}</span>
                   </td>
                 </tr>

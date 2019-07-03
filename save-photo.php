@@ -10,9 +10,7 @@ function get_photo_and_save($url, $path) {
 	fclose($fp);
 }
 
-echo '<pre>';
-
-$url = $_GET['url'];
+$url = urldecode($_GET['url']);
 $id = $_GET['id'];
 $word = $_GET['word'];
 $filename = $id . '-' . $word . '.jpg';
@@ -23,4 +21,5 @@ get_photo_and_save($url, $dir . $filename);
 header('Content-Type: application/json');
 echo json_encode([
 	'status' => 'success',
+	'url' => $url,
 ]);
