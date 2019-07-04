@@ -115,6 +115,9 @@ body {
   .character-example-wrapper>div {
     margin-bottom: 2rem;
   }
+  .example-bar {
+    padding-top: 0;
+  }
 }
 
 .bg-hsk1, [data-bg-hsk="1"] {
@@ -229,7 +232,8 @@ body {
 
 @media(max-width: 768px) {
   .example-image {
-    max-width: 14rem;
+    margin-left: calc((100vw - 100%) / 2 * -1);
+    width: 100vw;
   }
 }
 
