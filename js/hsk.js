@@ -95,23 +95,25 @@ var HSK = {
     hsk = this;
     word.split("").forEach(function(character) {
       var entry = hsk.lookupCharacter(character);
-      entry.animatedSvgLink = hsk.animatedSvgLink(character);
-      entry.examples = hsk.lookupHskFussy(character);
-      entry.parts = [];
-      var parts = entry.decomposition.substring(1).split("");
-      parts.forEach(function(part) {
-        partObj = hsk.lookupCharacter(part);
-        if (partObj) {
-          partObj.animatedSvgLink = hsk.animatedSvgLink(part);
-          entry.parts.push(partObj);
-        } else {
-          entry.parts.push({
-            character: part,
-            animatedSvgLink: hsk.animatedSvgLink(part)
-          });
-        }
-      });
-      characters.push(entry);
+      if (entry) {
+        entry.animatedSvgLink = hsk.animatedSvgLink(character);
+        entry.examples = hsk.lookupHskFussy(character);
+        entry.parts = [];
+        var parts = entry.decomposition.substring(1).split("");
+        parts.forEach(function(part) {
+          partObj = hsk.lookupCharacter(part);
+          if (partObj) {
+            partObj.animatedSvgLink = hsk.animatedSvgLink(part);
+            entry.parts.push(partObj);
+          } else {
+            entry.parts.push({
+              character: part,
+              animatedSvgLink: hsk.animatedSvgLink(part)
+            });
+          }
+        });
+        characters.push(entry);
+      }
     });
     return characters;
   },
