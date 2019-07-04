@@ -15,8 +15,8 @@ $url = urldecode($_GET['url']);
 $id = $_GET['id'];
 $word = $_GET['word'];
 $filename = $id . '-' . $word . '.jpg';
-$path = '/img/words/';
-$dir = dirname(__FILE__) . $path;
+$path = 'img/words/';
+$dir = dirname(__FILE__) . '/' . $path;
 
 get_photo_and_save($url, $dir . $filename);
 
