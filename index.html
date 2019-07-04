@@ -34,9 +34,9 @@
             </div>
             <div class="suggestions" v-cloak v-if="suggestions.length > 0">
               <a :href="suggestion.href" v-on:click="suggestionClick" class="suggestion" v-for="suggestion in suggestions">
-                <span class="character-example-word" v-bind:data-hsk="suggestion['Book']">{{ suggestion['Word'] }}</span>
-                <span class="character-example-pinyin">{{ suggestion['Pinyin'] }}</span>
-                <span class="character-example-english">{{ suggestion['English'] }}</span>
+                <span class="character-example-word" v-bind:data-hsk="suggestion.book">{{ suggestion.word }}</span>
+                <span class="character-example-pinyin">{{ suggestion.pinyin }}</span>
+                <span class="character-example-english">{{ suggestion.english }}</span>
                 <span class="suggestion-not-found" v-if="suggestion.notFound"><b>&ldquo;{{ suggestion.text }}&rdquo;</b> is not in the HSK. Try looking it up in <b>Wiktionary.</b></span>
               </a>
             </div>
@@ -50,47 +50,72 @@
         <div class="col-md-12">
             <button class="paginate-button previous" v-on:click="previousClick"><img src="img/angle-left.svg" alt=""></button>
             <button class="paginate-button next" v-on:click="nextClick"><img src="img/angle-right.svg" alt=""></button>
-            <div class="pinyin">{{ entry['Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Word']"></div>
-            <h1 class="word"><span v-bind:data-hsk="entry['Book']">{{ entry['Word'] }}</h1>
-            <p class="english">{{ entry['English'] }}</p>
+            <div class="pinyin">{{ entry.pinyin }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry.word"></div>
+            <h1 class="word"><span v-bind:data-hsk="entry.book" v-html="addAnimatedSvgLinks(entry.word)"></h1>
+            <p class="english">{{ entry.english }}</p>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid mb2" v-cloak v-if="initialized && entry['OofC'] !== ''">
+    <div class="container-fluid mb2" v-cloak v-if="initialized && entry.oofc !== ''">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
-            This word is not required in HSK {{ entry['Book'] }} but is covered in our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry['Book']" class="video-course">HSK {{ entry['Book'] }} Video Course</a> as an optional vocabulary word.
+            This word is not required in HSK {{ entry.book }} but is covered in our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry.book" class="video-course">HSK {{ entry.book }} Video Course</a> as an optional vocabulary word.
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid mb2" v-cloak v-if="initialized && entry['PN'] !== ''">
+    <div class="container-fluid mb2" v-cloak v-if="initialized && entry.pn !== ''">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
-            This is a <b><em>proper noun</em></b> that appeared in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry['Book']" class="video-course">HSK {{ entry['Book'] }} Video Course</a>.
+            This is a <b><em>proper noun</em></b> that appeared in <b>Lesson {{ entry.lesson }}<span v-if="entry.book < 5">, Text {{ entry.dialog }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" :data-hsk="entry.book" class="video-course">HSK {{ entry.book }} Video Course</a>.
           </div>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid example-bar" v-cloak v-if="initialized && entry['Example'] !== ''">
+    <div class="container-fluid example-bar" v-cloak v-if="initialized && entry.example !== ''">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-              <img v-bind:src="image" class="example-image" v-if="hasImage">
-              <img :src="'https://source.unsplash.com/540x303/?' + entry['English']" class="example-image" alt="" v-else="hasImage">
+            <div class="image-wrapper">
+                <img v-bind:src="image" class="example-image" v-if="hasImage">
+            </div>
           </div>
           <div class="col-md-6 example-wrapper text-md-left text-sm-center sm-mt2">
-              <div class="label" v-bind:data-bg-hsk="entry['Book']" v-if="entry['OofC'] == ''">HSK {{ entry['Book'] }}</div>
+              <div class="label" v-bind:data-bg-hsk="entry.book" v-if="entry.oofc == ''">HSK {{ entry.book }}</div>
               <div class="example-sentence">
-                <p class="example-sentence-pinyin">{{ entry['Example Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry['Example']"></p>
-                <p class="example-sentence-word"  v-html="highlight(entry['Example'])"></p>
-                <p class="example-sentence-english">{{ entry['Translation'] }}</p>
+                <p class="example-sentence-pinyin">{{ entry.examplePinyin }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry.example"></p>
+                <p class="example-sentence-word"  v-html="highlight(entry.example)"></p>
+                <p class="example-sentence-english">{{ entry.exampleTranslation }}</p>
               </div>
+          </div>
+        </div>
+        <div class="unsplash-sources" v-if="admin">
+          <div class="row mb2">
+            <div class="col-sm-12">
+              Search <input type="text" class="search-image" v-on:keyup.enter="searchImageKeyupEnter">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3 mb2" v-for="src in unsplashSrcs">
+              <div class="image-wrapper">
+                <img v-bind:src="src" alt="" class="example-image unsplash-thumb" v-on:click="unsplashThumbClick">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+                <div>
+                  Image URL: <input type="text" class="image-url d-block" v-on:keyup.enter="imageUrlKeyupEnter">
+                </div>
+                <div class="mt2">
+                  <a :href="'https://www.canva.com/photos/search/' + hsk.simplifyEnglish(entry.english)" target="_blank">Search on Canva</a>
+                </div>
+            </div>
           </div>
         </div>
       </div>
@@ -109,18 +134,18 @@
             </div>
           </div>
           <ul class="character-examples collapsed">
-            <li v-for="example in character.examples" class="character-example"><a :href="'#' + example['Word']"><span class="character-example-word"><b v-bind:data-hsk="example['Book']">{{ example['Word'] }}</b></span></a> <span class="character-example-pinyin">{{ example['Pinyin'] }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="example['Word']"></span> <em class="character-example-english">{{ example['English'] }}</em></li>
+            <li v-for="example in character.examples" class="character-example"><a :href="'#' + example.word"><span class="character-example-word"><b v-bind:data-hsk="example.book">{{ example.word }}</b></span></a> <span class="character-example-pinyin">{{ example.pinyin }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="example.word"></span> <em class="character-example-english">{{ example.english }}</em></li>
           </ul>
           <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick"><span class="label-expand">More</span><span class="label-collapse">Collapse</span></button>
         </div>
       </div>
     </div>
 
-    <div class="container-fluid learn-this-bar" :data-bg-hsk="entry['Book']" v-cloak v-if="initialized">
+    <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak v-if="initialized">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
-            Learn this word in <b>Lesson {{ entry['Lesson'] }}<span v-if="entry['Book'] < 5">, Text {{ entry['Dialog'] }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry['Book']">HSK {{ entry['Book'] }} Video Course</a>
+            Learn this word in <b>Lesson {{ entry.lesson }}<span v-if="entry.book < 5">, Text {{ entry.dialog }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course" :data-hsk="entry.book">HSK {{ entry.book }} Video Course</a>
           </div>
         </div>
       </div>
@@ -128,7 +153,7 @@
 
     <div class="container-flud lyrics-bar" v-cloak v-if="initialized && lrcs && lrcs.length > 0 ">
       
-      <div class="container">
+      <div class="container" v-if="!admin">
 
         <div class="song-caroussel">
           <nav>
@@ -136,18 +161,18 @@
             <button v-if="lrcs.length > 1" class="paginate-button next" v-on:click="songNextClick"><img src="img/angle-right.svg" alt=""></button>
           </nav>
           <div class="songs">
-            <div class="row song" v-if="initialized && entry['Song Lyrics'] != ''">
+            <div class="row song" v-if="initialized && entry.songLyrics != ''">
               <div class="col-md-6">
                 <div class="youtube">
-                  <iframe :src="entry['Song YouTube'].replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  <iframe :src="entry.songYouTube.replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
               </div>
               <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
-                <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
+                <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
                 <div class="lyrics">
-                  <p class="lyrics-pinyin">{{ entry['Song Pinyin'] }}</p>
-                  <p class="lyrics-line matched" v-html="highlight(entry['Song Lyrics'])"></p>
-                  <p class="lyrics-english">{{ entry['Song Translation'] }}</p>
+                  <p class="lyrics-pinyin">{{ entry.songPinyin }}</p>
+                  <p class="lyrics-line matched" v-html="highlight(entry.songLyrics)"></p>
+                  <p class="lyrics-english">{{ entry.songTranslation }}</p>
                 </div>
               </div>
             </div>
@@ -161,7 +186,7 @@
                 <button v-on:click="cycleYouTubeClick" class="youtube-version-button">Switch to Another Version of the Song</button>
               </div>
               <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
-                <div class="label song-label">{{ entry['Word'] }} IN SONG LYRICS</div>
+                <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
                 <div class="lyrics collapsed">
                   <div class="lyrics-english mt1">{{ lrc.artist }} 《{{ lrc.title }}》</div>
                   <div class="lyrics-line" v-for="line, index in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(index), 'matched-context': inContext(index, 2, lrc) }" v-html="highlight(line.line)"></div>
@@ -194,10 +219,10 @@
                         <div class="dialog-title" v-on:click='dialogClick'>Part {{ index }}</div>
                         <ul class="browse-words collapsed">
                             <li class="browse-words-item character-example" v-for="row in dialog">
-                              <a :href="'#' + row['Word']" >
-                                <span class="character-example-word" :data-hsk="row['Book']">{{ row['Word'] }}</span>
-                                <span class="character-example-pinyin">{{ row['Pinyin'] }}</span>
-                                <span class="character-example-english">{{ row['English'] }}</span>
+                              <a :href="'#' + row.id" >
+                                <span class="character-example-word" :data-hsk="row.book">{{ row.word }}</span>
+                                <span class="character-example-pinyin">{{ row.pinyin }}</span>
+                                <span class="character-example-english">{{ row.english }}</span>
                               </a>
                             </li>
                         </ul>
@@ -215,7 +240,7 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <b>Credits</b>: Images made possible with <a href="https://source.unsplash.com/">Unsplash Source</a>, <a href="https://www.canva.com/photos/">Canva</a> and <a href="https://pixabay.com/">Pixabay</a>. Character component breakdown and stroke animation made possible by <a href="https://github.com/skishore/makemeahanzi">Make Me a Hanzi</a>. Example sentences and translation from <a href="http://www.jukuu.com/">Jukuu</a>. Pinyin annotation made possible by <a href="https://mandarinspot.com/annotate">Mandarin Spot</a>.
+            <b>Credits</b>: Images made possible with <a href="https://source.unsplash.com/">Unsplash Source</a>, <a href="https://www.canva.com/photos/">Canva</a> and <a href="https://pixabay.com/">Pixabay</a>. Character component breakdown and stroke animation made possible by <a href="https://github.com/skishore/makemeahanzi">Make Me a Hanzi</a>. Example sentences and translation from <a href="http://www.jukuu.com/">Jukuu</a>. Pinyin annotation made possible by <a href="https://mandarinspot.com/annotate">Mandarin Spot</a>. <a v-on:click="adminClick">Admin</a>
           </div>
         </div>
       </div>
@@ -229,6 +254,7 @@
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/vue/vue.js"></script>
   <script src="vendor/papaparse/papaparse.min.js"></script>
+  <script src="js/hsk.js"></script>
   <script src="js/hsk-dictionary.js"></script>
   <script src="https://apis.google.com/js/client.js?onload=init"></script>
 </body>

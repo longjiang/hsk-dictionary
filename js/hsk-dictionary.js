@@ -1,221 +1,4 @@
-function getImage(entry, app) {
-  $.ajax("img/words/" + entry["Word"] + ".jpg")
-    .done(function() {
-      app.image = "img/words/" + entry["Word"] + ".jpg";
-      app.hasImage = true;
-    })
-    .fail(function() {
-      app.hasImage = false;
-    });
-}
-
-function recalculateExampleColumns(word) {
-  var $div = $(".character-example-wrapper > div");
-  var span = 12 / word.length;
-  $div.removeClass();
-  $div.addClass("col-md-" + span);
-}
-
-function getCharactersInWord(word, hskDictionary, characterDictionary) {
-  characters = [];
-  word.split("").forEach(function(character) {
-    var entry = lookupCharacter(character, characterDictionary);
-    entry.animatedSvgLink = animatedSvgLink(character);
-    entry.examples = lookupHskFussy(character, hskDictionary);
-    entry.parts = [];
-    var parts = entry.decomposition.substring(1).split("");
-    parts.forEach(function(part) {
-      partObj = lookupCharacter(part, characterDictionary);
-      if (partObj) {
-        partObj.animatedSvgLink = animatedSvgLink(part);
-        entry.parts.push(partObj);
-      } else {
-        entry.parts.push({
-          character: part,
-          animatedSvgLink: animatedSvgLink(part)
-        });
-      }
-    });
-    characters.push(entry);
-  });
-  return characters;
-}
-
-function animatedSvgLink(char) {
-  var charCode = char.charCodeAt(0);
-  return '<a href="data/svgs/' + charCode + '.svg">' + char + "</a>";
-}
-
-function addAnimatedSvgLinks() {
-  var $word = $(".word span");
-  var $word = $word.text();
-  var chars = word.split("");
-  var html = "";
-  chars.forEach(function(char) {
-    html = html + animatedSvgLink(char);
-  });
-  $(".word span").html(html);
-}
-
-function attachSpeakEventHandler() {
-  $(".speak")
-    .off()
-    .click(function() {
-      var text = $(this).attr("data-speak");
-      var utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "zh-CN";
-      speechSynthesis.speak(utterance);
-    });
-}
-
-function removeToneMarks(pinyin) {
-  // See https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
-  return pinyin.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
-
-function lookupHsk(word, hskDictionary) {
-  var results = [];
-  hskDictionary.forEach(function(row, index) {
-    if (row["Word"] == word) {
-      row.index = index;
-      results.push(row);
-    }
-  });
-  return results;
-}
-
-function lookupHskFussy(word, hskDictionary) {
-  var results = [];
-  word = word.toLowerCase();
-  hskDictionary.forEach(function(row) {
-    if (
-      row["Word"].includes(word) ||
-      removeToneMarks(row["Pinyin"])
-        .toLowerCase()
-        .includes(word) ||
-      row["English"].toLowerCase().includes(word)
-    ) {
-      if (row["OofC"] == "") {
-        row.href = "#" + row["Word"];
-        results.push(row);
-      }
-    }
-  });
-  return results;
-}
-
-function lookupCharacter(character, characterDictionary) {
-  results = [];
-  characterDictionary.forEach(function(row) {
-    if (row.character == character) {
-      results.push(row);
-    }
-  });
-  return results[0];
-}
-
-function displayEntry(entry, app) {
-  app.entry = entry;
-  app.index = entry.index;
-  app.characters = getCharactersInWord(
-    word,
-    app.hskDictionary,
-    app.characterDictionary
-  );
-  findWordInLrcs(entry["Word"], function(lrcs) {
-    lrcs.forEach(function(lrc) {
-      lrc.matchedLines = [];
-      lrc.content.forEach(function(line, index) {
-        if (line.line.includes(entry["Word"])) {
-          lrc.matchedLines.push(index);
-        }
-      });
-    });
-    console.log(lrcs);
-    app.lrcs = lrcs;
-  });
-  getImage(entry, app);
-  app.initialized = true;
-  app.suggestions = [];
-  $("#lookup").val(entry["Word"]);
-  app.$forceUpdate();
-}
-
-function showByIndex(index, app) {
-  if (index > 0 && index < app.hskDictionary.length) {
-    var entry = app.hskDictionary[index];
-    if (entry) {
-      entry.index = index;
-      location.hash = entry["Word"];
-    }
-  }
-}
-
-function showWord(word, app) {
-  var entry = lookupHsk(word, app.hskDictionary)[0];
-  if (entry) {
-    displayEntry(entry, app);
-  }
-}
-
-function compileBooks(hskDictionary) {
-  // https://www.consolelog.io/group-by-in-javascript/
-  Array.prototype.groupBy = function(prop) {
-    return this.reduce(function(groups, item) {
-      const val = item[prop];
-      groups[val] = groups[val] || [];
-      groups[val].push(item);
-      return groups;
-    }, {});
-  };
-  books = hskDictionary.groupBy("Book");
-  for (var book in books) {
-    books[book] = books[book].groupBy("Lesson");
-    for (var lesson in books[book]) {
-      books[book][lesson] = books[book][lesson].groupBy("Dialog");
-    }
-  }
-  return books;
-}
-
-function filterBook(book, hskDictionary) {
-  var getFilterFunction = function(book) {
-    return function(row) {
-      return row["Book"] == book;
-    };
-  };
-  return hskDictionary.filter(getFilterFunction(book));
-}
-
-function filterLesson(book, lesson, hskDictionary) {
-  var getFilterFunction = function(book, lesson) {
-    return function(row) {
-      return row["Book"] == book && row["Lesson"] == lesson;
-    };
-  };
-  return hskDictionary.filter(getFilterFunction(book, lesson));
-}
-
-function filterDialog(book, lesson, dialog, hskDictionary) {
-  var getFilterFunction = function(book, lesson, dialog) {
-    return function(row) {
-      return (
-        row["Book"] == book &&
-        row["Lesson"] == lesson &&
-        row["Dialog"] == dialog
-      );
-    };
-  };
-  return hskDictionary.filter(getFilterFunction(book, lesson, dialog));
-}
-
-function filterOofC(hskDictionary) {
-  return hskDictionary.filter(function(row) {
-    return row["OofC"] === "";
-  });
-}
-
-function findWordInLrcs(word, callback) {
+function getLrcs(word, callback) {
   $.getJSON(
     "https://www.chinesezerotohero.com/lyrics-search/lrc/search/" +
       word +
@@ -226,32 +9,146 @@ function findWordInLrcs(word, callback) {
   );
 }
 
-function main(hskDictionary, characterDictionary) {
-  var startWord = "固有";
-  var entry = lookupHsk(startWord, hskDictionary)[0];
-  var characters = getCharactersInWord(
-    startWord,
-    hskDictionary,
-    characterDictionary
+function savePhoto(word, url, callback) {
+  $.getJSON(
+    "save-photo.php?id=" +
+      word.id +
+      "&word=" +
+      word.word +
+      "&url=" +
+      encodeURIComponent(url),
+    callback
   );
+}
+
+function getSrcsFromUnsplash(term, callcback) {
+  scrape("https://unsplash.com/search/photos/" + term, function(
+    $html,
+    response
+  ) {
+    var srcs = [];
+
+    var $metas = $html.filter("meta"); // cannot use find
+    $metas.each(function() {
+      var property = $(this).attr("property");
+      if (property) {
+        if (property.includes("og:image:secure_url")) {
+          srcs.push($(this).attr("content"));
+        }
+      }
+    });
+    callcback(srcs);
+  });
+}
+
+function scrape(url, callback) {
+  $.ajax("proxy.php?" + url).done(function(response) {
+    // We use 'ownerDocument' so we don't load the images and scripts!
+    // https://stackoverflow.com/questions/15113910/jquery-parse-html-without-loading-images
+    var ownerDocument = document.implementation.createHTMLDocument("virtual");
+    $html = $(response, ownerDocument);
+    callback($html, response);
+  });
+}
+
+function main(hskObj) {
   var app = new Vue({
     el: "#hsk-dictionary",
     data: {
       character: {},
-      hskDictionary: hskDictionary,
-      characterDictionary: characterDictionary,
+      hsk: hskObj,
       lrcs: [], // matched song lyrics, pulled from another server
-      wordList: filterOofC(hskDictionary),
-      entry: entry,
-      books: compileBooks(hskDictionary),
-      characters: characters,
-      index: entry.index,
-      image: "img/words/" + entry["Word"] + ".jpg",
+      wordList: hskObj.listWhere(function(word) {
+        word.oofc === "";
+      }),
+      entry: undefined,
+      books: hskObj.compileBooks(),
+      characters: [],
+      image: undefined,
       hasImage: true,
       suggestions: [],
-      initialized: false
+      initialized: false,
+      unsplashSrcs: [],
+      unsplashSearchTerm: "",
+      admin: false
     },
     methods: {
+      adminClick: function() {
+        this.admin = true;
+      },
+      showById: function(id) {
+        var entry = this.hsk.get(id);
+        if (entry) {
+          this.displayEntry(entry);
+        }
+      },
+
+      displayEntry: function(entry) {
+        app = this;
+        app.entry = entry;
+        app.characters = this.hsk.getCharactersInWord(entry.word);
+        getLrcs(entry.word, function(lrcs) {
+          lrcs.forEach(function(lrc) {
+            lrc.matchedLines = [];
+            lrc.content.forEach(function(line, index) {
+              if (line.line.includes(entry.word)) {
+                lrc.matchedLines.push(index);
+              }
+            });
+          });
+          app.lrcs = lrcs;
+        });
+        app.getImage(entry);
+        app.initialized = true;
+        app.suggestions = [];
+        $("#lookup").val(entry.word);
+        app.$forceUpdate();
+      },
+
+      getImage: function(entry) {
+        var app = this;
+        var imagePath = "img/words/" + entry.id + "-" + entry.word + ".jpg";
+        $.ajax(imagePath)
+          .done(function() {
+            app.image = imagePath;
+            app.hasImage = true;
+          })
+          .fail(function() {
+            app.hasImage = false;
+          });
+        getSrcsFromUnsplash(
+          app.hsk.simplifyEnglish(app.entry.english),
+          function(srcs) {
+            app.unsplashSrcs = srcs;
+          }
+        );
+      },
+      uploadPhotoAndUpdate(url, $button) {
+        savePhoto(app.entry, url, function(response) {
+          $button.after('<span class="success">Uploaded</span>');
+          app.hasImage = true;
+          app.image = response.url;
+          setTimeout(function() {
+            $(".success").remove();
+          }, 3000);
+        });
+      },
+      unsplashThumbClick(e) {
+        var $button = $(e.target);
+        var url = $button.attr("src");
+        var app = this;
+        this.uploadPhotoAndUpdate(url, $button);
+      },
+      imageUrlKeyupEnter(e) {
+        var $input = $(e.target);
+        var url = $(e.target).val();
+        this.uploadPhotoAndUpdate(url, $input);
+      },
+      searchImageKeyupEnter(e) {
+        getSrcsFromUnsplash($(e.target).val(), function(srcs) {
+          app.unsplashSrcs = srcs;
+        });
+      },
       lookupKeyupEnter() {
         const url = $(".suggestion:first-child").attr("href");
         window.location = url;
@@ -270,9 +167,12 @@ function main(hskDictionary, characterDictionary) {
         app.suggestions = [];
         var text = e.target.value;
         if (text !== "") {
-          var suggestions = lookupHskFussy(text, hskDictionary);
+          var suggestions = app.hsk.lookupHskFussy(text);
           if (suggestions.length > 0) {
             app.suggestions = suggestions;
+            suggestions.forEach(function(suggestion) {
+              suggestion.href = "#" + suggestion.id;
+            });
           } else if (suggestions.length == 0) {
             app.suggestions = [
               {
@@ -285,14 +185,12 @@ function main(hskDictionary, characterDictionary) {
         }
       },
       highlight(text) {
-        return text.replace(
-          this.entry["Word"],
-          '<b data-hsk="' +
-            this.entry["Book"] +
-            '">' +
-            this.entry["Word"] +
-            "</b>"
-        );
+        if (text) {
+          return text.replace(
+            this.entry.word,
+            '<b data-hsk="' + this.entry.book + '">' + this.entry.word + "</b>"
+          );
+        }
       },
       showMoreClick(e) {
         $button = $(e.currentTarget);
@@ -303,13 +201,15 @@ function main(hskDictionary, characterDictionary) {
         location.hash = "";
       },
       previousClick(e) {
-        showByIndex(app.index - 1, app);
+        var previous = Math.max(0, parseInt(this.entry.id) - 1);
+        location.hash = previous;
       },
       nextClick(e) {
-        showByIndex(app.index + 1, app);
+        var next = Math.min(this.hsk.count(), parseInt(this.entry.id) + 1);
+        location.hash = next;
       },
       suggestionClick(e) {
-        app.suggestions = [];
+        this.suggestions = [];
       },
       toggleCollapsed(e) {
         $(e.target)
@@ -320,7 +220,7 @@ function main(hskDictionary, characterDictionary) {
         var book = $(e.target)
           .parents("[data-book]")
           .attr("data-book");
-        this.wordList = filterBook(book, this.hskDictionary);
+        this.wordList = this.hsk.listByBook(book);
         $(e.target)
           .next("ul")
           .toggleClass("collapsed");
@@ -332,7 +232,7 @@ function main(hskDictionary, characterDictionary) {
         var book = $(e.target)
           .parents("[data-book]")
           .attr("data-book");
-        this.wordList = filterLesson(book, lesson, this.hskDictionary);
+        this.wordList = this.hsk.listByBookLesson(book, lesson);
         $(e.target)
           .next("ul")
           .toggleClass("collapsed");
@@ -347,7 +247,7 @@ function main(hskDictionary, characterDictionary) {
         var book = $(e.target)
           .parents("[data-book]")
           .attr("data-book");
-        this.wordList = filterDialog(book, lesson, dialog, this.hskDictionary);
+        this.wordList = this.hsk.listBookLessonDialog(book, lesson, dialog);
         $(e.target)
           .next("ul")
           .toggleClass("collapsed");
@@ -395,38 +295,57 @@ function main(hskDictionary, characterDictionary) {
         var min = lrc.matchedLines[0] - margin;
         var max = lrc.matchedLines[0] + margin;
         return index >= min && index <= max;
+      },
+      recalculateExampleColumns: function(word) {
+        var $div = $(".character-example-wrapper > div");
+        var span = 12 / word.length;
+        $div.removeClass();
+        $div.addClass("col-md-" + span);
+      },
+
+      addAnimatedSvgLinks: function(word) {
+        var chars = word.split("");
+        var html = "";
+        chars.forEach(function(char) {
+          html = html + this.hsk.animatedSvgLink(char);
+        });
+        return html;
+      },
+
+      attachSpeakEventHandler: function() {
+        $(".speak")
+          .off()
+          .click(function() {
+            var text = $(this).attr("data-speak");
+            var utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "zh-CN";
+            speechSynthesis.speak(utterance);
+          });
       }
     },
     updated: function() {
       if (app.initialized) {
-        recalculateExampleColumns(this.entry["Word"]);
-        addAnimatedSvgLinks();
-        attachSpeakEventHandler();
+        this.recalculateExampleColumns(this.entry.word);
+        this.attachSpeakEventHandler();
       }
     }
   });
 
   window.onhashchange = function() {
-    word = decodeURI(location.hash.substr(1));
-    if (word) {
-      showWord(word, app);
+    id = decodeURI(location.hash.substr(1));
+    if (id) {
+      app.showById(id);
     } else {
       app.initialized = false;
     }
     window.scrollTo(0, 0);
   };
   if (location.hash && location.hash.length > 1) {
-    word = decodeURI(location.hash.substr(1));
-    showWord(word, app);
+    id = decodeURI(location.hash.substr(1));
+    app.showById(id);
   }
 }
 
-Papa.parse("data/HSK 1-6 Vocabulary/HSK Standard Course 1-6-Table 1.csv", {
-  download: true,
-  header: true,
-  complete: function(csv) {
-    $.getJSON("data/dictionary.txt").done(function(characterDictionary) {
-      main(csv.data, characterDictionary);
-    });
-  }
+HSK.load(function(hsk) {
+  main(hsk);
 });

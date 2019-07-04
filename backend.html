@@ -44,12 +44,14 @@
               <thead>
                 <tr>
                   <th>Word</th>
+                  <th>Simple English</th>
                   <th><button class="btn btn-primary" v-on:click="getAllClick">Get All</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="word in words" :data-id="word.id">
+                <tr v-for="word in words" :data-id="word.id" v-if="!word.hasPhoto">
                   <td>{{ word.word }}</td>
+                  <td>{{ word.simpleEnglish }}</td>
                   <td>
                     <button class="btn btn-primary get-photo-button" v-if="!word.hasPhoto" :data-id="word.id" v-on:click="getPhotoClick">Get photo</button>
                     <span v-else>Has photo: {{ word.photo }}</span>

@@ -175,7 +175,14 @@ $(document).ready(function() {
     }
   });
 
-  function loadWords() {}
+  function simplifyEnglish(english) {
+    return english
+      .replace("/", ", ")
+      .replace(/, .*/, "")
+      .replace(/\(.*\)/, "")
+      .replace("to ", "")
+      .replace(".", "");
+  }
 
   HSK.load(function(hsk) {
     var saveImagesVue = new Vue({
@@ -187,14 +194,19 @@ $(document).ready(function() {
         loadWordsClick: function() {
           var saveImagesVue = this;
           this.words = hsk.list();
+          this.words.forEach(function(word) {
+            word.simpleEnglish = simplifyEnglish(word.english);
+          });
           $.getJSON("list-photos.php", function(result) {
+            // words with id marked as having photo
             result.forEach(function(photo) {
-              // words with id marked as having photo
               var word = saveImagesVue.words.find(function(w) {
-                return w.id === photo.id;
+                return parseInt(w.id) === parseInt(photo.id);
               });
-              word.hasPhoto = true;
-              word.photo = photo.filename;
+              if (word) {
+                word.hasPhoto = true;
+                word.photo = photo.filename;
+              }
             });
             saveImagesVue.$forceUpdate();
           });
@@ -203,22 +215,27 @@ $(document).ready(function() {
           $button = $(e.target);
           var id = $button.attr("data-id");
           var word = hsk.get(id);
-          // savePhotoFromUnsplashSource(word, function(result) {
-          // if (result.status === "success") {
-          //   $button.after("Success");
-          //   $button.remove();
-          // }
-          // });
-          getSrcsFromSplash(word.english, function(srcs) {
-            var url =
-              srcs[Math.floor(Math.min(3, srcs.length) * Math.random())];
-            savePhoto(word, url, function(result) {
-              if (result.status === "success") {
-                $button.after("Success");
-                $button.remove();
-              }
-            });
+          savePhotoFromUnsplashSource(word, function(result) {
+            if (result.status === "success") {
+              $button.after("Success");
+              $button.remove();
+            }
           });
+          // getSrcsFromUnsplash(word.simpleEnglish, function(srcs) {
+          //   if (srcs.length > 0) {
+          //     var url =
+          //       srcs[Math.floor(Math.min(10, srcs.length) * Math.random())];
+          //     savePhoto(word, url, function(result) {
+          //       if (result.status === "success") {
+          //         $button.after("Success");
+          //         $button.remove();
+          //       }
+          //     });
+          //   } else {
+          //     $button.after("No match.");
+          //     $button.remove();
+          //   }
+          // });
         },
         getAllClick: function(e) {
           timeout = 0;
@@ -243,7 +260,7 @@ $(document).ready(function() {
   function savePhotoFromUnsplashSource(word, callback) {
     savePhoto(
       word,
-      "https://source.unsplash.com/1280x720/?" + word.english,
+      "https://source.unsplash.com/1280x720/?" + word.simpleEnglish,
       callback
     );
   }
@@ -260,7 +277,7 @@ $(document).ready(function() {
     );
   }
 
-  function getSrcsFromSplash(term, callcback) {
+  function getSrcsFromUnsplash(term, callcback) {
     scrape("https://unsplash.com/search/photos/" + term, function($html) {
       var srcs = [];
       $html.find("img._2zEKz").each(function() {

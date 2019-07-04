@@ -212,10 +212,19 @@ body {
   font-size: 1.5rem;
 }
 
+.image-wrapper {
+  padding-bottom: 56%;
+  height: 0;
+  position: relative;
+}
+
 .example-image {
-  max-width: 100%;
+  width: 100%;
   display: block;
   margin: 0 auto;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
 }
 
 @media(max-width: 768px) {
@@ -505,4 +514,22 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 
 .lyrics.collapsed .lyrics-line.matched-context {
   display: block;
+}
+
+.unsplash-sources {
+  background: white;
+  padding: 2rem;
+  overflow: hidden;
+}
+
+.unsplash-sources img {
+  max-width: 10rem;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3)
+}
+
+.success {
+  position: absolute;
+  background: green;
+  color: white;
+  padding: 0.5rem 1rem;
 }
