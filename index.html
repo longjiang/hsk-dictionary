@@ -135,7 +135,7 @@
               <span class="part-pinyin character-example-english" v-if="part.character == '？'">Other elements</span>
             </div>
           </div>
-          <ul class="character-examples collapsed">
+          <ul class="character-examples collapsed" data-collapse-target>
             <li v-for="example in character.examples" class="character-example"><a :href="'#' + example.id"><span class="character-example-word"><b v-bind:data-hsk="example.book">{{ example.word }}</b></span></a> <span class="character-example-pinyin">{{ example.pinyin }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="example.word"></span> <em class="character-example-english">{{ example.english }}</em></li>
           </ul>
           <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick"><span class="label-expand">More</span><span class="label-collapse">Collapse</span></button>
@@ -163,6 +163,7 @@
             <button v-if="lrcs.length > 1" class="paginate-button next" v-on:click="songNextClick"><img src="img/angle-right.svg" alt=""></button>
           </nav>
           <div class="songs">
+            <!--
             <div class="row song" v-if="initialized && entry.songLyrics != ''">
               <div class="col-md-6">
                 <div class="youtube">
@@ -178,6 +179,7 @@
                 </div>
               </div>
             </div>
+            -->
             <div class="row song" v-for="lrc, index in lrcs" v-if="lrc.youtube && lrc.youtube.length > 0">
               <div class="col-md-6 text-center">
                 <div class="youtube-versions">
@@ -189,12 +191,12 @@
               </div>
               <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
                 <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
-                <div class="lyrics collapsed" :id="'lyrics-' + entry.id + '-' + index">
+                <div class="lyrics collapsed" :id="'lyrics-' + entry.id + '-' + index" data-collapse-target>
                   <div class="lyrics-english mt1" v-html="lrc.artist + '《' + lrc.title + '》'"></div>
                   <div class="lyrics-line" v-for="line, index in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(index), 'matched-context': inContext(index, 2, lrc) }" v-html="highlight(line.line)"></div>
                 </div>
-                <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">Show Entire Song</span><span class="label-collapse">Collapse</span></button>
                 <button class="show-more mt1" v-on:click="showPinyinClick" :data-target-selector="'#lyrics-' + entry.id + '-' + index">Show Pinyin</button>
+                <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">Show Entire Song</span><span class="label-collapse">Collapse</span></button>
               </div>
             </div>
           </div>         

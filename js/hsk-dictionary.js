@@ -217,7 +217,7 @@ function main(hskObj) {
       },
       showMoreClick(e) {
         $button = $(e.currentTarget);
-        $button.prev().toggleClass("collapsed");
+        $button.siblings("[data-collapse-target]").toggleClass("collapsed");
         $button.toggleClass("collapsed");
       },
       backToBrowse() {
