@@ -70,7 +70,8 @@ function main(hskObj) {
       initialized: false,
       unsplashSrcs: [],
       unsplashSearchTerm: "",
-      admin: false
+      admin: false,
+      annotator: new Annotator()
     },
     methods: {
       adminClick: function() {
@@ -327,6 +328,12 @@ function main(hskObj) {
       if (app.initialized) {
         this.recalculateExampleColumns(this.entry.word);
         this.attachSpeakEventHandler();
+        this.annotator.annotateBySelector(
+          ".add-pinyin, .add-pinyin *",
+          function() {
+            // success
+          }
+        );
       }
     }
   });

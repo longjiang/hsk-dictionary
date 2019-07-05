@@ -12,6 +12,8 @@
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="vendor/annotator-js/css/tipped.css" rel="stylesheet">
+  <link href="vendor/annotator-js/css/annotator.css" rel="stylesheet">
   <link href="css/hsk-dictionary.css" rel="stylesheet">
 
 </head>
@@ -187,7 +189,7 @@
               </div>
               <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
                 <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
-                <div class="lyrics collapsed">
+                <div class="lyrics collapsed add-pinyin">
                   <div class="lyrics-english mt1">{{ lrc.artist }} 《{{ lrc.title }}》</div>
                   <div class="lyrics-line" v-for="line, index in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(index), 'matched-context': inContext(index, 2, lrc) }" v-html="highlight(line.line)"></div>
                 </div>
@@ -254,6 +256,8 @@
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/vue/vue.js"></script>
   <script src="vendor/papaparse/papaparse.min.js"></script>
+  <script src="vendor/annotator-js/js/tipped.js"></script>
+  <script src="vendor/annotator-js/js/annotator.js"></script>
   <script src="js/hsk.js"></script>
   <script src="js/hsk-dictionary.js"></script>
   <script src="https://apis.google.com/js/client.js?onload=init"></script>
