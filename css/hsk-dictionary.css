@@ -209,6 +209,7 @@ body {
   border: none;
   padding: 0.2rem 0.5rem;
   color: #8e8e8e;
+  display: inline-block;
 }
 
 .collapsed > .label-collapse,
@@ -228,7 +229,7 @@ body {
 
 .example-sentence-word {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 }
 
 .image-wrapper {

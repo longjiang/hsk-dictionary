@@ -90,7 +90,7 @@
           <div class="col-md-6 example-wrapper text-md-left text-sm-center sm-mt2">
               <div class="label" v-bind:data-bg-hsk="entry.book" v-if="entry.oofc == ''">HSK {{ entry.book }}</div>
               <div class="example-sentence">
-                <p class="example-sentence-pinyin">{{ entry.examplePinyin }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry.example"></p>
+                <!-- <p class="example-sentence-pinyin">{{ entry.examplePinyin }} <img src="img/speaker.svg" class="speak" v-bind:data-speak="entry.example"></p> -->
                 <p class="example-sentence-word"  v-html="highlight(entry.example)"></p>
                 <p class="example-sentence-english">{{ entry.exampleTranslation }}</p>
               </div>
@@ -189,11 +189,12 @@
               </div>
               <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
                 <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
-                <div class="lyrics collapsed add-pinyin">
+                <div class="lyrics collapsed" :id="'lyrics-' + entry.id + '-' + index">
                   <div class="lyrics-english mt1" v-html="lrc.artist + '《' + lrc.title + '》'"></div>
                   <div class="lyrics-line" v-for="line, index in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(index), 'matched-context': inContext(index, 2, lrc) }" v-html="highlight(line.line)"></div>
                 </div>
-                <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">More</span><span class="label-collapse">Collapse</span></button>
+                <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">Show Entire Song</span><span class="label-collapse">Collapse</span></button>
+                <button class="show-more mt1" v-on:click="showPinyinClick" :data-target-selector="'#lyrics-' + entry.id + '-' + index">Show Pinyin</button>
               </div>
             </div>
           </div>         

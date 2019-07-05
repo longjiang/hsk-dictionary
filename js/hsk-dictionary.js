@@ -207,7 +207,11 @@ function main(hskObj) {
         if (text) {
           return text.replace(
             this.entry.word,
-            '<b data-hsk="' + this.entry.book + '">' + this.entry.word + "</b>"
+            '<span data-hsk="' +
+              this.entry.book +
+              '">' +
+              this.entry.word +
+              "</span>"
           );
         }
       },
@@ -340,6 +344,11 @@ function main(hskObj) {
             utterance.lang = "zh-CN";
             speechSynthesis.speak(utterance);
           });
+      },
+      showPinyinClick: function(e) {
+        var selector = $(e.target).attr("data-target-selector");
+        $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
+        new Annotator().annotateBySelector(selector + " *");
       }
     },
     updated: function() {
@@ -347,10 +356,12 @@ function main(hskObj) {
       if (app.initialized) {
         app.recalculateExampleColumns(this.entry.word);
         app.attachSpeakEventHandler();
-        if ($(".add-pinyin").length > 0 && !app.annotated) {
+        var selector = ".example-wrapper > .example-sentence";
+        if ($(selector).length > 0 && !app.annotated) {
           app.annotated = true; // Only once!
+          $(selector).addClass("add-pinyin"); // So we get the looks
           new Annotator().annotateBySelector(
-            ".add-pinyin, .add-pinyin *",
+            selector + ", " + selector + " *",
             function() {
               // success
             }
