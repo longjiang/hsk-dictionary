@@ -348,7 +348,10 @@ function main(hskObj) {
       showPinyinClick: function(e) {
         var selector = $(e.target).attr("data-target-selector");
         $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
-        new Annotator().annotateBySelector(selector + " *");
+        $(e.target).text("Loading...");
+        new Annotator().annotateBySelector(selector + " *", function() {
+          $(e.target).remove();
+        });
       }
     },
     updated: function() {

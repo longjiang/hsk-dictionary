@@ -75,36 +75,6 @@ body {
   padding: 2rem;
 }
 
-.hsk1,
-[data-hsk="1"] {
-  color: #f8b51e;
-}
-
-.hsk2,
-[data-hsk="2"] {
-  color: #267f94;
-}
-
-.hsk3,
-[data-hsk="3"] {
-  color: #fd4f1c;
-}
-
-.hsk4,
-[data-hsk="4"] {
-  color: #bb1718;
-}
-
-.hsk5,
-[data-hsk="5"] {
-  color: #1b3e76;
-}
-
-.hsk6,
-[data-hsk="6"] {
-  color: #6a3669;
-}
-
 .label {
   display: inline-block;
   padding: 0 1rem;
@@ -125,37 +95,6 @@ body {
     padding-top: 0;
   }
 }
-
-.bg-hsk1,
-[data-bg-hsk="1"] {
-  background-color: #f8b51e;
-}
-
-.bg-hsk2,
-[data-bg-hsk="2"] {
-  background-color: #267f94;
-}
-
-.bg-hsk3,
-[data-bg-hsk="3"] {
-  background-color: #fd4f1c;
-}
-
-.bg-hsk4,
-[data-bg-hsk="4"] {
-  background-color: #bb1718;
-}
-
-.bg-hsk5,
-[data-bg-hsk="5"] {
-  background-color: #1b3e76;
-}
-
-.bg-hsk6,
-[data-bg-hsk="6"] {
-  background-color: #6a3669;
-}
-
 .parts {
   margin-bottom: 1rem;
   margin-left: 1rem;
@@ -582,4 +521,70 @@ a.suggestion:first-child:not(:hover) {
 
 .mand-block-pinyin {
   font-size: 0.7em;
+}
+
+.hsk1,
+[data-hsk="1"] {
+  color: #f8b51e;
+}
+
+.hsk2,
+[data-hsk="2"] {
+  color: #267f94;
+}
+
+.hsk3,
+[data-hsk="3"] {
+  color: #fd4f1c;
+}
+
+.hsk4,
+[data-hsk="4"] {
+  color: #bb1718;
+}
+
+.hsk5,
+[data-hsk="5"] {
+  color: #1b3e76;
+}
+
+.hsk6,
+[data-hsk="6"] {
+  color: #6a3669;
+}
+
+.bg-hsk1,
+[data-bg-hsk="1"] {
+  background-color: #f8b51e;
+  color: white;
+}
+
+.bg-hsk2,
+[data-bg-hsk="2"] {
+  background-color: #267f94;
+  color: white;
+}
+
+.bg-hsk3,
+[data-bg-hsk="3"] {
+  background-color: #fd4f1c;
+  color: white;
+}
+
+.bg-hsk4,
+[data-bg-hsk="4"] {
+  background-color: #bb1718;
+  color: white;
+}
+
+.bg-hsk5,
+[data-bg-hsk="5"] {
+  background-color: #1b3e76;
+  color: white;
+}
+
+.bg-hsk6,
+[data-bg-hsk="6"] {
+  background-color: #6a3669;
+  color: white;
 }

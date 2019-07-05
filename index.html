@@ -195,7 +195,7 @@
                   <div class="lyrics-english mt1" v-html="lrc.artist + '《' + lrc.title + '》'"></div>
                   <div class="lyrics-line" v-for="line, index in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(index), 'matched-context': inContext(index, 2, lrc) }" v-html="highlight(line.line)"></div>
                 </div>
-                <button class="show-more mt1" v-on:click="showPinyinClick" :data-target-selector="'#lyrics-' + entry.id + '-' + index">Show Pinyin</button>
+                <button class="show-more mt1" v-on:click="showPinyinClick" :data-target-selector="'#lyrics-' + entry.id + '-' + index" :data-bg-hsk="entry.book">Show Pinyin</button>
                 <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">Show Entire Song</span><span class="label-collapse">Collapse</span></button>
               </div>
             </div>
