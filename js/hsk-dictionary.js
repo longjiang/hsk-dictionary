@@ -71,7 +71,8 @@ function main(hskObj) {
       unsplashSrcs: [],
       unsplashSearchTerm: "",
       admin: false,
-      annotator: new Annotator()
+      annotator: new Annotator(),
+      annotated: false
     },
     methods: {
       adminClick: function() {
@@ -325,15 +326,19 @@ function main(hskObj) {
       }
     },
     updated: function() {
+      var app = this;
       if (app.initialized) {
-        this.recalculateExampleColumns(this.entry.word);
-        this.attachSpeakEventHandler();
-        this.annotator.annotateBySelector(
-          ".add-pinyin, .add-pinyin *",
-          function() {
-            // success
-          }
-        );
+        app.recalculateExampleColumns(this.entry.word);
+        app.attachSpeakEventHandler();
+        if ($(".add-pinyin").length > 0 && !app.annotated) {
+          app.annotated = true; // Only once!
+          app.annotator.annotateBySelector(
+            ".add-pinyin, .add-pinyin *",
+            function() {
+              // success
+            }
+          );
+        }
       }
     }
   });
