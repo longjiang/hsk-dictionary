@@ -102,9 +102,27 @@ function main(hskObj) {
         });
         app.getImage(entry);
         app.initialized = true;
+        app.annotated = false; // Add pinyin again on update
         app.suggestions = [];
         $("#lookup").val(entry.word);
+        $(".youtube iframe").remove(); // Show new videos;
         app.$forceUpdate();
+      },
+
+      youtubeScreenTap: function(e) {
+        var youtube = $(e.target).attr("data-youtube");
+        var starttime = $(e.target).attr("data-starttime");
+        var src =
+          "https://www.youtube.com/embed/" +
+          youtube +
+          "?start=" +
+          Math.floor(starttime);
+        var iframe =
+          '<iframe src="' +
+          src +
+          '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+        console.log(iframe);
+        $(e.target).after(iframe); // Add the embed
       },
 
       getImage: function(entry) {

@@ -182,7 +182,7 @@
               <div class="col-md-6 text-center">
                 <div class="youtube-versions">
                   <div class="youtube" v-for="youtube in lrc.youtube.slice(0, 3)">
-                    <iframe :src="'https://www.youtube.com/embed/' + youtube + '?start=' + Math.floor(lrc.content[lrc.matchedLines[0]].starttime)" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <div class="youtube-screen" v-on:click="youtubeScreenTap" :data-youtube="youtube" :data-starttime="lrc.content[lrc.matchedLines[0]].starttime"></div>
                   </div>
                 </div>
                 <button v-on:click="cycleYouTubeClick" class="youtube-version-button">Switch to Another Version of the Song</button>

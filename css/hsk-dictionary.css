@@ -448,12 +448,28 @@ a.suggestion:first-child:not(:hover) {
   position: relative;
 }
 
-.youtube iframe {
+.youtube iframe,
+.youtube-screen {
   position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
+}
+
+.youtube-screen {
+  background: url("../img/youtube-red.svg"), black;
+  background-size: 28%;
+  background-repeat: no-repeat;
+  background-position: center;
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
