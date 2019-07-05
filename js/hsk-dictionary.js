@@ -71,7 +71,6 @@ function main(hskObj) {
       unsplashSrcs: [],
       unsplashSearchTerm: "",
       admin: false,
-      annotator: new Annotator(),
       annotated: false
     },
     methods: {
@@ -350,7 +349,7 @@ function main(hskObj) {
         app.attachSpeakEventHandler();
         if ($(".add-pinyin").length > 0 && !app.annotated) {
           app.annotated = true; // Only once!
-          app.annotator.annotateBySelector(
+          new Annotator().annotateBySelector(
             ".add-pinyin, .add-pinyin *",
             function() {
               // success
