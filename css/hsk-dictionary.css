@@ -546,11 +546,13 @@ a.suggestion:first-child:not(:hover) {
 }
 
 .lyrics-line {
-  color: #b7b7b7;
+  color: #ababab;
+  font-size: 1.2rem;
 }
 
 .lyrics-line.matched {
-  color: #868686;
+  color: #616161;
+  font-weight: bold;
 }
 
 .lyrics.collapsed .lyrics-line {
@@ -576,4 +578,8 @@ a.suggestion:first-child:not(:hover) {
   background: green;
   color: white;
   padding: 0.5rem 1rem;
+}
+
+.mand-block-pinyin {
+  font-size: 0.7em;
 }
