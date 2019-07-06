@@ -129,7 +129,18 @@ var HSK = {
 
   animatedSvgLink: function(char) {
     var charCode = char.charCodeAt(0);
-    return '<a href="data/svgs/' + charCode + '.svg">' + char + "</a>";
+    return (
+      '<a href="data/svgs/' +
+      charCode +
+      '.svg" target="_blank">' +
+      char +
+      "</a>"
+    );
+  },
+
+  animatedSvgUrl: function(char) {
+    var charCode = char.charCodeAt(0);
+    return "data/svgs/" + charCode + ".svg";
   },
 
   lookupCharacter: function(character) {
