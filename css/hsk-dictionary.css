@@ -46,6 +46,15 @@ body {
   color: white;
 }
 
+.search-wrapper {
+  display: flex;
+  position: relative;
+}
+
+.search-wrapper .input-group {
+  flex: 1;
+}
+
 .example-bar {
   background-color: #ececec;
   overflow: hidden;
@@ -292,7 +301,8 @@ footer a:hover {
   border-radius: 0.3rem;
   overflow: hidden;
   border: 1px solid #ccc;
-  width: calc(100% - 30px);
+  width: 100%;
+  top: 2.9rem;
 }
 
 a.suggestion {
@@ -614,4 +624,39 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   height: 0.9rem;
   margin-bottom: 0.2rem;
   filter: opacity(0.3);
+}
+
+.save-word-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  position: absolute;
+  top: 1.75rem;
+  right: 0.5rem;
+  color: #ffe597;
+}
+
+.btn-saved-words {
+  background: #f8b61e;
+  color: white;
+}
+
+.btn-saved-words:hover {
+  color: white;
+  background: #d29914;
+}
+
+.saved-words {
+  padding: 0;
+  list-style: none;
+}
+
+.blink {
+  animation: blink 0.5s linear 2;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.5;
+  }
 }

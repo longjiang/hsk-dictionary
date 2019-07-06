@@ -61,13 +61,17 @@ function main(hskObj) {
       wordList: hskObj.listWhere(function(word) {
         word.oofc === "";
       }),
+      savedWordIds: localStorage.getItem("savedWordIds")
+        ? JSON.parse(localStorage.getItem("savedWordIds"))
+        : [],
       entry: undefined,
       books: hskObj.compileBooks(),
       characters: [],
       image: undefined,
       hasImage: true,
       suggestions: [],
-      initialized: false,
+      view:
+        "browse" /* Default view is "browse words by course", can also set to "entry" (when viewing a word), or "saved-words" */,
       unsplashSrcs: [],
       unsplashSearchTerm: "",
       admin: false,
@@ -87,6 +91,9 @@ function main(hskObj) {
       displayEntry: function(entry) {
         app = this;
         app.entry = entry;
+        if (app.savedWordIds.includes(entry.id)) {
+          entry.saved = true;
+        }
         app.characters = this.hsk.getCharactersInWord(entry.word);
         getLrcs(entry.word, function(lrcs) {
           lrcs.forEach(function(lrc) {
@@ -100,7 +107,7 @@ function main(hskObj) {
           app.lrcs = lrcs;
         });
         app.getImage(entry);
-        app.initialized = true;
+        app.view = "entry";
         app.annotated = false; // Add pinyin again on update
         app.suggestions = [];
         $("#lookup").val(entry.word);
@@ -120,7 +127,6 @@ function main(hskObj) {
           '<iframe src="' +
           src +
           '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-        console.log(iframe);
         $(e.target).after(iframe); // Add the embed
       },
 
@@ -202,6 +208,14 @@ function main(hskObj) {
             ];
           }
         }
+      },
+      getWordsByIds(ids) {
+        var app = this;
+        var words = [];
+        ids.forEach(function(id) {
+          words.push(app.hsk.get(id));
+        });
+        return words;
       },
       highlight(text) {
         if (text) {
@@ -354,6 +368,24 @@ function main(hskObj) {
           app.lrcs[index].annotated = true;
           app.$forceUpdate();
         });
+      },
+      // ANCHOR img/anchors/save-word-button.png
+      saveWordClick: function(e) {
+        if (!this.entry.saved) {
+          this.savedWordIds.push(app.entry.id);
+          this.entry.saved = true;
+        } else {
+          this.savedWordIds = this.savedWordIds.filter(function(id) {
+            return id != app.entry.id;
+          });
+          this.entry.saved = false;
+        }
+        $(".btn-saved-words").addClass("blink");
+        localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
+      },
+      // ANCHOR img/anchors/saved-words-button.png
+      savedWordsButtonClick: function(e) {
+        this.view = "saved-words";
       }
     },
     updated: function() {
@@ -376,12 +408,14 @@ function main(hskObj) {
     }
   });
 
+  console.log(app.savedWordIds);
+
   window.onhashchange = function() {
     id = decodeURI(location.hash.substr(1));
     if (id) {
       app.showById(id);
     } else {
-      app.initialized = false;
+      app.view = "browse";
     }
     window.scrollTo(0, 0);
   };

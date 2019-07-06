@@ -32,19 +32,22 @@
         <div class="row">
           <div class="col-sm-12 pb2">
             <h1 class="title"><a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a><span class="title-text" v-on:click="backToBrowse">HSK Glossary</span></h1>
-            <div class="input-group">
-              <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" v-on:compositionend="lookupKeyup" v-on:focus="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
-              <div class="input-group-append">
-                <button class="btn btn-primary lookup-button" v-on:click="lookupButtonClick" type="button">Search</button>
+            <div class="search-wrapper">
+              <div class="input-group">
+                <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" v-on:compositionend="lookupKeyup" v-on:focus="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
+                <div class="input-group-append">
+                  <button class="btn btn-primary lookup-button" v-on:click="lookupButtonClick" type="button">Search</button>
+                </div>
               </div>
-            </div>
-            <div class="suggestions" v-cloak v-if="suggestions.length > 0">
-              <a :href="suggestion.href" v-on:click="suggestionClick" class="suggestion" v-for="suggestion in suggestions">
-                <span class="character-example-word" v-bind:data-hsk="suggestion.book">{{ suggestion.word }}</span>
-                <span class="character-example-pinyin">{{ suggestion.pinyin }}</span>
-                <span class="character-example-english">{{ suggestion.english }}</span>
-                <span class="suggestion-not-found" v-if="suggestion.notFound"><b>&ldquo;{{ suggestion.text }}&rdquo;</b> is not in the HSK. Try looking it up in <b>Wiktionary.</b></span>
-              </a>
+              <div class="suggestions" v-cloak v-if="suggestions.length > 0">
+                <a :href="suggestion.href" v-on:click="suggestionClick" class="suggestion" v-for="suggestion in suggestions">
+                  <span class="character-example-word" v-bind:data-hsk="suggestion.book">{{ suggestion.word }}</span>
+                  <span class="character-example-pinyin">{{ suggestion.pinyin }}</span>
+                  <span class="character-example-english">{{ suggestion.english }}</span>
+                  <span class="suggestion-not-found" v-if="suggestion.notFound"><b>&ldquo;{{ suggestion.text }}&rdquo;</b> is not in the HSK. Try looking it up in <b>Wiktionary.</b></span>
+                </a>
+              </div>
+              <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick" v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><i class="glyphicon glyphicon-list"></i> My words</button>
             </div>
           </div>
         </div>
@@ -52,15 +55,16 @@
     </div>
     
     <!-- ANCHOR img/anchors/entry.png  -->
-    <div class="container" v-cloak v-if="initialized">
+    <div class="container" v-cloak v-if="view == 'entry'">
       <div class="row text-center">
         <div class="col-md-12">
-          <button class="paginate-button previous" v-on:click="previousClick"><img src="img/angle-left.svg" alt=""></button>
-          <button class="paginate-button next" v-on:click="nextClick"><img src="img/angle-right.svg" alt=""></button>
+          <button class="save-word-button" v-on:click="saveWordClick" title="Save word"><i class="glyphicon glyphicon-star-empty" v-if="!entry.saved"></i><i class="glyphicon glyphicon-star" v-if="entry.saved"></i></button>
+          <button class="paginate-button previous" v-on:click="previousClick" title="Previous word"><img src="img/angle-left.svg" alt=""></button>
+          <button class="paginate-button next" v-on:click="nextClick" title="Next word"><img src="img/angle-right.svg" alt=""></button>
           <div class="pinyin">{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="entry.word"></i></div>
           <div class="word"><span v-bind:data-hsk="entry.book" v-html="addAnimatedSvgLinks(entry.word)"></span></div>
           <div class="stroke-wrapper">
-            <a class="stroke" v-for="character in characters" :href="hsk.animatedSvgUrl(character.character)" target="_blank"><img src="img/stroke.svg"> Strokes</a>
+            <a class="stroke" v-for="character in characters" :href="hsk.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"> Strokes</a>
           </div>
           <p class="english">{{ entry.english }}</p>
         </div>
@@ -68,7 +72,7 @@
     </div>
     
     <!-- ANCHOR img/anchors/oofc.png -->
-    <div class="container-fluid mb2" v-cloak v-if="initialized && entry.oofc !== ''">
+    <div class="container-fluid mb2" v-cloak v-if="view == 'entry' && entry.oofc !== ''">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
@@ -79,7 +83,7 @@
     </div>
     
     <!-- ANCHOR img/anchors/pn.png -->
-    <div class="container-fluid mb2" v-cloak v-if="initialized && entry.pn !== ''">
+    <div class="container-fluid mb2" v-cloak v-if="view == 'entry' && entry.pn !== ''">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
@@ -90,7 +94,7 @@
     </div>
     
     <!-- ANCHOR img/anchors/example-bar.png -->
-    <div class="container-fluid example-bar" v-cloak v-if="initialized && entry.example !== ''">
+    <div class="container-fluid example-bar" v-cloak v-if="view == 'entry' && entry.example !== ''">
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -136,13 +140,13 @@
     
     <!-- ANCHOR img/anchors/character-example.png -->
     <!-- FIXME Handle homonyms (e.g. 称 in 称心如意 should be chèn not chēng) -->
-    <div class="container mt2 mb2" v-cloak v-if="initialized">
+    <div class="container mt2 mb2" v-cloak v-if="view == 'entry'">
       <div class="row mt1 character-example-wrapper">
         <!-- ANCHOR img/anchors/character.png -->
         <div class="col-md-6" v-for="character in characters">
           <!-- ANCHOR img/anchors/character-example-header.png -->
           <div class="character-example-header">
-            <b class="character-example-header-word" v-html="character.animatedSvgLink" :data-hsk="character.examples[0].book"></b> <a class="stroke" :href="hsk.animatedSvgUrl(character.character)" target="_blank"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span>
+            <b class="character-example-header-word" v-html="character.animatedSvgLink" :data-hsk="character.examples[0].book"></b> <a class="stroke" :href="hsk.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span>
           </div>
           <!-- ANCHOR img/anchors/parts.png -->
           <div class="parts">
@@ -156,13 +160,13 @@
           <ul class="character-examples collapsed" data-collapse-target>
             <li v-for="example in character.examples" class="character-example"><a :href="'#' + example.id"><span class="character-example-word"><b v-bind:data-hsk="example.book">{{ example.word }}</b></span></a> <span class="character-example-pinyin">{{ example.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="example.word"></i></span> <em class="character-example-english">{{ example.english }}</em></li>
           </ul>
-          <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick"><span class="label-expand">More</span><span class="label-collapse">Collapse</span></button>
+          <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick" title="Show all examples"><span class="label-expand">More</span><span class="label-collapse">Collapse</span></button>
         </div>
       </div>
     </div>
     
     <!-- ANCHOR img/anchors/learn-this.png -->
-    <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak v-if="initialized">
+    <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak v-if="view == 'entry'">
       <div class="container">
         <div class="row">
           <div class="col-sm-12 text-center">
@@ -173,18 +177,18 @@
     </div>
     
     <!-- ANCHOR img/anchors/lyrics-bar.png -->
-    <div class="container-flud lyrics-bar" v-cloak v-if="initialized && lrcs && lrcs.length > 0 ">
+    <div class="container-flud lyrics-bar" v-cloak v-if="view == 'entry' && lrcs && lrcs.length > 0 ">
       
       <div class="container" v-if="!admin">
         
         <div class="song-caroussel">
           <nav>
-            <button v-if="lrcs.length > 1" class="paginate-button previous" v-on:click="songPreviousClick"><img src="img/angle-left.svg" alt=""></button>
-            <button v-if="lrcs.length > 1" class="paginate-button next" v-on:click="songNextClick"><img src="img/angle-right.svg" alt=""></button>
+            <button v-if="lrcs.length > 1" class="paginate-button previous" v-on:click="songPreviousClick" title="Previous song"><img src="img/angle-left.svg" alt=""></button>
+            <button v-if="lrcs.length > 1" class="paginate-button next" v-on:click="songNextClick" title="Next song"><img src="img/angle-right.svg" alt=""></button>
           </nav>
           <div class="songs">
             <!--
-              <div class="row song" v-if="initialized && entry.songLyrics != ''">
+              <div class="row song" v-if="view == 'entry' && entry.songLyrics != ''">
                 <div class="col-md-6">
                   <div class="youtube">
                     <iframe :src="entry.songYouTube.replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -227,7 +231,7 @@
     
     
     <!-- ANCHOR img/anchors/browse-by-course.png -->
-    <div class="container mt2 mb2" v-cloak v-if="!initialized">
+    <div class="container mt2 mb2" v-cloak v-if="view == 'browse'">
       <div class="row">
         <div class="col-sm-12">
           <h4>Browse Words by Course</h4>
@@ -255,6 +259,25 @@
                   </ul>
                 </li>
               </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container mt2 mb2" v-cloak v-if="view == 'saved-words'">
+      <div class="row">
+        <div class="col-sm-12">
+          <h4>My Saved Words</h4>
+        </div>
+        <div class="col-sm-12">
+          <ul class="saved-words">
+            <li class="saved-words-item character-example" v-for="word in getWordsByIds(savedWordIds)">
+              <a :href="'#' + word.id" >
+                <span class="character-example-word" :data-hsk="word.book">{{ word.word }}</span>
+                <span class="character-example-pinyin">{{ word.pinyin }}</span>
+                <span class="character-example-english">{{ word.english }}</span>
+              </a>
             </li>
           </ul>
         </div>
