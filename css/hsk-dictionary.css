@@ -171,6 +171,10 @@ body {
   font-size: 1.3rem;
 }
 
+.example-sentence .example-sentence-english {
+  margin-top: 0.5rem;
+}
+
 .image-wrapper {
   padding-bottom: 56%;
   height: 0;
