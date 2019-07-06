@@ -132,7 +132,8 @@ function main(hskObj) {
           "https://www.youtube.com/embed/" +
           youtube +
           "?start=" +
-          Math.floor(starttime);
+          Math.floor(starttime) +
+          "&playsinline=1";
         var iframe =
           '<iframe src="' +
           src +
