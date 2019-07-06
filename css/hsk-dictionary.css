@@ -276,9 +276,14 @@ footer a:hover {
 }
 
 .speak {
-  height: 1rem;
-  opacity: 0.4;
   cursor: pointer;
+  color: #ccc;
+  position: relative;
+  top: 0.2em;
+}
+
+.speak:hover {
+  color: inherit;
 }
 
 .suggestions {
