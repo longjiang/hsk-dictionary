@@ -220,6 +220,7 @@
                 <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
                 <div class="lyrics collapsed" :id="'lyrics-' + entry.id + '-' + index" data-collapse-target>
                   <div class="lyrics-english mt1" v-html="lrc.artist + '《' + lrc.title + '》'"></div>
+                  <hr>
                   <div class="lyrics-line" v-for="line, index in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(index), 'matched-context': inContext(index, 2, lrc) }" v-html="highlight(line.line)"></div>
                 </div>
                 <button class="show-more mt1" v-on:click="showPinyinClick" :data-target-selector="'#lyrics-' + entry.id + '-' + index" :data-index="index" :data-bg-hsk="entry.book" v-if="!lrc.annotated">Show Pinyin</button>
@@ -295,7 +296,9 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <b>Credits</b>: Images made possible with <a href="https://source.unsplash.com/">Unsplash Source</a>, <a href="https://www.canva.com/photos/">Canva</a> and <a href="https://pixabay.com/">Pixabay</a>. Character component breakdown and stroke animation made possible by <a href="https://github.com/skishore/makemeahanzi">Make Me a Hanzi</a>. Example sentences and translation from <a href="http://www.jukuu.com/">Jukuu</a>. Pinyin annotation made possible by <a href="https://mandarinspot.com/annotate">Mandarin Spot</a>. <a v-on:click="adminClick">Admin</a>
+            <b>Credits</b>: Images made <a v-on:click="adminClick">possible</a> with <a href="https://source.unsplash.com/">Unsplash Source</a> and <a href="https://www.canva.com/photos/">Canva</a></a>, <a href="https://www.canva.com/photos/">Canva</a> and <a href="https://pixabay.com/">Pixabay</a>. Character component breakdown and stroke animation made possible by <a href="https://github.com/skishore/makemeahanzi">Make Me a Hanzi</a>. Example sentences and translation from <a href="http://www.jukuu.com/">Jukuu</a>. Pinyin annotation with <a href="https://longjiang.github.io/annotator-js/">Annotator.js</a>, which we created ourselves based on the <a href="https://www.mdbg.net/chinese/dictionary?page=cedict">CC-CEDICT</a> dictionary made freely available from <a href="https://www.mdbg.net/chinese/dictionary?page=cedict">MDBG</a>. Over 7,000 time-synced lyrics (LRCs) from <a href="http://www.22lrc.com/" class="add-pinyin">爱歌词</a> and <a href="http://www.gecimi.com/" class="add-pinyin">歌词迷</a>.
+            <hr>
+            <a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo-footer" alt=""></a>
           </div>
         </div>
       </div>

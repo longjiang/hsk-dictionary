@@ -481,9 +481,6 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 }
 
 @media (max-width: 768px) {
-  .song-caroussel .paginate-button {
-    top: calc(100% - 10rem);
-  }
   .song-caroussel .paginate-button.next {
     margin-right: -1.5rem;
   }
@@ -693,4 +690,8 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   line-height: 1.4rem;
   position: relative;
   top: -0.1rem;
+}
+
+.logo-footer {
+  height: 2rem;
 }
