@@ -55,6 +55,10 @@ body {
   flex: 1;
 }
 
+.search-wrapper .input-group * {
+  height: 2.3rem;
+}
+
 .example-bar {
   background-color: #ececec;
   overflow: hidden;
@@ -170,6 +174,7 @@ body {
   padding: 0.2rem 0.5rem;
   color: #8e8e8e;
   display: inline-block;
+  border-radius: 0.3rem;
 }
 
 .collapsed>.label-collapse, :not(.collapsed)>.label-expand {
