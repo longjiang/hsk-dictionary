@@ -163,7 +163,7 @@
           <ul class="character-examples collapsed" data-collapse-target>
             <li v-for="example in character.examples" class="character-example"><a :href="'#' + example.id"><span class="character-example-word"><b v-bind:data-hsk="example.book">{{ example.word }}</b></span></a> <span class="character-example-pinyin">{{ example.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="example.word"></i></span> <em class="character-example-english">{{ example.english }}</em></li>
           </ul>
-          <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick" title="Show all examples"><span class="label-expand">More</span><span class="label-collapse">Collapse</span></button>
+          <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick" title="Show all examples"><span class="label-expand">Show {{ character.examples.length - 4 }} more</span><span class="label-collapse">Collapse</span></button>
         </div>
       </div>
     </div>

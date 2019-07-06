@@ -1,5 +1,5 @@
 /**
- * v3.2.5
+ * v3.2.6
  */
 
 function getLrcs(word, callback) {
