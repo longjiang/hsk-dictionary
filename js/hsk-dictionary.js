@@ -241,6 +241,7 @@ function main(hskObj) {
         $button.toggleClass("collapsed");
       },
       backToBrowse() {
+        this.view = "browse";
         location.hash = "";
       },
       previousClick(e) {
@@ -403,6 +404,7 @@ function main(hskObj) {
       // ANCHOR img/anchors/saved-words-button.png
       savedWordsButtonClick: function(e) {
         this.view = "saved-words";
+        location.hash = "";
       }
     },
     updated: function() {
@@ -429,10 +431,8 @@ function main(hskObj) {
     id = decodeURI(location.hash.substr(1));
     if (id) {
       app.showById(id);
-    } else {
-      app.view = "browse";
+      window.scrollTo(0, 0);
     }
-    window.scrollTo(0, 0);
   };
   if (location.hash && location.hash.length > 1) {
     id = decodeURI(location.hash.substr(1));
