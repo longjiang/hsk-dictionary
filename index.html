@@ -140,7 +140,9 @@
         <!-- ANCHOR img/anchors/character.png -->
         <div class="col-md-6" v-for="character in characters">
           <!-- ANCHOR img/anchors/character-example-header.png -->
-          <div><b class="character-example-word" v-html="character.animatedSvgLink" :data-hsk="character.examples[0].book"></b><a class="stroke" :href="hsk.animatedSvgUrl(character.character)" target="_blank"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span></div>
+          <div class="character-example-header">
+            <b class="character-example-header-word" v-html="character.animatedSvgLink" :data-hsk="character.examples[0].book"></b> <a class="stroke" :href="hsk.animatedSvgUrl(character.character)" target="_blank"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span>
+          </div>
           <!-- ANCHOR img/anchors/parts.png -->
           <div class="parts">
             <div class="part character-example" v-for="part in character.parts">
