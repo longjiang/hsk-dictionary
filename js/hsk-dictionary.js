@@ -1,3 +1,7 @@
+/**
+ * v3.2.5
+ */
+
 function getLrcs(word, callback) {
   $.getJSON(
     "https://www.chinesezerotohero.com/lyrics-search/lrc/search/" +
