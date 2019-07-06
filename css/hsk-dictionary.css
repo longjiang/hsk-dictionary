@@ -124,6 +124,7 @@ body {
 
 .character-example-header-word a {
   color: inherit;
+  text-decoration: none;
 }
 
 .character-example {
@@ -636,6 +637,12 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   color: #ffe597;
 }
 
+.saved-words-item-remove {
+  background: none;
+  border: none;
+  color: #dc3545;
+}
+
 .btn-saved-words {
   background: #f8b61e;
   color: white;
@@ -659,4 +666,18 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   50% {
     opacity: 0.5;
   }
+}
+
+.btn-saved-words-count {
+  background: white;
+  border-radius: 100%;
+  font-size: 0.8rem;
+  color: #f8b71d;
+  font-weight: bold;
+  display: inline-block;
+  width: 1.4rem;
+  height: 1.4rem;
+  line-height: 1.4rem;
+  position: relative;
+  top: -0.1rem;
 }

@@ -110,6 +110,7 @@ function main(hskObj) {
         app.view = "entry";
         app.annotated = false; // Add pinyin again on update
         app.suggestions = [];
+        $(".btn-saved-words").removeClass("blink");
         $("#lookup").val(entry.word);
         $(".youtube iframe").remove(); // Show new videos;
         app.$forceUpdate();
@@ -215,7 +216,10 @@ function main(hskObj) {
         var app = this;
         var words = [];
         ids.forEach(function(id) {
-          words.push(app.hsk.get(id));
+          var word = app.hsk.get(id);
+          if (word) {
+            words.push(word);
+          }
         });
         return words;
       },
@@ -372,18 +376,29 @@ function main(hskObj) {
         });
       },
       // ANCHOR img/anchors/save-word-button.png
-      saveWordClick: function(e) {
-        if (!this.entry.saved) {
-          this.savedWordIds.push(app.entry.id);
-          this.entry.saved = true;
-        } else {
-          this.savedWordIds = this.savedWordIds.filter(function(id) {
-            return id != app.entry.id;
-          });
-          this.entry.saved = false;
-        }
-        $(".btn-saved-words").addClass("blink");
+      addSavedWord: function(id) {
+        this.savedWordIds.push(id);
         localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
+        $(".btn-saved-words").addClass("blink");
+      },
+      removeSavedWord: function(id) {
+        this.savedWordIds = this.savedWordIds.filter(function(savedWordId) {
+          return id != savedWordId;
+        });
+        localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
+        $(".btn-saved-words").removeClass("blink");
+      },
+      saveWordClick: function(e) {
+        var $target = $(e.target);
+        if (e.target.tagName.toLowerCase() === "i") {
+          $target = $target.parent();
+        }
+        var id = $target.attr("data-id");
+        if (!this.savedWordIds.includes(id)) {
+          this.addSavedWord(id);
+        } else {
+          this.removeSavedWord(id);
+        }
       },
       // ANCHOR img/anchors/saved-words-button.png
       savedWordsButtonClick: function(e) {

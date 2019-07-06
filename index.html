@@ -50,7 +50,7 @@
                   <span class="suggestion-not-found" v-if="suggestion.notFound"><b>&ldquo;{{ suggestion.text }}&rdquo;</b> is not in the HSK. Try looking it up in <b>Wiktionary.</b></span>
                 </a>
               </div>
-              <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick" v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><i class="glyphicon glyphicon-star"></i> My words</button>
+              <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick" v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><span class="btn-saved-words-count">{{ savedWordIds.length }}</span> Saved</button>
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@
     <div class="container" v-cloak v-if="view == 'entry'">
       <div class="row text-center">
         <div class="col-md-12">
-          <button class="save-word-button" v-on:click="saveWordClick" title="Save word"><i class="glyphicon glyphicon-star-empty" v-if="!entry.saved"></i><i class="glyphicon glyphicon-star" v-if="entry.saved"></i></button>
+          <button class="save-word-button" v-on:click="saveWordClick" :data-id="entry.id"><i class="glyphicon glyphicon-star-empty" v-if="!savedWordIds.includes(entry.id)" title="Save word"></i><i class="glyphicon glyphicon-star" v-if="savedWordIds.includes(entry.id)" title="Remove word"></i></button>
           <button class="paginate-button previous" v-on:click="previousClick" title="Previous word"><img src="img/angle-left.svg" alt=""></button>
           <button class="paginate-button next" v-on:click="nextClick" title="Next word"><img src="img/angle-right.svg" alt=""></button>
           <div class="pinyin">{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="entry.word"></i></div>
@@ -277,6 +277,7 @@
         <div class="col-sm-12">
           <ul class="saved-words">
             <li class="saved-words-item character-example" v-for="word in getWordsByIds(savedWordIds)">
+              <button class="saved-words-item-remove" v-on:click="saveWordClick" :data-id="word.id" title="Remove word"><i class="glyphicon glyphicon-minus-sign" v-if="savedWordIds.includes(word.id)"></i></button>
               <a :href="'#' + word.id" >
                 <span class="character-example-word" :data-hsk="word.book">{{ word.word }}</span>
                 <span class="character-example-pinyin">{{ word.pinyin }}</span>
