@@ -6,7 +6,7 @@ function getLrcs(word, callback) {
   $.getJSON(
     "https://www.chinesezerotohero.com/lyrics-search/lrc/search/" +
       word +
-      "/50", // Limit to only 50 songs
+      "/20", // Limit to only 20 songs
     function(results) {
       callback(results);
     }
@@ -108,7 +108,12 @@ function main(hskObj) {
               }
             });
           });
-          app.lrcs = lrcs;
+          app.lrcs = lrcs.sort(function(a, b) {
+            return (
+              Object.keys(b.matchedLines).length -
+              Object.keys(a.matchedLines).length
+            );
+          });
         });
         app.getImage(entry);
         app.view = "entry";

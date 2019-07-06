@@ -369,38 +369,69 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 .book-title {
   padding: 0.5rem 1rem;
   color: white;
-  font-weight: 500;
+  font-weight: bold;
   margin: 1rem 0 0 0;
-  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.3)
+  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  white-space: nowrap;
+  border-radius: 0.3rem;
+}
+
+.book[data-book="1"]>.book-title {
+  width: 25%;
+}
+
+.book[data-book="2"]>.book-title {
+  width: 25%;
+}
+
+.book[data-book="3"]>.book-title {
+  width: 50%;
+}
+
+.book[data-book="4"]>.book-title {
+  width: 100%;
+}
+
+.book[data-book="5"]>.book-title {
+  width: 100%;
+  height: 5rem;
+  line-height: 4rem;
+}
+
+.book[data-book="6"]>.book-title {
+  width: 100%;
+  height: 10rem;
+  line-height: 9rem;
+}
+
+.lesson:first-child {
+  margin-top: 1rem;
 }
 
 .lesson-title {
   padding: 0.5rem 1rem;
-  border: 1px solid #4c4c4c;
   border-top: none;
-  background: #676666;
-  margin-left: 1rem;
-  color: #f1f1f1;
+  font-weight: bold;
 }
 
 .lesson-title:last-child {
   border-radius: 0 0 0 0.5rem;
 }
 
+.dialog {
+  padding-left: 1rem;
+}
+
 .dialog-title {
   padding: 0.5rem 1rem;
-  margin-left: 2rem;
-  border: 1px solid #c5c5c5;
+  /* border: 1px solid #c5c5c5; */
   border-top: none;
-  background: #e4e4e4;
 }
 
 .browse-words {
   list-style: none;
-  padding: 0;
-  background-color: #f9f9f9;
-  padding: 0.5rem 1rem;
-  margin-left: 3rem;
+  padding-left: 0.5rem;
 }
 
 .count {

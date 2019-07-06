@@ -243,9 +243,9 @@
         <div class="col-sm-12">
           <ul class="books mt1">
             <li class="book" v-for="book, index in books" :data-book="index">
-              <div class="book-title" v-on:click='bookClick' :data-bg-hsk="index">HSK {{ index }} Course</div>
+              <div class="book-title" v-on:click='bookClick' :data-bg-hsk="index">HSK {{ index }}</div>
               <ul class="lessons collapsed">
-                <li v-for="lesson, index in book" :data-lesson="index">
+                <li class="lesson" v-for="lesson, index in book" :data-lesson="index">
                   <div class="lesson-title" v-on:click='lessonClick'>Lesson {{ index }}</div>
                   <ul class="dialogs collapsed">
                     <li class="dialog" v-for="dialog, index in lesson" :data-dialog="index">
