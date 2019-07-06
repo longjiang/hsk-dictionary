@@ -210,7 +210,7 @@
             <div class="row song" v-for="lrc, index in lrcs" v-if="lrc.youtube && lrc.youtube.length > 0">
               <div class="col-md-6 text-center">
                 <div class="youtube-versions">
-                  <div class="youtube" v-for="youtube in lrc.youtube.slice(0, 3)">
+                  <div class="youtube" v-for="youtube in lrc.youtube">
                     <div class="youtube-screen" v-on:click="youtubeScreenTap" :data-youtube="youtube" :data-starttime="lrc.content[lrc.matchedLines[0]].starttime"></div>
                   </div>
                 </div>

@@ -2,7 +2,7 @@ function getLrcs(word, callback) {
   $.getJSON(
     "https://www.chinesezerotohero.com/lyrics-search/lrc/search/" +
       word +
-      "/10",
+      "/50", // Limit to only 50 songs
     function(results) {
       callback(results);
     }
