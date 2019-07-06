@@ -168,6 +168,14 @@ function main(hskObj) {
           }, 3000);
         });
       },
+      countWordsInLesson(lesson) {
+        var count = 0;
+        for (index in lesson) {
+          var dialog = lesson[index];
+          count += dialog.length;
+        }
+        return count;
+      },
       unsplashThumbClick(e) {
         var $button = $(e.target);
         var url = $button.attr("src");
@@ -279,31 +287,25 @@ function main(hskObj) {
           .toggleClass("collapsed");
       },
       lessonClick(e) {
-        var lesson = $(e.target)
-          .parents("[data-lesson]")
-          .attr("data-lesson");
-        var book = $(e.target)
-          .parents("[data-book]")
-          .attr("data-book");
+        var $target = $(e.target);
+        if (e.target.tagName.toLowerCase() !== "div") {
+          $target = $target.parent();
+        }
+        var lesson = $target.parents("[data-lesson]").attr("data-lesson");
+        var book = $target.parents("[data-book]").attr("data-book");
         this.wordList = this.hsk.listByBookLesson(book, lesson);
-        $(e.target)
-          .next("ul")
-          .toggleClass("collapsed");
+        $target.next("ul").toggleClass("collapsed");
       },
       dialogClick(e) {
-        var dialog = $(e.target)
-          .parents("[data-dialog]")
-          .attr("data-dialog");
-        var lesson = $(e.target)
-          .parents("[data-lesson]")
-          .attr("data-lesson");
-        var book = $(e.target)
-          .parents("[data-book]")
-          .attr("data-book");
+        var $target = $(e.target);
+        if (e.target.tagName.toLowerCase() !== "div") {
+          $target = $target.parent();
+        }
+        var dialog = $target.parents("[data-dialog]").attr("data-dialog");
+        var lesson = $target.parents("[data-lesson]").attr("data-lesson");
+        var book = $target.parents("[data-book]").attr("data-book");
         this.wordList = this.hsk.listBookLessonDialog(book, lesson, dialog);
-        $(e.target)
-          .next("ul")
-          .toggleClass("collapsed");
+        $target.next("ul").toggleClass("collapsed");
       },
       songNextClick(e) {
         var $songs = $(".song-caroussel .songs");
