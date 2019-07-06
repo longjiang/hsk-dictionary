@@ -250,11 +250,12 @@
                     <li class="dialog" v-for="dialog, index in lesson" :data-dialog="index">
                       <div class="dialog-title" v-on:click='dialogClick'>Part {{ index }}</div>
                       <ul class="browse-words collapsed">
-                        <li class="browse-words-item character-example" v-for="row in dialog">
-                          <a :href="'#' + row.id" >
-                            <span class="character-example-word" :data-hsk="row.book">{{ row.word }}</span>
-                            <span class="character-example-pinyin">{{ row.pinyin }}</span>
-                            <span class="character-example-english">{{ row.english }}</span>
+                        <li class="browse-words-item character-example" v-for="word in dialog">
+                          <button class="saved-words-item-star" v-on:click="saveWordClick" :data-id="word.id" title="Save word"><i class="glyphicon glyphicon-star-empty" v-if="!savedWordIds.includes(word.id)"></i><i class="glyphicon glyphicon-star" v-if="savedWordIds.includes(word.id)"></i></button>
+                          <a :href="'#' + word.id" >
+                            <span class="character-example-word" :data-hsk="word.book">{{ word.word }}</span>
+                            <span class="character-example-pinyin">{{ word.pinyin }}</span>
+                            <span class="character-example-english">{{ word.english }}</span>
                           </a>
                         </li>
                       </ul>
@@ -276,7 +277,7 @@
         </div>
         <div class="col-sm-12">
           <ul class="saved-words">
-            <li class="saved-words-item character-example" v-for="word in getWordsByIds(savedWordIds)">
+            <li class="saved-words-item character-example" v-for="word in getWordsByIds(savedWordIdsSorted)">
               <button class="saved-words-item-remove" v-on:click="saveWordClick" :data-id="word.id" title="Remove word"><i class="glyphicon glyphicon-minus-sign" v-if="savedWordIds.includes(word.id)"></i></button>
               <a :href="'#' + word.id" >
                 <span class="character-example-word" :data-hsk="word.book">{{ word.word }}</span>

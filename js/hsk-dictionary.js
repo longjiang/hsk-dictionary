@@ -407,6 +407,13 @@ function main(hskObj) {
         location.hash = "";
       }
     },
+    computed: {
+      savedWordIdsSorted: function() {
+        return this.savedWordIds.sort(function(a, b) {
+          return parseInt(a) - parseInt(b);
+        });
+      }
+    },
     updated: function() {
       var app = this;
       if (app.view == "entry") {
