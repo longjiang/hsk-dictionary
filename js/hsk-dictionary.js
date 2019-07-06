@@ -183,10 +183,12 @@ function main(hskObj) {
       },
       lookupButtonClick() {
         const url = $(".suggestion:first-child").attr("href");
-        window.location = url;
-        $(".suggestion:first-child")
-          .get(0)
-          .click();
+        if (url) {
+          window.location = url;
+          $(".suggestion:first-child")
+            .get(0)
+            .click();
+        }
       },
       lookupKeyup(e) {
         app.suggestions = [];
@@ -390,7 +392,7 @@ function main(hskObj) {
     },
     updated: function() {
       var app = this;
-      if (app.initialized) {
+      if (app.view == "entry") {
         app.recalculateExampleColumns(this.entry.word);
         app.attachSpeakEventHandler();
         var selector = ".example-wrapper > .example-sentence";
@@ -407,8 +409,6 @@ function main(hskObj) {
       }
     }
   });
-
-  console.log(app.savedWordIds);
 
   window.onhashchange = function() {
     id = decodeURI(location.hash.substr(1));

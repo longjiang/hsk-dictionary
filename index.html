@@ -34,9 +34,12 @@
             <h1 class="title"><a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a><span class="title-text" v-on:click="backToBrowse">HSK Glossary</span></h1>
             <div class="search-wrapper">
               <div class="input-group">
+                <div class="input-group-prepend">
+                  <button class="btn btn-info" v-on:click="backToBrowse" title="Browse words by course"><i class="glyphicon glyphicon-list"></i></span>
+                </div>
                 <input v-on:keyup.enter="lookupKeyupEnter" v-on:keyup="lookupKeyup" v-on:compositionend="lookupKeyup" v-on:focus="lookupKeyup" type="text" class="form-control" id="lookup" placeholder="Search for a Chinese word here...">
                 <div class="input-group-append">
-                  <button class="btn btn-primary lookup-button" v-on:click="lookupButtonClick" type="button">Search</button>
+                  <button class="btn btn-primary lookup-button" v-on:click="lookupButtonClick" type="button" title="Search"><i class="glyphicon glyphicon-search"></i></button>
                 </div>
               </div>
               <div class="suggestions" v-cloak v-if="suggestions.length > 0">
@@ -47,7 +50,7 @@
                   <span class="suggestion-not-found" v-if="suggestion.notFound"><b>&ldquo;{{ suggestion.text }}&rdquo;</b> is not in the HSK. Try looking it up in <b>Wiktionary.</b></span>
                 </a>
               </div>
-              <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick" v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><i class="glyphicon glyphicon-list"></i> My words</button>
+              <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick" v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><i class="glyphicon glyphicon-star"></i> My words</button>
             </div>
           </div>
         </div>
@@ -268,7 +271,8 @@
     <div class="container mt2 mb2" v-cloak v-if="view == 'saved-words'">
       <div class="row">
         <div class="col-sm-12">
-          <h4>My Saved Words</h4>
+          <h4>My Words</h4>
+          <p>These words are stored in your browser's local storage, which persists unless you clear your browsing data.</p>
         </div>
         <div class="col-sm-12">
           <ul class="saved-words">
