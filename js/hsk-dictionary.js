@@ -350,7 +350,9 @@ function main(hskObj) {
         $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
         $(e.target).text("Loading...");
         new Annotator().annotateBySelector(selector + " *", function() {
-          $(e.target).remove();
+          var index = $(e.target).attr("data-index");
+          app.lrcs[index].annotated = true;
+          app.$forceUpdate();
         });
       }
     },
