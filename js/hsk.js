@@ -1,9 +1,6 @@
 class Character {
-  animatedSvgLink;
-  parts;
-  hanzi; // The Hanzi library
   constructor(row, hanzi) {
-    for (index in row) {
+    for (var index in row) {
       this[index] = row[index];
     }
     this.hanzi = hanzi;
@@ -34,7 +31,7 @@ var Hanzi = {
   _makeMeAHanziDictionaryTxt: "data/dictionary.txt",
   load: function(callback) {
     var hanzi = this;
-    $.getJSON("data/dictionary.txt").done(function(data) {
+    jQuery.getJSON("data/dictionary.txt").done(function(data) {
       hanzi._hanziData = data;
       callback(hanzi);
     });
@@ -56,7 +53,7 @@ var Hanzi = {
     return string.replace(/[\u4E00-\u9FFF]+/, "") === "";
   },
 
-  searchByRadical: function(radical, limit = false) {
+  searchByRadical: function(radical) {
     var rows = [];
     var hanzi = this;
     // Filter out description characters and "？ - other elements"
@@ -69,8 +66,8 @@ var Hanzi = {
   },
 
   getCharactersInWord: function(word) {
-    characters = [];
-    hanzi = this;
+    var characters = [];
+    var hanzi = this;
     word.split("").forEach(function(char) {
       var character = hanzi.lookup(char);
       if (character) {
@@ -134,7 +131,7 @@ var HSK = {
         complete: function(results) {
           results.data.forEach(function(row) {
             var result = {};
-            for (index in hsk._standardCourseCSVFields) {
+            for (var index in hsk._standardCourseCSVFields) {
               result[index] = row[hsk._standardCourseCSVFields[index]];
             }
             hsk._standardCourseData.push(result);
@@ -278,7 +275,7 @@ var HSK = {
         return groups;
       }, {});
     };
-    books = this._standardCourseData.groupBy("book");
+    var books = this._standardCourseData.groupBy("book");
     for (var book in books) {
       books[book] = books[book].groupBy("lesson");
       for (var lesson in books[book]) {

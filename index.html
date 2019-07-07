@@ -190,55 +190,59 @@
       <!-- ANCHOR img/anchors/lyrics-bar.png -->
       <div class="container-flud lyrics-bar" v-cloak v-if="view == 'entry' && lrcs && lrcs.length > 0 ">
         
-        <div class="container" v-if="!admin">
-          
-          <div class="song-caroussel">
-            <nav>
-              <button v-if="lrcs.length > 1" class="paginate-button previous" v-on:click="songPreviousClick" title="Previous song"><img src="img/angle-left.svg" alt=""></button>
-              <button v-if="lrcs.length > 1" class="paginate-button next" v-on:click="songNextClick" title="Next song"><img src="img/angle-right.svg" alt=""></button>
-            </nav>
-            <div class="songs">
-              <!--
-                <div class="row song" v-if="view == 'entry' && entry.songLyrics != ''">
-                  <div class="col-md-6">
-                    <div class="youtube">
-                      <iframe :src="entry.songYouTube.replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                  </div>
-                  <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
-                    <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
-                    <div class="lyrics">
-                      <p class="lyrics-pinyin">{{ entry.songPinyin }}</p>
-                      <p class="lyrics-line matched" v-html="highlight(entry.songLyrics)"></p>
-                      <p class="lyrics-english">{{ entry.songTranslation }}</p>
-                    </div>
-                  </div>
-                </div>
-              -->
-              <div class="row song" v-for="lrc, index in lrcs" v-if="lrc.youtube && lrc.youtube.length > 0">
-                <div class="col-md-6 text-center">
-                  <div class="youtube-versions">
-                    <div class="youtube" v-for="youtube in lrc.youtube">
-                      <div class="youtube-screen" v-on:click="youtubeScreenTap" :data-youtube="youtube" :data-starttime="lrc.content[lrc.matchedLines[0]].starttime"></div>
-                    </div>
-                  </div>
-                  <button v-on:click="cycleYouTubeClick" class="youtube-version-button">Switch to Another Version of the Song</button>
-                </div>
-                <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
-                  <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
-                  <div class="lyrics collapsed" :id="'lyrics-' + entry.id + '-' + index" data-collapse-target>
-                    <div class="lyrics-english mt1" v-html="lrc.artist + '《' + lrc.title + '》'"></div>
-                    <hr>
-                    <div class="lyrics-line" v-for="line, index in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(index), 'matched-context': inContext(index, 2, lrc) }" v-html="highlight(line.line)"></div>
-                  </div>
-                  <button class="show-more mt1" v-on:click="showPinyinClick" :data-target-selector="'#lyrics-' + entry.id + '-' + index" :data-index="index" :data-bg-hsk="entry.book" v-if="!lrc.annotated">Show Pinyin</button>
-                  <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">Show Entire Song</span><span class="label-collapse">Collapse</span></button>
+        
+        
+        <div class="row">
+          <div class="col-sm-12 text-center mt-4 mb-2">
+            <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
+          </div>
+        </div>
+        <div class="songs">
+          <!--
+            <div class="row song" v-if="view == 'entry' && entry.songLyrics != ''">
+              <div class="col-md-6">
+                <div class="youtube">
+                  <iframe :src="entry.songYouTube.replace('https://youtu.be/', 'https://www.youtube.com/embed/').replace('?t=', '?start=')" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
               </div>
-            </div>         
-          </div>
+              <div class="col-md-6 text-md-left text-sm-center lyrics-wrapper sm-mt2">
+                <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
+                <div class="lyrics">
+                  <p class="lyrics-pinyin">{{ entry.songPinyin }}</p>
+                  <p class="lyrics-line matched" v-html="highlight(entry.songLyrics)"></p>
+                  <p class="lyrics-english">{{ entry.songTranslation }}</p>
+                </div>
+              </div>
+            </div>
+          -->
           
-        </div>
+          <div class="row song" v-for="lrc, lrcIndex in lrcs" v-if="lrc.youtube && lrc.youtube.length > 0">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6 text-center lyrics-wrapper sm-mb2">
+                  <div class="lyrics collapsed" :id="'lyrics-' + entry.id + '-' + lrcIndex" data-collapse-target>
+                    <div class="lyrics-title" v-html="lrc.artist + '《' + lrc.title + '》'"></div>
+                    <hr>
+                    <div class="lyrics-line" v-for="line, lineIndex in lrc.content" v-if="!rejectLine(line.line)" v-bind:class="{ 'matched': lrc.matchedLines.includes(lineIndex), 'matched-context': inContext(lineIndex, 2, lrc) }" v-on:click="seekYouTube(lrc, line.starttime)" v-html="highlight(line.line)"></div>
+                  </div>
+                  <button class="show-more mt1" v-on:click="showPinyinClick" :data-target-selector="'#lyrics-' + entry.id + '-' + lrcIndex" :data-index="lrcIndex" :data-bg-hsk="entry.book" v-if="!lrc.annotated">Show Pinyin</button>
+                  <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">Show Entire Song</span><span class="label-collapse">Collapse</span></button>
+                </div>
+                <div class="col-md-6 text-center">
+                  <div class="youtube-versions" :id="'lrc-' + lrcIndex + '-youtube'">
+                    <div class="youtube" v-for="youtube in lrc.youtube">
+                      <div v-bind:style="{ backgroundImage: 'url(' + 'http://img.youtube.com/vi/' + youtube + '/hqdefault.jpg' + ')' }" class="youtube-screen" v-on:click="loadYouTubeiFrame(youtube, lrc.content[lrc.matchedLines[0]].starttime, 'lrc-' + lrcIndex + '-youtube-' + youtube, lrc)">
+                        <div :id="'lrc-' + lrcIndex + '-youtube-' + youtube"></div>
+                      </div>
+                    </div>
+                    <div class="mt-4">Showing {{ lrc.currentYoutubeIndex }} of {{ lrc.youtube.length }} videos of this song. <button v-on:click="cycleYouTube(lrc, lrcIndex)" class="youtube-version-button btn-small">Show Next</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>    
+        </div>     
+        
       </div><!-- .lyrics-bar -->
       
       
@@ -334,7 +338,8 @@
     <script src="vendor/annotator-js/js/annotator.js?v=1.0.0"></script>
     <script src="js/hsk.js?v=3.3.3"></script>
     <script src="js/hsk-dictionary.js?v=3.3.3"></script>
-    <script src="https://apis.google.com/js/client.js?onload=init"></script>
+    <script src="//apis.google.com/js/client.js?onload=init"></script>
+    <!-- <script src="//www.youtube.com/iframe_api"></script> -->
   </body>
   
   </html>

@@ -77,6 +77,12 @@ body {
   margin: 0.5rem 0;
 }
 
+@media (max-width: 768px) {
+  .word {
+    font-size: 4rem;
+  }
+}
+
 .word img {
   width: 4.8rem;
   border: 1px solid #ccc;
@@ -189,7 +195,7 @@ body {
 }
 
 .example-sentence, .lyrics {
-  margin-top: 1rem;
+  min-height: 9.5rem;
 }
 
 .example-sentence p, .lyrics p {
@@ -466,7 +472,6 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 
 .lyrics-bar {
   background: #dedede;
-  padding: 2rem 0;
 }
 
 .youtube {
@@ -483,18 +488,24 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 }
 
 .youtube-screen {
-  background: url("../img/youtube-red.svg"), black;
-  background-size: 28%;
-  background-repeat: no-repeat;
+  background-size: cover;
   background-position: center;
   color: white;
   font-size: 1.3rem;
   font-weight: bold;
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
   cursor: pointer;
+}
+
+.youtube-screen::after {
+  content: "";
+  background: url("../img/youtube-red.svg");
+  width: 100px;
+  height: 100px;
 }
 
 @media (max-width: 768px) {
@@ -522,7 +533,7 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   position: absolute;
   z-index: 1;
   height: 4rem;
-  top: calc(50% - 2rem);
+  top: 3rem;
 }
 
 .song-caroussel .paginate-button.next {
@@ -542,21 +553,8 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   }
 }
 
-.song-caroussel .row:not(:first-child) {
-  display: none;
-}
-
 .youtube:not(:first-child) {
   display: none;
-}
-
-.youtube-version-button {
-  color: #666;
-  background: none;
-  text-decoration: underline;
-  border: none;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
 }
 
 @media (max-width: 768px) {
@@ -763,4 +761,39 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 .part-examples {
   list-style: none;
   padding-left: 1.2rem;
+}
+
+.song {
+  padding: 2rem 0;
+}
+
+.song:nth-child(2n) {
+  background: #fbfbfb;
+}
+
+.lyrics-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.lyrics-line {
+  cursor: pointer;
+  position: relative;
+}
+
+.lyrics-line:hover {
+  background: #e6e6e6;
+}
+
+.lyrics-line:hover::before {
+  content: "PLAY HERE";
+  font-size: 0.8rem;
+  width: 4rem;
+  line-height: 0.8rem;
+  display: block;
+  color: #bbbbbb;
+  position: absolute;
+  left: -3.5rem;
+  top: 0.2rem;
+  font-weight: bold;
 }
