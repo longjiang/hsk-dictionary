@@ -1,6 +1,91 @@
+class Character {
+  animatedSvgLink;
+  parts;
+  hanzi; // The Hanzi library
+  constructor(row, hanzi) {
+    for (index in row) {
+      this[index] = row[index];
+    }
+    this.hanzi = hanzi;
+    this.animatedSvgLink = this.hanzi.animatedSvgLink(row.character);
+    this.parts = [];
+    var parts = this.decomposition.substring(1).split("");
+    var character = this;
+    parts.forEach(function(part) {
+      var partObj = character.hanzi.lookup(part);
+      if (partObj) {
+        partObj.animatedSvgLink = character.hanzi.animatedSvgLink(part);
+      } else {
+        partObj = {
+          character: part
+        };
+      }
+      partObj.animatedSvgLink = character.hanzi.animatedSvgLink(part);
+      character.parts.push(partObj);
+    });
+  }
+}
+
+/**
+ * The library associated with the character information in data/dictionary.txt provided by Make Me a Hanzi (https://github.com/skishore/makemeahanzi) project.
+ */
+var Hanzi = {
+  _hanziData: [],
+  _makeMeAHanziDictionaryTxt: "data/dictionary.txt",
+  load: function(callback) {
+    var hanzi = this;
+    $.getJSON("data/dictionary.txt").done(function(data) {
+      hanzi._hanziData = data;
+      callback(hanzi);
+    });
+  },
+
+  lookup: function(char) {
+    var hanzi = this;
+    var character = false;
+    this._hanziData.forEach(function(row) {
+      if (row.character == char) {
+        character = new Character(row, hanzi);
+        return;
+      }
+    });
+    return character;
+  },
+
+  getCharactersInWord: function(word) {
+    characters = [];
+    hanzi = this;
+    word.split("").forEach(function(char) {
+      var character = hanzi.lookup(char);
+      if (character) {
+        // new character
+        characters.push(character);
+      }
+    });
+    return characters;
+  },
+
+  animatedSvgUrl: function(char) {
+    var charCode = char.charCodeAt(0);
+    return "data/svgs/" + charCode + ".svg";
+  },
+
+  animatedSvgLink: function(char) {
+    return (
+      '<a href="' +
+      this.animatedSvgUrl(char) +
+      '" target="_blank">' +
+      char +
+      "</a>"
+    );
+  },
+
+  getCharactersWithRadical: function(radical) {}
+};
+
 var HSK = {
+  hanzi: undefined, // The Hanzi library, loaded async in the constructor
   _standardCourseData: [],
-  _characterData: [],
   _standardCourseCSV:
     "data/HSK 1-6 Vocabulary/HSK Standard Course 1-6-Table 1.csv",
   _standardCourseCSVFields: {
@@ -21,14 +106,14 @@ var HSK = {
     songYouTube: "Song YouTube"
   },
 
-  count: function() {
-    return this._standardCourseData.length;
-  },
-
+  /**
+   * Loads the data and returns this via a callback.
+   * @param {function} callback A callback function that takes the HSK library object as an argument.
+   */
   load: function(callback) {
     var hsk = this;
-    $.getJSON("data/dictionary.txt").done(function(data) {
-      hsk._characterData = data;
+    Hanzi.load(function(hanzi) {
+      hsk.hanzi = hanzi;
       Papa.parse(hsk._standardCourseCSV, {
         download: true,
         header: true,
@@ -46,11 +131,20 @@ var HSK = {
     });
   },
 
+  /**
+   * Get a word by id
+   * @param {int} id The id of the word
+   */
+
   get: function(id) {
     var word = this._standardCourseData.find(function(row) {
       return parseInt(row.id) === parseInt(id);
     });
     return word;
+  },
+
+  count: function() {
+    return this._standardCourseData.length;
   },
 
   lookup: function(word) {
@@ -90,34 +184,6 @@ var HSK = {
     return results;
   },
 
-  getCharactersInWord: function(word) {
-    characters = [];
-    hsk = this;
-    word.split("").forEach(function(character) {
-      var entry = hsk.lookupCharacter(character);
-      if (entry) {
-        entry.animatedSvgLink = hsk.animatedSvgLink(character);
-        entry.examples = hsk.lookupHskFussy(character);
-        entry.parts = [];
-        var parts = entry.decomposition.substring(1).split("");
-        parts.forEach(function(part) {
-          partObj = hsk.lookupCharacter(part);
-          if (partObj) {
-            partObj.animatedSvgLink = hsk.animatedSvgLink(part);
-            entry.parts.push(partObj);
-          } else {
-            entry.parts.push({
-              character: part,
-              animatedSvgLink: hsk.animatedSvgLink(part)
-            });
-          }
-        });
-        characters.push(entry);
-      }
-    });
-    return characters;
-  },
-
   simplifyEnglish: function(english) {
     return english
       .replace("/", ", ")
@@ -125,33 +191,6 @@ var HSK = {
       .replace(/\(.*\)/, "")
       .replace("to ", "")
       .replace(".", "");
-  },
-
-  animatedSvgLink: function(char) {
-    var charCode = char.charCodeAt(0);
-    return (
-      '<a href="data/svgs/' +
-      charCode +
-      '.svg" target="_blank">' +
-      char +
-      "</a>"
-    );
-  },
-
-  animatedSvgUrl: function(char) {
-    var charCode = char.charCodeAt(0);
-    return "data/svgs/" + charCode + ".svg";
-  },
-
-  lookupCharacter: function(character) {
-    result = false;
-    this._characterData.forEach(function(row) {
-      if (row.character == character) {
-        result = row;
-        return;
-      }
-    });
-    return result;
   },
 
   list: function() {

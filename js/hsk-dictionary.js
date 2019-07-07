@@ -98,7 +98,11 @@ function main(hskObj) {
         if (app.savedWordIds.includes(entry.id)) {
           entry.saved = true;
         }
-        app.characters = this.hsk.getCharactersInWord(entry.word);
+        app.characters = app.hsk.hanzi.getCharactersInWord(entry.word);
+        app.characters.forEach(function(character) {
+          character.examples = app.hsk.lookupHskFussy(character.character);
+        });
+
         getLrcs(entry.word, function(lrcs) {
           lrcs.forEach(function(lrc) {
             lrc.matchedLines = [];
@@ -370,8 +374,9 @@ function main(hskObj) {
       addAnimatedSvgLinks: function(word) {
         var chars = word.split("");
         var html = "";
+        var app = this;
         chars.forEach(function(char) {
-          html = html + this.hsk.animatedSvgLink(char);
+          html = html + app.hsk.hanzi.animatedSvgLink(char);
         });
         return html;
       },

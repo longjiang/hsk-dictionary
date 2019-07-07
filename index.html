@@ -67,7 +67,7 @@
           <div class="pinyin">{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="entry.word"></i></div>
           <div class="word"><span v-bind:data-hsk="entry.book" v-html="addAnimatedSvgLinks(entry.word)"></span></div>
           <div class="stroke-wrapper">
-            <a class="stroke" v-for="character in characters" :href="hsk.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"> Strokes</a>
+            <a class="stroke" v-for="character in characters" :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"> Strokes</a>
           </div>
           <p class="english">{{ entry.english }}</p>
         </div>
@@ -149,7 +149,7 @@
         <div class="col-md-6" v-for="character in characters">
           <!-- ANCHOR img/anchors/character-example-header.png -->
           <div class="character-example-header">
-            <b class="character-example-header-word" v-html="character.animatedSvgLink" :data-hsk="character.examples[0].book"></b> <a class="stroke" :href="hsk.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span>
+            <b class="character-example-header-word" v-html="character.animatedSvgLink" :data-hsk="character.examples[0].book"></b> <a class="stroke" :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span>
           </div>
           <!-- ANCHOR img/anchors/parts.png -->
           <div class="parts">
