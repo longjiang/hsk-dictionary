@@ -100,7 +100,7 @@ function main(hskObj) {
         }
         app.characters = app.hsk.hanzi.getCharactersInWord(entry.word);
         app.characters.forEach(function(character) {
-          character.examples = app.hsk.lookupHskFussy(character.character);
+          character.examples = app.hsk.lookupFuzzy(character.character);
         });
 
         getLrcs(entry.word, function(lrcs) {
@@ -217,7 +217,7 @@ function main(hskObj) {
         app.suggestions = [];
         var text = e.target.value;
         if (text !== "") {
-          var suggestions = app.hsk.lookupHskFussy(text);
+          var suggestions = app.hsk.lookupFuzzy(text);
           if (suggestions.length > 0) {
             app.suggestions = suggestions;
             suggestions.forEach(function(suggestion) {
@@ -264,6 +264,12 @@ function main(hskObj) {
             '<span data-hsk="' + hsk + '">' + character + "</span>"
           );
         }
+      },
+      togglePartExamples(part) {
+        part.showExamples
+          ? (part.showExamples = false)
+          : (part.showExamples = true);
+        app.$forceUpdate();
       },
       showMoreClick(e) {
         $button = $(e.currentTarget);

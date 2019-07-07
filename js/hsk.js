@@ -52,6 +52,22 @@ var Hanzi = {
     return character;
   },
 
+  chineseOnly: function(string) {
+    return string.replace(/[\u4E00-\u9FFF]+/, "") === "";
+  },
+
+  searchByRadical: function(radical, limit = false) {
+    var rows = [];
+    var hanzi = this;
+    // Filter out description characters and "？ - other elements"
+    if (hanzi.chineseOnly(radical)) {
+      rows = hanzi._hanziData.filter(function(row) {
+        return row.decomposition.includes(radical);
+      });
+    }
+    return rows;
+  },
+
   getCharactersInWord: function(word) {
     characters = [];
     hanzi = this;
@@ -78,9 +94,7 @@ var Hanzi = {
       char +
       "</a>"
     );
-  },
-
-  getCharactersWithRadical: function(radical) {}
+  }
 };
 
 var HSK = {
@@ -163,7 +177,7 @@ var HSK = {
     return pinyin.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   },
 
-  lookupHskFussy: function(word) {
+  lookupFuzzy: function(word) {
     var results = [];
     word = word.toLowerCase();
     var hsk = this;
@@ -182,6 +196,31 @@ var HSK = {
       }
     });
     return results;
+  },
+
+  getFirstHSKWordWithCharacter: function(char) {
+    var words = this._standardCourseData.filter(function(row) {
+      return row.word.includes(char) && row.oofc == "" && row.pn == "";
+    });
+    if (words[0]) {
+      return words[0];
+    }
+  },
+
+  getHSKCharactersByRadical: function(radical) {
+    var hsk = this;
+    var characters = this.hanzi.searchByRadical(radical);
+    var hskCharacters = [];
+    characters.forEach(function(character) {
+      var firstWord = hsk.getFirstHSKWordWithCharacter(character.character);
+      if (firstWord) {
+        character.firstHSKWord = firstWord;
+        hskCharacters.push(character);
+      }
+    });
+    return hskCharacters.sort(function(a, b) {
+      return a.firstHSKWord.book - b.firstHSKWord.book;
+    });
   },
 
   simplifyEnglish: function(english) {

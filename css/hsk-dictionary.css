@@ -658,7 +658,7 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   color: white;
 }
 
-.stroke {
+.btn-small {
   color: #a7a7a7;
   font-size: 0.8rem;
   padding: 0.1rem 0.4rem;
@@ -668,15 +668,16 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   margin: 0.2rem;
   display: inline-block;
   bottom: 0.2rem;
+  border: none;
 }
 
-.stroke:hover {
+.btn-small:hover {
   background-color: #b5b5b5;
   text-decoration: none;
   color: #868686;
 }
 
-.stroke img {
+.btn-small img {
   height: 0.9rem;
   margin-bottom: 0.2rem;
   filter: opacity(0.3);
@@ -757,4 +758,9 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   margin-right: 0.2rem;
   background-image: url('../img/square.png');
   background-size: 100%;
+}
+
+.part-examples {
+  list-style: none;
+  padding-left: 1.2rem;
 }
