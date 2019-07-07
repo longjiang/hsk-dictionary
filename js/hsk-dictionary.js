@@ -1,5 +1,5 @@
 /**
-* v3.2.6
+* v3.4.2
 */
 
 // eslint-disable-next-line no-unused-vars
@@ -22,7 +22,7 @@ class Timer {
     // setTimeout
   }
   pause() {
-
+    
   }
   setCurrentTime(currentTime) {
     this._currentTime = currentTime;
@@ -204,7 +204,7 @@ class Timer {
                         if (playerStatus == 1) { // Playing, update time
                           lrc.timer.setCurrentTime(lrc, player.getCurrentTime());
                           lrc.timer.play();
-
+                          
                         }
                         if (playerStatus == 2) { // Playing, update time
                           lrc.timer.setCurrentTime(lrc, player.getCurrentTime());
@@ -421,157 +421,153 @@ class Timer {
                         lrc.currentYoutubeIndex =
                         lrc.currentYoutubeIndex - lrc.youtube.length;
                       }
-                      $(
-                        '.youtube-screen[data-youtube="' +
-                        lrc.youtube[lrc.currentYoutubeIndex - 1] +
-                        '"]'
-                        ).click(); // Load the iframe
-                        this.$forceUpdate();
-                      },
-                      rejectLine(line) {
-                        var bannedPatterns = [
-                          "www",
-                          "LRC",
-                          " - ",
-                          "歌词",
-                          "QQ",
-                          "演唱：",
-                          "编辑：",
-                          "☆"
-                        ];
-                        var rejected = false;
-                        bannedPatterns.forEach(function(pattern) {
-                          if (line.includes(pattern)) {
-                            rejected = true;
-                          }
-                        });
-                        return rejected;
-                      },
-                      /**
-                      *
-                      * @param {*} index the index of the lrc line
-                      * @param {*} margin show 'margin' number of lines above and below the first matched line
-                      * @param {*} lrc the lrc object
-                      */
-                      inContext(index, margin, lrc) {
-                        var min = lrc.matchedLines[0] - margin;
-                        var max = lrc.matchedLines[0] + margin;
-                        return index >= min && index <= max;
-                      },
-                      recalculateExampleColumns: function(word) {
-                        var $div = $(".character-example-wrapper > div");
-                        var span = 12 / word.length;
-                        $div.removeClass();
-                        $div.addClass("col-md-" + span);
-                      },
-                      
-                      addAnimatedSvgLinks: function(word) {
-                        var chars = word.split("");
-                        var html = "";
-                        var app = this;
-                        chars.forEach(function(char) {
-                          html = html + app.hsk.hanzi.animatedSvgLink(char);
-                        });
-                        return html;
-                      },
-                      
-                      attachSpeakEventHandler: function() {
-                        $(".speak")
-                        .off()
-                        .click(function() {
-                          var text = $(this).attr("data-speak");
-                          var utterance = new SpeechSynthesisUtterance(text);
-                          utterance.lang = "zh-CN";
-                          speechSynthesis.speak(utterance);
-                        });
-                      },
-                      showPinyinClick: function(e) {
-                        var selector = $(e.target).attr("data-target-selector");
-                        $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
-                        $(e.target).text("Loading...");
-                        // eslint-disable-next-line no-undef
-                        new Annotator().annotateBySelector(selector + " *", function() {
-                          var index = $(e.target).attr("data-index");
-                          app.lrcs[index].annotated = true;
-                          app.$forceUpdate();
-                        });
-                      },
-                      // ANCHOR img/anchors/save-word-button.png
-                      addSavedWord: function(id) {
-                        this.savedWordIds.push(id);
-                        localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
-                        $(".btn-saved-words").addClass("blink");
-                      },
-                      removeSavedWord: function(id) {
-                        this.savedWordIds = this.savedWordIds.filter(function(savedWordId) {
-                          return id != savedWordId;
-                        });
-                        localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
-                        $(".btn-saved-words").removeClass("blink");
-                      },
-                      saveWordClick: function(e) {
-                        var $target = $(e.target);
-                        if (e.target.tagName.toLowerCase() === "i") {
-                          $target = $target.parent();
-                        }
-                        var id = $target.attr("data-id");
-                        if (!this.savedWordIds.includes(id)) {
-                          this.addSavedWord(id);
-                        } else {
-                          this.removeSavedWord(id);
-                        }
-                      },
-                      // ANCHOR img/anchors/saved-words-button.png
-                      savedWordsButtonClick: function() {
-                        this.view = "saved-words";
-                        location.hash = "";
-                      }
+                      var $youtube = $versions.find('.youtube:first-child .youtube-screen')
+                      $youtube.click(); // Load the iframe
                     },
-                    computed: {
-                      savedWordIdsSorted: function() {
-                        return this.savedWordIds.sort(function(a, b) {
-                          return parseInt(a) - parseInt(b);
-                        });
-                      }
-                    },
-                    updated: function() {
-                      var app = this;
-                      if (app.view == "entry") {
-                        app.recalculateExampleColumns(this.entry.word);
-                        app.attachSpeakEventHandler();
-                        var selector = ".example-wrapper > .example-sentence";
-                        if ($(selector).length > 0 && !app.annotated) {
-                          app.annotated = true; // Only once!
-                          $(selector).addClass("add-pinyin"); // So we get the looks
-                          // eslint-disable-next-line no-undef
-                          new Annotator().annotateBySelector(
-                            selector + ", " + selector + " *",
-                            function() {
-                              // success
-                            }
-                            );
-                          }
+                    rejectLine(line) {
+                      var bannedPatterns = [
+                        "www",
+                        "LRC",
+                        " - ",
+                        "歌词",
+                        "QQ",
+                        "演唱：",
+                        "编辑：",
+                        "☆"
+                      ];
+                      var rejected = false;
+                      bannedPatterns.forEach(function(pattern) {
+                        if (line.includes(pattern)) {
+                          rejected = true;
                         }
-                      }
-                    });
+                      });
+                      return rejected;
+                    },
+                    /**
+                    *
+                    * @param {*} index the index of the lrc line
+                    * @param {*} margin show 'margin' number of lines above and below the first matched line
+                    * @param {*} lrc the lrc object
+                    */
+                    inContext(index, margin, lrc) {
+                      var min = lrc.matchedLines[0] - margin;
+                      var max = lrc.matchedLines[0] + margin;
+                      return index >= min && index <= max;
+                    },
+                    recalculateExampleColumns: function(word) {
+                      var $div = $(".character-example-wrapper > div");
+                      var span = 12 / word.length;
+                      $div.removeClass();
+                      $div.addClass("col-md-" + span);
+                    },
                     
-                    window.onhashchange = function() {
-                      var id = decodeURI(location.hash.substr(1));
-                      if (id) {
-                        app.showById(id);
-                        window.scrollTo(0, 0);
+                    addAnimatedSvgLinks: function(word) {
+                      var chars = word.split("");
+                      var html = "";
+                      var app = this;
+                      chars.forEach(function(char) {
+                        html = html + app.hsk.hanzi.animatedSvgLink(char);
+                      });
+                      return html;
+                    },
+                    
+                    attachSpeakEventHandler: function() {
+                      $(".speak")
+                      .off()
+                      .click(function() {
+                        var text = $(this).attr("data-speak");
+                        var utterance = new SpeechSynthesisUtterance(text);
+                        utterance.lang = "zh-CN";
+                        speechSynthesis.speak(utterance);
+                      });
+                    },
+                    showPinyinClick: function(e) {
+                      var selector = $(e.target).attr("data-target-selector");
+                      $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
+                      $(e.target).text("Loading...");
+                      // eslint-disable-next-line no-undef
+                      new Annotator().annotateBySelector(selector + " *", function() {
+                        var index = $(e.target).attr("data-index");
+                        app.lrcs[index].annotated = true;
+                        app.$forceUpdate();
+                      });
+                    },
+                    // ANCHOR img/anchors/save-word-button.png
+                    addSavedWord: function(id) {
+                      this.savedWordIds.push(id);
+                      localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
+                      $(".btn-saved-words").addClass("blink");
+                    },
+                    removeSavedWord: function(id) {
+                      this.savedWordIds = this.savedWordIds.filter(function(savedWordId) {
+                        return id != savedWordId;
+                      });
+                      localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
+                      $(".btn-saved-words").removeClass("blink");
+                    },
+                    saveWordClick: function(e) {
+                      var $target = $(e.target);
+                      if (e.target.tagName.toLowerCase() === "i") {
+                        $target = $target.parent();
                       }
-                    };
-                    if (location.hash && location.hash.length > 1) {
-                      var id = decodeURI(location.hash.substr(1));
-                      app.showById(id);
+                      var id = $target.attr("data-id");
+                      if (!this.savedWordIds.includes(id)) {
+                        this.addSavedWord(id);
+                      } else {
+                        this.removeSavedWord(id);
+                      }
+                    },
+                    // ANCHOR img/anchors/saved-words-button.png
+                    savedWordsButtonClick: function() {
+                      this.view = "saved-words";
+                      location.hash = "";
                     }
-                  }
-                  
-                  HSK.load(function(hsk) {
-                    main(hsk);
+                  },
+                  computed: {
+                    savedWordIdsSorted: function() {
+                      return this.savedWordIds.sort(function(a, b) {
+                        return parseInt(a) - parseInt(b);
+                      });
+                    }
+                  },
+                  updated: function() {
+                    var app = this;
+                    if (app.view == "entry") {
+                      app.recalculateExampleColumns(this.entry.word);
+                      app.attachSpeakEventHandler();
+                      var selector = ".example-wrapper > .example-sentence";
+                      if ($(selector).length > 0 && !app.annotated) {
+                        app.annotated = true; // Only once!
+                        $(selector).addClass("add-pinyin"); // So we get the looks
+                        // eslint-disable-next-line no-undef
+                        new Annotator().annotateBySelector(
+                          selector + ", " + selector + " *",
+                          function() {
+                            // success
+                          }
+                          );
+                        }
+                      }
+                    }
                   });
                   
-                  // eslint-disable-next-line no-undef
-                })(jQuery);
+                  window.onhashchange = function() {
+                    var id = decodeURI(location.hash.substr(1));
+                    if (id) {
+                      app.showById(id);
+                      window.scrollTo(0, 0);
+                    }
+                  };
+                  if (location.hash && location.hash.length > 1) {
+                    var id = decodeURI(location.hash.substr(1));
+                    app.showById(id);
+                  }
+                }
                 
+                HSK.load(function(hsk) {
+                  main(hsk);
+                });
+                
+                // eslint-disable-next-line no-undef
+              })(jQuery);
+              
