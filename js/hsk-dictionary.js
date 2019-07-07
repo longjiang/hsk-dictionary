@@ -253,6 +253,14 @@ function main(hskObj) {
           );
         }
       },
+      highlightCharacter(text, character, hsk) {
+        if (text) {
+          return text.replace(
+            character,
+            '<span data-hsk="' + hsk + '">' + character + "</span>"
+          );
+        }
+      },
       showMoreClick(e) {
         $button = $(e.currentTarget);
         $button.siblings("[data-collapse-target]").toggleClass("collapsed");

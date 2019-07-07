@@ -137,6 +137,11 @@ body {
 
 .character-example a {
   text-decoration: none;
+  color: inherit;
+}
+
+.character-example [data-hsk] {
+  font-weight: bold;
 }
 
 .character-examples.collapsed li:nth-child(n + 5) {
@@ -145,8 +150,10 @@ body {
 
 .character-example-word {
   font-size: 1.4rem;
+}
+
+.character-example-word[data-hsk] {
   font-weight: bold;
-  /* font-weight: bold; */
 }
 
 .character-example-pinyin {

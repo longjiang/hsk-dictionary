@@ -14,7 +14,7 @@
   <link href="vendor/bootstrap/css/bootstrap.min.css?v=4.3.1" rel="stylesheet">
   <link href="vendor/annotator-js/css/tipped.css?v=4.2.7" rel="stylesheet">
   <link href="vendor/annotator-js/css/annotator.css?v=1.0.0" rel="stylesheet">
-  <link href="css/hsk-dictionary.css?v=3.3.1" rel="stylesheet">
+  <link href="css/hsk-dictionary.css?v=3.3.2" rel="stylesheet">
   
 </head>
 
@@ -161,7 +161,7 @@
             </div>
           </div>
           <ul class="character-examples collapsed" data-collapse-target>
-            <li v-for="example in character.examples" class="character-example"><a :href="'#' + example.id"><span class="character-example-word"><b v-bind:data-hsk="example.book">{{ example.word }}</b></span></a> <span class="character-example-pinyin">{{ example.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="example.word"></i></span> <em class="character-example-english">{{ example.english }}</em></li>
+            <li v-for="example in character.examples" class="character-example"><a :href="'#' + example.id"><span class="character-example-word" v-html="highlightCharacter(example.word, character.character, example.book)"></span></a> <span class="character-example-pinyin">{{ example.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="example.word"></i></span> <em class="character-example-english">{{ example.english }}</em></li>
           </ul>
           <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick" title="Show all examples"><span class="label-expand">Show {{ character.examples.length - 4 }} more</span><span class="label-collapse">Collapse</span></button>
         </div>
@@ -325,7 +325,7 @@
   <script src="vendor/annotator-js/js/tipped.js?v=4.2.7"></script>
   <script src="vendor/annotator-js/js/annotator.js?v=1.0.0"></script>
   <script src="js/hsk.js?v=3.2.5"></script>
-  <script src="js/hsk-dictionary.js?v=3.3.1"></script>
+  <script src="js/hsk-dictionary.js?v=3.3.2"></script>
   <script src="https://apis.google.com/js/client.js?onload=init"></script>
 </body>
 
