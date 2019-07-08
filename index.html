@@ -14,7 +14,7 @@
   <link href="vendor/bootstrap/css/bootstrap.min.css?v=4.3.1" rel="stylesheet">
   <link href="vendor/annotator-js/css/tipped.css?v=4.2.7" rel="stylesheet">
   <link href="vendor/annotator-js/css/annotator.css?v=1.0.0" rel="stylesheet">
-  <link href="css/hsk-dictionary.css?v=3.5.0" rel="stylesheet">
+  <link href="css/hsk-dictionary.css?v=3.6.0" rel="stylesheet">
   
 </head>
 
@@ -109,7 +109,7 @@
               <div class="label" v-bind:data-bg-hsk="entry.book" v-if="entry.oofc == ''">HSK {{ entry.book }}</div>
               <div class="example-sentence">
                 <!-- <p class="example-sentence-pinyin">{{ entry.examplePinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="entry.example"></i></p> -->
-                <p class="example-sentence-word"  v-html="highlight(entry.example)"></p>
+                <p class="example-sentence-word add-pinyin"  v-html="highlight(entry.example)"></p>
                 <p class="example-sentence-english">{{ entry.exampleTranslation }}</p>
               </div>
             </div>
@@ -149,7 +149,14 @@
           <div class="col-md-6" v-for="character in characters">
             <!-- ANCHOR img/anchors/character-example-header.png -->
             <div class="character-example-header">
-              <b class="character-example-header-word" :data-hsk="character.examples[0].book">{{ character.character }}</b><a class="stroke btn-small" :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span>
+              <b class="character-example-header-word" :data-hsk="character.examples[0].book">{{ character.character }}</b>
+              <a class="stroke btn-small" :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"></a>
+              <span v-if="character.pinyin">
+                ({{ character.pinyin[0] }})
+                <em>{{ character.definition }}</em>
+              </span>
+              <div class="etymology" :data-bg-hsk="character.examples[0].book" v-if="character.etymology"><span><b>Origin:</b> {{ character.etymology.hint }}.</span> A <em v-if="character.etymology"> {{ character.etymology.type }}</em> character.</div>
+              <b>{{ character.character }}</b> is made up of:
             </div>
             <!-- ANCHOR img/anchors/parts.png -->
             <div class="parts">
@@ -159,7 +166,8 @@
                 <span class="part-definition character-example-english" v-if="part.definition">{{ part.definition }}</span>
                 <span class="part-pinyin character-example-english" v-if="part.character == '？'">Other elements</span>
                 <ul class="part-examples" v-if="part.showExamples">
-                  <li class="part-example" v-for="row in hsk.getHSKCharactersByRadical(part.character)">
+                  <li>{{ part.hskCharacters.length }} characters:</li>
+                  <li class="part-example" v-for="row in part.hskCharacters">
                     <a :href="'#' + row.firstHSKWord.id" v-html="highlightCharacter(row.firstHSKWord.word, row.character, row.firstHSKWord.book)"></a>
                     <span class="part-pinyin character-example-pinyin" v-if="part.pinyin">{{ row.firstHSKWord.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="row.firstHSKWord.word"></i></span>
                     <span class="part-definition character-example-english" v-if="part.definition">{{ row.firstHSKWord.english }}</span>
@@ -336,8 +344,8 @@
     <script src="vendor/papaparse/papaparse.min.js?v=5.0.0"></script>
     <script src="vendor/annotator-js/js/tipped.js?v=4.2.7"></script>
     <script src="vendor/annotator-js/js/annotator.js?v=1.0.0"></script>
-    <script src="js/hsk.js?v=3.5.0"></script>
-    <script src="js/hsk-dictionary.js?v=3.5.0"></script>
+    <script src="js/hsk.js?v=3.6.0"></script>
+    <script src="js/hsk-dictionary.js?v=3.6.0"></script>
     <script src="//apis.google.com/js/client.js?onload=init"></script>
     <!-- <script src="//www.youtube.com/iframe_api"></script> -->
   </body>

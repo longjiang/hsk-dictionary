@@ -8,6 +8,7 @@ class Character {
     this.parts = [];
     var parts = this.decomposition.substring(1).split("");
     var character = this;
+    console.log(this)
     parts.forEach(function(part) {
       var partObj = character.hanzi.lookup(part);
       if (partObj) {

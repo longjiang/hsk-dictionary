@@ -324,250 +324,244 @@ class Timer {
                 },
                 highlight(text) {
                   if (text) {
-                    return text.replace(
-                      this.entry.word,
-                      '<span data-hsk="' +
-                      this.entry.book +
-                      '">' +
-                      this.entry.word +
-                      "</span>"
-                      );
-                    }
-                  },
-                  highlightCharacter(text, character, hsk) {
-                    if (text) {
-                      return text.replace(
-                        character,
-                        '<span data-hsk="' + hsk + '">' + character + "</span>"
-                        );
-                      }
-                    },
-                    togglePartExamples(part) {
-                      part.showExamples
-                      ? (part.showExamples = false)
-                      : (part.showExamples = true);
-                      app.$forceUpdate();
-                    },
-                    showMoreClick(e) {
-                      var $button = $(e.currentTarget);
-                      $button.siblings("[data-collapse-target]").toggleClass("collapsed");
-                      $button.toggleClass("collapsed");
-                    },
-                    backToBrowse() {
-                      this.view = "browse";
-                      location.hash = "";
-                    },
-                    previousClick() {
-                      var previous = Math.max(0, parseInt(this.entry.id) - 1);
-                      location.hash = previous;
-                    },
-                    nextClick() {
-                      var next = Math.min(this.hsk.count(), parseInt(this.entry.id) + 1);
-                      location.hash = next;
-                    },
-                    suggestionClick() {
-                      this.suggestions = [];
-                    },
-                    toggleCollapsed(e) {
-                      $(e.target)
-                      .next("ul")
-                      .toggleClass("collapsed");
-                    },
-                    bookClick(e) {
-                      var book = $(e.target)
-                      .parents("[data-book]")
-                      .attr("data-book");
-                      this.wordList = this.hsk.listByBook(book);
-                      $(e.target)
-                      .next("ul")
-                      .toggleClass("collapsed");
-                    },
-                    lessonClick(e) {
-                      var $target = $(e.target);
-                      if (e.target.tagName.toLowerCase() !== "div") {
-                        $target = $target.parent();
-                      }
-                      var lesson = $target.parents("[data-lesson]").attr("data-lesson");
-                      var book = $target.parents("[data-book]").attr("data-book");
-                      this.wordList = this.hsk.listByBookLesson(book, lesson);
-                      $target.next("ul").toggleClass("collapsed");
-                    },
-                    dialogClick(e) {
-                      var $target = $(e.target);
-                      if (e.target.tagName.toLowerCase() !== "div") {
-                        $target = $target.parent();
-                      }
-                      var dialog = $target.parents("[data-dialog]").attr("data-dialog");
-                      var lesson = $target.parents("[data-lesson]").attr("data-lesson");
-                      var book = $target.parents("[data-book]").attr("data-book");
-                      this.wordList = this.hsk.listBookLessonDialog(book, lesson, dialog);
-                      $target.next("ul").toggleClass("collapsed");
-                    },
-                    songNextClick() {
-                      var $songs = $(".song-caroussel .songs");
-                      var $firstSong = $songs.find(".song:first-child");
-                      $firstSong.appendTo($songs); // move to the last
-                    },
-                    songPreviousClick() {
-                      var $songs = $(".song-caroussel .songs");
-                      var $firstSong = $songs.find(".song:last-child");
-                      $firstSong.prependTo($songs); // move to the last
-                    },
-                    cycleYouTube(lrc, index) {
-                      var $versions = $("#lrc-" + index + "-youtube");
-                      $versions.find(".youtube:first-child").appendTo($versions);
-                      lrc.currentYoutubeIndex += 1;
-                      if (lrc.currentYoutubeIndex > lrc.youtube.length) {
-                        lrc.currentYoutubeIndex =
-                        lrc.currentYoutubeIndex - lrc.youtube.length;
-                      }
-                      var $youtube = $versions.find('.youtube:first-child .youtube-screen')
-                      $youtube.click(); // Load the iframe
-                    },
-                    rejectLine(line) {
-                      var bannedPatterns = [
-                        "www",
-                        "LRC",
-                        " - ",
-                        "歌词",
-                        "QQ",
-                        "演唱：",
-                        "编辑：",
-                        "☆"
-                      ];
-                      var rejected = false;
-                      bannedPatterns.forEach(function(pattern) {
-                        if (line.includes(pattern)) {
-                          rejected = true;
-                        }
-                      });
-                      return rejected;
-                    },
-                    /**
-                    *
-                    * @param {*} index the index of the lrc line
-                    * @param {*} margin show 'margin' number of lines above and below the first matched line
-                    * @param {*} lrc the lrc object
-                    */
-                    inContext(index, margin, lrc) {
-                      var min = lrc.matchedLines[0] - margin;
-                      var max = lrc.matchedLines[0] + margin;
-                      return index >= min && index <= max;
-                    },
-                    recalculateExampleColumns: function(word) {
-                      var $div = $(".character-example-wrapper > div");
-                      var span = 12 / word.length;
-                      $div.removeClass();
-                      $div.addClass("col-md-" + span);
-                    },
-                    
-                    addAnimatedSvgLinks: function(word) {
-                      var chars = word.split("");
-                      var html = "";
-                      var app = this;
-                      chars.forEach(function(char) {
-                        html = html + app.hsk.hanzi.animatedSvgLink(char);
-                      });
-                      return html;
-                    },
-                    
-                    attachSpeakEventHandler: function() {
-                      $(".speak")
-                      .off()
-                      .click(function() {
-                        var text = $(this).attr("data-speak");
-                        var utterance = new SpeechSynthesisUtterance(text);
-                        utterance.lang = "zh-CN";
-                        speechSynthesis.speak(utterance);
-                      });
-                    },
-                    showPinyinClick: function(e) {
-                      var selector = $(e.target).attr("data-target-selector");
-                      $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
-                      $(e.target).text("Loading...");
-                      // eslint-disable-next-line no-undef
-                      new Annotator().annotateBySelector(selector + " *", function() {
-                        var index = $(e.target).attr("data-index");
-                        app.lrcs[index].annotated = true;
-                        app.$forceUpdate();
-                      });
-                    },
-                    // ANCHOR img/anchors/save-word-button.png
-                    addSavedWord: function(id) {
-                      this.savedWordIds.push(id);
-                      localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
-                      $(".btn-saved-words").addClass("blink");
-                    },
-                    removeSavedWord: function(id) {
-                      this.savedWordIds = this.savedWordIds.filter(function(savedWordId) {
-                        return id != savedWordId;
-                      });
-                      localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
-                      $(".btn-saved-words").removeClass("blink");
-                    },
-                    saveWordClick: function(e) {
-                      var $target = $(e.target);
-                      if (e.target.tagName.toLowerCase() === "i") {
-                        $target = $target.parent();
-                      }
-                      var id = $target.attr("data-id");
-                      if (!this.savedWordIds.includes(id)) {
-                        this.addSavedWord(id);
-                      } else {
-                        this.removeSavedWord(id);
-                      }
-                    },
-                    // ANCHOR img/anchors/saved-words-button.png
-                    savedWordsButtonClick: function() {
-                      this.view = "saved-words";
-                      location.hash = "";
-                    }
-                  },
-                  computed: {
-                    savedWordIdsSorted: function() {
-                      return this.savedWordIds.sort(function(a, b) {
-                        return parseInt(a) - parseInt(b);
-                      });
-                    }
-                  },
-                  updated: function() {
-                    var app = this;
-                    if (app.view == "entry") {
-                      app.recalculateExampleColumns(this.entry.word);
-                      app.attachSpeakEventHandler();
-                      var selector = ".example-wrapper > .example-sentence";
-                      if ($(selector).length > 0 && !app.annotated) {
-                        app.annotated = true; // Only once!
-                        $(selector).addClass("add-pinyin"); // So we get the looks
-                        // eslint-disable-next-line no-undef
-                        new Annotator().annotateBySelector(
-                          selector + ", " + selector + " *",
-                          function() {
-                            // success
-                          }
-                          );
-                        }
-                      }
+                    return text.replace(this.entry.word, '<span data-hsk="' + this.entry.book + '">' + this.entry.word + "</span>");
+                  }
+                },
+                highlightCharacter(text, character, hsk) {
+                  if (text) {
+                    return text.replace(character, '<span data-hsk="' + hsk + '">' + character + "</span>"
+                    );
+                  }
+                },
+                togglePartExamples(part) {
+                  var app = this;
+                  if (!part.hskCharacters) {
+                    part.hskCharacters = app.hsk.getHSKCharactersByRadical(part.character);
+                  }
+                  part.showExamples
+                  ? (part.showExamples = false)
+                  : (part.showExamples = true);
+                  app.$forceUpdate();
+                },
+                showMoreClick(e) {
+                  var $button = $(e.currentTarget);
+                  $button.siblings("[data-collapse-target]").toggleClass("collapsed");
+                  $button.toggleClass("collapsed");
+                },
+                backToBrowse() {
+                  this.view = "browse";
+                  location.hash = "";
+                },
+                previousClick() {
+                  var previous = Math.max(0, parseInt(this.entry.id) - 1);
+                  location.hash = previous;
+                },
+                nextClick() {
+                  var next = Math.min(this.hsk.count(), parseInt(this.entry.id) + 1);
+                  location.hash = next;
+                },
+                suggestionClick() {
+                  this.suggestions = [];
+                },
+                toggleCollapsed(e) {
+                  $(e.target)
+                  .next("ul")
+                  .toggleClass("collapsed");
+                },
+                bookClick(e) {
+                  var book = $(e.target)
+                  .parents("[data-book]")
+                  .attr("data-book");
+                  this.wordList = this.hsk.listByBook(book);
+                  $(e.target)
+                  .next("ul")
+                  .toggleClass("collapsed");
+                },
+                lessonClick(e) {
+                  var $target = $(e.target);
+                  if (e.target.tagName.toLowerCase() !== "div") {
+                    $target = $target.parent();
+                  }
+                  var lesson = $target.parents("[data-lesson]").attr("data-lesson");
+                  var book = $target.parents("[data-book]").attr("data-book");
+                  this.wordList = this.hsk.listByBookLesson(book, lesson);
+                  $target.next("ul").toggleClass("collapsed");
+                },
+                dialogClick(e) {
+                  var $target = $(e.target);
+                  if (e.target.tagName.toLowerCase() !== "div") {
+                    $target = $target.parent();
+                  }
+                  var dialog = $target.parents("[data-dialog]").attr("data-dialog");
+                  var lesson = $target.parents("[data-lesson]").attr("data-lesson");
+                  var book = $target.parents("[data-book]").attr("data-book");
+                  this.wordList = this.hsk.listBookLessonDialog(book, lesson, dialog);
+                  $target.next("ul").toggleClass("collapsed");
+                },
+                songNextClick() {
+                  var $songs = $(".song-caroussel .songs");
+                  var $firstSong = $songs.find(".song:first-child");
+                  $firstSong.appendTo($songs); // move to the last
+                },
+                songPreviousClick() {
+                  var $songs = $(".song-caroussel .songs");
+                  var $firstSong = $songs.find(".song:last-child");
+                  $firstSong.prependTo($songs); // move to the last
+                },
+                cycleYouTube(lrc, index) {
+                  var $versions = $("#lrc-" + index + "-youtube");
+                  $versions.find(".youtube:first-child").appendTo($versions);
+                  lrc.currentYoutubeIndex += 1;
+                  if (lrc.currentYoutubeIndex > lrc.youtube.length) {
+                    lrc.currentYoutubeIndex =
+                    lrc.currentYoutubeIndex - lrc.youtube.length;
+                  }
+                  var $youtube = $versions.find('.youtube:first-child .youtube-screen')
+                  $youtube.click(); // Load the iframe
+                },
+                rejectLine(line) {
+                  var bannedPatterns = [
+                    "www",
+                    "LRC",
+                    " - ",
+                    "歌词",
+                    "QQ",
+                    "演唱：",
+                    "编辑：",
+                    "☆"
+                  ];
+                  var rejected = false;
+                  bannedPatterns.forEach(function(pattern) {
+                    if (line.includes(pattern)) {
+                      rejected = true;
                     }
                   });
-                  
-                  window.onhashchange = function() {
-                    var id = decodeURI(location.hash.substr(1));
-                    if (id) {
-                      app.showById(id);
-                      window.scrollTo(0, 0);
+                  return rejected;
+                },
+                /**
+                *
+                * @param {*} index the index of the lrc line
+                * @param {*} margin show 'margin' number of lines above and below the first matched line
+                * @param {*} lrc the lrc object
+                */
+                inContext(index, margin, lrc) {
+                  var min = lrc.matchedLines[0] - margin;
+                  var max = lrc.matchedLines[0] + margin;
+                  return index >= min && index <= max;
+                },
+                recalculateExampleColumns: function(word) {
+                  var $div = $(".character-example-wrapper > div");
+                  var span = 12 / word.length;
+                  $div.removeClass();
+                  $div.addClass("col-md-" + span);
+                },
+                
+                addAnimatedSvgLinks: function(word) {
+                  var chars = word.split("");
+                  var html = "";
+                  var app = this;
+                  chars.forEach(function(char) {
+                    html = html + app.hsk.hanzi.animatedSvgLink(char);
+                  });
+                  return html;
+                },
+                
+                attachSpeakEventHandler: function() {
+                  $(".speak")
+                  .off()
+                  .click(function() {
+                    var text = $(this).attr("data-speak");
+                    var utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = "zh-CN";
+                    speechSynthesis.speak(utterance);
+                  });
+                },
+                showPinyinClick: function(e) {
+                  var selector = $(e.target).attr("data-target-selector");
+                  $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
+                  $(e.target).text("Loading...");
+                  // eslint-disable-next-line no-undef
+                  new Annotator().annotateBySelector(selector + " *", function() {
+                    var index = $(e.target).attr("data-index");
+                    app.lrcs[index].annotated = true;
+                    app.$forceUpdate();
+                  });
+                },
+                // ANCHOR img/anchors/save-word-button.png
+                addSavedWord: function(id) {
+                  this.savedWordIds.push(id);
+                  localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
+                  $(".btn-saved-words").addClass("blink");
+                },
+                removeSavedWord: function(id) {
+                  this.savedWordIds = this.savedWordIds.filter(function(savedWordId) {
+                    return id != savedWordId;
+                  });
+                  localStorage.setItem("savedWordIds", JSON.stringify(this.savedWordIds));
+                  $(".btn-saved-words").removeClass("blink");
+                },
+                saveWordClick: function(e) {
+                  var $target = $(e.target);
+                  if (e.target.tagName.toLowerCase() === "i") {
+                    $target = $target.parent();
+                  }
+                  var id = $target.attr("data-id");
+                  if (!this.savedWordIds.includes(id)) {
+                    this.addSavedWord(id);
+                  } else {
+                    this.removeSavedWord(id);
+                  }
+                },
+                // ANCHOR img/anchors/saved-words-button.png
+                savedWordsButtonClick: function() {
+                  this.view = "saved-words";
+                  location.hash = "";
+                }
+              },
+              computed: {
+                savedWordIdsSorted: function() {
+                  return this.savedWordIds.sort(function(a, b) {
+                    return parseInt(a) - parseInt(b);
+                  });
+                }
+              },
+              updated: function() {
+                var app = this;
+                if (app.view == "entry") {
+                  app.recalculateExampleColumns(this.entry.word);
+                  app.attachSpeakEventHandler();
+                  var selector = ".example-wrapper > .example-sentence *";
+                  if ($(selector).length > 0 && !app.annotated) {
+                    app.annotated = true; // Only once!
+                    // eslint-disable-next-line no-undef
+                    new Annotator().annotateBySelector(
+                      selector,
+                      function() {
+                        // success
+                      }
+                      );
                     }
-                  };
-                  if (location.hash && location.hash.length > 1) {
-                    var id = decodeURI(location.hash.substr(1));
-                    app.showById(id);
                   }
                 }
-                
-                HSK.load(function(hsk) {
-                  main(hsk);
-                });
-                
-                // eslint-disable-next-line no-undef
-              })(jQuery);
+              });
               
+              window.onhashchange = function() {
+                var id = decodeURI(location.hash.substr(1));
+                if (id) {
+                  app.showById(id);
+                  window.scrollTo(0, 0);
+                }
+              };
+              if (location.hash && location.hash.length > 1) {
+                var id = decodeURI(location.hash.substr(1));
+                app.showById(id);
+              }
+            }
+            
+            HSK.load(function(hsk) {
+              main(hsk);
+            });
+            
+            // eslint-disable-next-line no-undef
+          })(jQuery);
+          
