@@ -245,7 +245,7 @@ class Timer {
                   savePhoto(app.entry, url, function(response) {
                     $button.after('<span class="success">Uploaded</span>');
                     app.hasImage = true;
-                    app.image = response.url;
+                    app.image = response.url + '?' + Date.now();
                     setTimeout(function() {
                       $(".success").remove();
                     }, 3000);
