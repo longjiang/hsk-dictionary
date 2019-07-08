@@ -155,7 +155,7 @@
                 ({{ character.pinyin[0] }})
                 <em>{{ character.definition }}</em>
               </span>
-              <div class="etymology" :data-bg-hsk="character.examples[0].book" v-if="character.etymology"><span><b>Origin:</b> {{ character.etymology.hint }}.</span> A <em v-if="character.etymology"> {{ character.etymology.type }}</em> character.</div>
+              <div class="etymology" :data-bg-hsk="character.examples[0].book" v-if="character.etymology"><span v-if="character.etymology.type"><b>Origin:</b> A <em v-if="character.etymology"> {{ character.etymology.type }}</em> character.</span> <span v-if="character.etymology.hint"><b>Mnemonic:</b> {{ character.etymology.hint }}.</span></div>
               <b>{{ character.character }}</b> is made up of:
             </div>
             <!-- ANCHOR img/anchors/parts.png -->
