@@ -65,7 +65,7 @@
             <button class="paginate-button previous" v-on:click="previousClick" title="Previous word"><img src="img/angle-left.svg" alt=""></button>
             <button class="paginate-button next" v-on:click="nextClick" title="Next word"><img src="img/angle-right.svg" alt=""></button>
             <div class="pinyin">{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="entry.word"></i></div>
-            <div class="word"><span v-bind:data-hsk="entry.book" v-html="addAnimatedSvgLinks(entry.word)"></span></div>
+            <div class="word"><span v-bind:data-hsk="entry.book">{{ entry.word }}</span></div>
             <div class="stroke-wrapper">
               <a class="stroke btn-small" v-for="character in characters" :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"> Strokes</a>
             </div>
@@ -149,12 +149,12 @@
           <div class="col-md-6" v-for="character in characters">
             <!-- ANCHOR img/anchors/character-example-header.png -->
             <div class="character-example-header">
-              <b class="character-example-header-word" v-html="character.animatedSvgLink" :data-hsk="character.examples[0].book"></b> <a class="stroke btn-small" :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span>
+              <b class="character-example-header-word" :data-hsk="character.examples[0].book">{{ character.character }}</b><a class="stroke btn-small" :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"></a><span v-if="character.pinyin"> ({{ character.pinyin[0] }}) <b><em>&ldquo;{{ character.definition }}&rdquo;</em></b> is a <b><em v-if="character.etymology">{{ character.etymology.type }}</em></b> character made up of:</span>
             </div>
             <!-- ANCHOR img/anchors/parts.png -->
             <div class="parts">
               <div class="part character-example" v-for="part in character.parts">
-                <span class="part-part" v-if="part"><b v-html="part.animatedSvgLink"></b></span>
+                <span class="part-part" v-if="part"><b>{{ part.character }}</b><a class="stroke btn-small" :href="hsk.hanzi.animatedSvgUrl(part.character)" target="_blank" title="Show stroke order animation"><img src="img/stroke.svg"></a></span>
                 <span class="part-pinyin character-example-pinyin" v-if="part.pinyin">{{ part.pinyin[0] }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="part.character"></i></span>
                 <span class="part-definition character-example-english" v-if="part.definition">{{ part.definition }}</span>
                 <span class="part-pinyin character-example-english" v-if="part.character == '？'">Other elements</span>

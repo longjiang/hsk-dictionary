@@ -59,7 +59,7 @@ var Hanzi = {
     // Filter out description characters and "？ - other elements"
     if (hanzi.chineseOnly(radical)) {
       rows = hanzi._hanziData.filter(function(row) {
-        return row.decomposition.includes(radical);
+        return row.decomposition.includes(radical) || row.character.includes(radical);
       });
     }
     return rows;
