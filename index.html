@@ -50,7 +50,7 @@
                     <span class="suggestion-not-found" v-if="suggestion.notFound"><b>&ldquo;{{ suggestion.text }}&rdquo;</b> is not in the HSK. Try looking it up in <b>Wiktionary.</b></span>
                   </a>
                 </div>
-                <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick" v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><span class="btn-saved-words-count">{{ savedWordIds.length }}</span> Saved</button>
+                <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick" v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><span class="btn-saved-words-count">{{ savedWordIds.length < 100 ? savedWordIds.length : '多' }}</span> Saved</button>
               </div>
             </div>
           </div>
@@ -290,12 +290,20 @@
           </div>
         </div>
       </div>
-      
       <div class="container mt2 mb2" v-cloak v-if="view == 'saved-words'">
         <div class="row">
           <div class="col-sm-12">
             <h4>My Words</h4>
             <p>These words are stored in your browser's local storage, which persists unless you clear your browsing data.</p>
+            <hr>
+            <div class="my-words-tools mt1 mb1 text-right">
+              <button class="upload-list btn btn-primary" v-on:click="showImportClick"><i class="glyphicon glyphicon-cloud-upload"></i> Import</button>
+              <button class="remove-all btn btn-danger" v-on:click="removeAllClick"><i class="glyphicon glyphicon-trash"></i> Remove All</button>
+              <div class="import-wrapper hidden">
+                <textarea id="import-textarea" class="mt1 mb1 form-control" cols="30" rows="10" placeholder="Paste your list here (in simplified characters), one word per line"></textarea>
+                <button class="btn btn-success btn-block" v-on:click="importClick">Import</button>
+              </div>
+            </div>
           </div>
           <div class="col-sm-12">
             <ul class="saved-words">

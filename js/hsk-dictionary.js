@@ -516,6 +516,40 @@ class Timer {
                 savedWordsButtonClick: function() {
                   this.view = "saved-words";
                   location.hash = "";
+                },
+                showImportClick: function() {
+                  $('.import-wrapper').toggleClass('hidden');
+                },
+                importClick: function() {
+                  const list = $('#import-textarea').val().split("\n");
+                  const app = this;
+                  var notMatched = []
+                  list.forEach(function(item) {
+                    const words = app.hsk.lookup(item);
+                    console.log(item)
+                    if (words[0] && !app.savedWordIds.includes(words[0].id)) {
+                      app.addSavedWord(words[0].id);
+                    } else {
+                      notMatched.push(item)
+                    }
+                  })
+                  const words = app.hsk.listWhere(function(word) {
+                    found = false;
+                    notMatched.forEach(function(item) {
+                      if (item.includes(word.word)) found = true;
+                    })
+                    return found;
+                  })
+                  words.forEach(function(word) {
+                    if(!app.savedWordIds.includes(word.id)) app.addSavedWord(word.id)
+                  })
+                },
+                removeAllClick: function() {
+                  const confirmed = confirm("Are you sure you want to remove all your saved words?");
+                  if (confirmed) {
+                    this.savedWordIds = []
+                    localStorage.removeItem('savedWordIds')
+                  }
                 }
               },
               computed: {
