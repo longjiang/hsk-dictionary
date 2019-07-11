@@ -353,12 +353,28 @@ class Timer {
                   location.hash = "";
                 },
                 previousClick() {
-                  var previous = Math.max(0, parseInt(this.entry.id) - 1);
-                  location.hash = previous;
+                  var thisId = parseInt(this.entry.id);
+                  var previousId;
+                  if (app.savedWordIds.length < 2) {
+                    var previousId = Math.max(this.hsk.first(), thisId - 1);
+                  } else {
+                    i = app.savedWordIdsSorted.indexOf(thisId.toString())
+                    var previousIndex = Math.max(0, i - 1);
+                    previousId = app.savedWordIds[previousIndex]
+                  }
+                  location.hash = previousId;
                 },
                 nextClick() {
-                  var next = Math.min(this.hsk.count(), parseInt(this.entry.id) + 1);
-                  location.hash = next;
+                  var thisId = parseInt(this.entry.id);
+                  var nextId;
+                  if (app.savedWordIds.length < 2) {
+                    var nextId = Math.min(this.hsk.last(), thisId + 1);
+                  } else {
+                    i = app.savedWordIdsSorted.indexOf(thisId.toString())
+                    var nextIndex = Math.min(app.savedWordIds.length - 1, i + 1);
+                    nextId = app.savedWordIds[nextIndex]
+                  }
+                  location.hash = nextId;
                 },
                 suggestionClick() {
                   this.suggestions = [];
@@ -526,7 +542,6 @@ class Timer {
                   var notMatched = []
                   list.forEach(function(item) {
                     const words = app.hsk.lookup(item);
-                    console.log(item)
                     if (words[0] && !app.savedWordIds.includes(words[0].id)) {
                       app.addSavedWord(words[0].id);
                     } else {
@@ -543,6 +558,7 @@ class Timer {
                   words.forEach(function(word) {
                     if(!app.savedWordIds.includes(word.id)) app.addSavedWord(word.id)
                   })
+                  $('.import-wrapper').addClass('hidden')
                 },
                 removeAllClick: function() {
                   const confirmed = confirm("Are you sure you want to remove all your saved words?");
@@ -557,7 +573,25 @@ class Timer {
                   return this.savedWordIds.sort(function(a, b) {
                     return parseInt(a) - parseInt(b);
                   });
-                }
+                },
+                hasPrevious: function(){
+                  var thisId = parseInt(this.entry.id);
+                  if (app.savedWordIds.length < 2) {
+                    return this.hsk.hasPrevious(thisId);
+                  } else {
+                    i = app.savedWordIdsSorted.indexOf(thisId.toString())
+                    return i > 0;
+                  }
+                },
+                hasNext: function(){
+                  var thisId = parseInt(this.entry.id);
+                  if (app.savedWordIds.length < 2) {
+                    return this.hsk.hasNext(thisId);
+                  } else {
+                    i = app.savedWordIdsSorted.indexOf(thisId.toString())
+                    return i + 1 < app.savedWordIds.length
+                  }
+                },
               },
               updated: function() {
                 var app = this;

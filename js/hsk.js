@@ -8,7 +8,7 @@ class Character {
     this.parts = [];
     var parts = this.decomposition.substring(1).split("");
     var character = this;
-    parts.forEach(function(part) {
+    parts.forEach(function (part) {
       var partObj = character.hanzi.lookup(part);
       if (partObj) {
         partObj.animatedSvgLink = character.hanzi.animatedSvgLink(part);
@@ -29,18 +29,18 @@ class Character {
 var Hanzi = {
   _hanziData: [],
   _makeMeAHanziDictionaryTxt: "data/dictionary.txt",
-  load: function(callback) {
+  load: function (callback) {
     var hanzi = this;
-    jQuery.getJSON("data/dictionary.txt").done(function(data) {
+    jQuery.getJSON("data/dictionary.txt").done(function (data) {
       hanzi._hanziData = data;
       callback(hanzi);
     });
   },
 
-  lookup: function(char) {
+  lookup: function (char) {
     var hanzi = this;
     var character = false;
-    this._hanziData.forEach(function(row) {
+    this._hanziData.forEach(function (row) {
       if (row.character == char) {
         character = new Character(row, hanzi);
         return;
@@ -49,26 +49,26 @@ var Hanzi = {
     return character;
   },
 
-  chineseOnly: function(string) {
+  chineseOnly: function (string) {
     return string.replace(/[\u4E00-\u9FFF]+/, "") === "";
   },
 
-  searchByRadical: function(radical) {
+  searchByRadical: function (radical) {
     var rows = [];
     var hanzi = this;
     // Filter out description characters and "？ - other elements"
     if (hanzi.chineseOnly(radical)) {
-      rows = hanzi._hanziData.filter(function(row) {
+      rows = hanzi._hanziData.filter(function (row) {
         return row.decomposition.includes(radical) || row.character.includes(radical);
       });
     }
     return rows;
   },
 
-  getCharactersInWord: function(word) {
+  getCharactersInWord: function (word) {
     var characters = [];
     var hanzi = this;
-    word.split("").forEach(function(char) {
+    word.split("").forEach(function (char) {
       var character = hanzi.lookup(char);
       if (character) {
         // new character
@@ -78,12 +78,12 @@ var Hanzi = {
     return characters;
   },
 
-  animatedSvgUrl: function(char) {
+  animatedSvgUrl: function (char) {
     var charCode = char.charCodeAt(0);
     return "data/svgs/" + charCode + ".svg";
   },
 
-  animatedSvgLink: function(char) {
+  animatedSvgLink: function (char) {
     return (
       '<a href="' +
       this.animatedSvgUrl(char) +
@@ -121,15 +121,15 @@ var HSK = {
    * Loads the data and returns this via a callback.
    * @param {function} callback A callback function that takes the HSK library object as an argument.
    */
-  load: function(callback) {
+  load: function (callback) {
     var hsk = this;
-    Hanzi.load(function(hanzi) {
+    Hanzi.load(function (hanzi) {
       hsk.hanzi = hanzi;
       Papa.parse(hsk._standardCourseCSV, {
         download: true,
         header: true,
-        complete: function(results) {
-          results.data.forEach(function(row) {
+        complete: function (results) {
+          results.data.forEach(function (row) {
             var result = {};
             for (var index in hsk._standardCourseCSVFields) {
               result[index] = row[hsk._standardCourseCSVFields[index]];
@@ -147,21 +147,21 @@ var HSK = {
    * @param {int} id The id of the word
    */
 
-  get: function(id) {
-    var word = this._standardCourseData.find(function(row) {
+  get: function (id) {
+    var word = this._standardCourseData.find(function (row) {
       return parseInt(row.id) === parseInt(id);
     });
     return word;
   },
 
-  count: function() {
+  count: function () {
     return this._standardCourseData.length;
   },
 
-  lookup: function(word) {
+  lookup: function (word) {
     var hsk = this;
     var results = [];
-    hsk._standardCourseData.forEach(function(row) {
+    hsk._standardCourseData.forEach(function (row) {
       if (row.word === word) {
         results.push(row);
       }
@@ -169,16 +169,16 @@ var HSK = {
     return results;
   },
 
-  removeToneMarks: function(pinyin) {
+  removeToneMarks: function (pinyin) {
     // See https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
     return pinyin.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   },
 
-  lookupFuzzy: function(word) {
+  lookupFuzzy: function (word) {
     var results = [];
     word = word.toLowerCase();
     var hsk = this;
-    this._standardCourseData.forEach(function(row) {
+    this._standardCourseData.forEach(function (row) {
       if (
         row.word.includes(word) ||
         hsk
@@ -195,8 +195,8 @@ var HSK = {
     return results;
   },
 
-  getFirstHSKWordWithCharacter: function(char) {
-    var words = this._standardCourseData.filter(function(row) {
+  getFirstHSKWordWithCharacter: function (char) {
+    var words = this._standardCourseData.filter(function (row) {
       return row.word.includes(char) && row.oofc == "" && row.pn == "";
     });
     if (words[0]) {
@@ -204,23 +204,23 @@ var HSK = {
     }
   },
 
-  getHSKCharactersByRadical: function(radical) {
+  getHSKCharactersByRadical: function (radical) {
     var hsk = this;
     var characters = this.hanzi.searchByRadical(radical);
     var hskCharacters = [];
-    characters.forEach(function(character) {
+    characters.forEach(function (character) {
       var firstWord = hsk.getFirstHSKWordWithCharacter(character.character);
       if (firstWord) {
         character.firstHSKWord = firstWord;
         hskCharacters.push(character);
       }
     });
-    return hskCharacters.sort(function(a, b) {
+    return hskCharacters.sort(function (a, b) {
       return a.firstHSKWord.book - b.firstHSKWord.book;
     });
   },
 
-  simplifyEnglish: function(english) {
+  simplifyEnglish: function (english) {
     return english
       .replace("/", ", ")
       .replace(/, .*/, "")
@@ -229,46 +229,68 @@ var HSK = {
       .replace(".", "");
   },
 
-  list: function() {
+  list: function () {
     var hsk = this;
     return hsk._standardCourseData;
   },
 
-  listWhere: function(filterFunction) {
+  listWhere: function (filterFunction) {
     return this._standardCourseData.filter(filterFunction);
   },
 
-  listByBook: function(book) {
-    var getFilterFunction = function(book) {
-      return function(row) {
+  listByBook: function (book) {
+    var getFilterFunction = function (book) {
+      return function (row) {
         return row.book == book;
       };
     };
     return this.listWhere(getFilterFunction(book));
   },
 
-  listByBookLesson: function(book, lesson) {
-    var getFilterFunction = function(book, lesson) {
-      return function(row) {
+  listByBookLesson: function (book, lesson) {
+    var getFilterFunction = function (book, lesson) {
+      return function (row) {
         return row.book == book && row.lesson == lesson;
       };
     };
     return this.listWhere(getFilterFunction(book, lesson));
   },
 
-  listBookLessonDialog: function(book, lesson, dialog) {
-    var getFilterFunction = function(book, lesson, dialog) {
-      return function(row) {
+  listBookLessonDialog: function (book, lesson, dialog) {
+    var getFilterFunction = function (book, lesson, dialog) {
+      return function (row) {
         return row.book == book && row.lesson == lesson && row.dialog == dialog;
       };
     };
     return this.listWhere(getFilterFunction(book, lesson, dialog));
   },
 
-  compileBooks: function() {
+  first: function () {
+    const min = Math.min(...this._standardCourseData.map(function(word) {
+      return word.id
+    }))
+    return min
+  },
+
+  last: function () {
+    const max = Math.max(...this._standardCourseData.map(function(word) {
+      return word.id
+    }))
+    return max
+  },
+
+  hasPrevious: function (id) {
+    return id > this.first();
+  },
+
+  hasNext: function (id) {
+    return id < this.last();
+  },
+
+  compileBooks: function () {
     // https://www.consolelog.io/group-by-in-javascript/
-    Array.prototype.groupBy = function(prop) {
-      return this.reduce(function(groups, item) {
+    Array.prototype.groupBy = function (prop) {
+      return this.reduce(function (groups, item) {
         const val = item[prop];
         groups[val] = groups[val] || [];
         groups[val].push(item);

@@ -62,8 +62,8 @@
         <div class="row text-center">
           <div class="col-md-12">
             <button class="save-word-button" v-on:click="saveWordClick" :data-id="entry.id"><i class="glyphicon glyphicon-star-empty" v-if="!savedWordIds.includes(entry.id)" title="Save word"></i><i class="glyphicon glyphicon-star" v-if="savedWordIds.includes(entry.id)" title="Remove word"></i></button>
-            <button class="paginate-button previous" v-on:click="previousClick" title="Previous word"><img src="img/angle-left.svg" alt=""></button>
-            <button class="paginate-button next" v-on:click="nextClick" title="Next word"><img src="img/angle-right.svg" alt=""></button>
+            <button class="paginate-button previous" v-on:click="previousClick" title="Previous word" v-if="hasPrevious"><img src="img/angle-left.svg" alt=""></button>
+            <button class="paginate-button next" v-on:click="nextClick" title="Next word"  v-if="hasNext"><img src="img/angle-right.svg" alt=""></button>
             <div class="pinyin">{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="entry.word"></i></div>
             <div class="word"><span v-bind:data-hsk="entry.book">{{ entry.word }}</span></div>
             <div class="stroke-wrapper">
