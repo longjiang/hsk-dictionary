@@ -28,10 +28,10 @@ class Character {
  */
 var Hanzi = {
   _hanziData: [],
-  _makeMeAHanziDictionaryTxt: "data/dictionary.txt",
+  _makeMeAHanziDictionaryTxt: "data/hanzi.json",
   load: function (callback) {
     var hanzi = this;
-    jQuery.getJSON("data/dictionary.txt").done(function (data) {
+    jQuery.getJSON(hanzi._makeMeAHanziDictionaryTxt).done(function (data) {
       hanzi._hanziData = data;
       callback(hanzi);
     });
@@ -98,7 +98,7 @@ var HSK = {
   hanzi: undefined, // The Hanzi library, loaded async in the constructor
   _standardCourseData: [],
   _standardCourseCSV:
-    "data/HSK 1-6 Vocabulary/HSK Standard Course 1-6-Table 1.csv",
+    "data/hsk.csv",
   _standardCourseCSVFields: {
     id: "Id",
     word: "Word",

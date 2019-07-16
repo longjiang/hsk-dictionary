@@ -51,6 +51,10 @@ body {
   position: relative;
 }
 
+.search-wrapper[v-cloak] {
+  display: none;
+}
+
 .search-wrapper .input-group {
   flex: 1;
 }

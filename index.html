@@ -8,10 +8,11 @@
   <meta name="description" content="">
   <meta name="author" content="">
   
-  <title>HSK Glossary | Chinese Zero to Hero</title>
+  <title>HSK Dictionary | Chinese Zero to Hero</title>
   
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css?v=4.3.1" rel="stylesheet">
+  <link href="vendor/css-spinners/spinner/heartbeat.css" rel="stylesheet">
   <link href="vendor/annotator-js/css/tipped.css?v=4.2.7" rel="stylesheet">
   <link href="vendor/annotator-js/css/annotator.css?v=1.0.0" rel="stylesheet">
   <link href="css/hsk-dictionary.css?v=3.6.0" rel="stylesheet">
@@ -31,8 +32,8 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12 pb2">
-            <h1 class="title"><a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a><span class="title-text" v-on:click="backToBrowse">HSK Glossary</span></h1>
-            <div class="search-wrapper">
+            <h1 class="title"><a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo" alt=""></a><span class="title-text" v-on:click="backToBrowse">HSK Dictionary</span></h1>
+            <div class="search-wrapper" v-cloak>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <button class="btn btn-info" v-on:click="backToBrowse" title="Browse words by course"><i class="glyphicon glyphicon-list"></i></span>
@@ -53,6 +54,14 @@
                 <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick" v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><span class="btn-saved-words-count">{{ savedWordIds.length < 100 ? savedWordIds.length : '多' }}</span> Saved</button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+      <div class="container text-center mt-4" v-if="false">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="heartbeat-loader mb-4"></div>
+            <p>Loading dictionary data...</p>
           </div>
         </div>
       </div>
