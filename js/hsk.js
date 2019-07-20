@@ -158,12 +158,14 @@ var HSK = {
     return this._standardCourseData.length;
   },
 
-  lookup: function (word) {
+  lookup: function (word, oofc = 'include') {
     var hsk = this;
     var results = [];
     hsk._standardCourseData.forEach(function (row) {
       if (row.word === word) {
-        results.push(row);
+        if (oofc === 'include' || row.oofc === '') {
+          results.push(row);
+        }
       }
     });
     return results;

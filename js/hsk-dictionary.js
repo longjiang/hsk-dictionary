@@ -541,7 +541,7 @@ class Timer {
           const app = this;
           var notMatched = []
           list.forEach(function (item) {
-            const words = app.hsk.lookup(item);
+            const words = app.hsk.lookup(item, 'exclude');
             if (words[0] && !app.savedWordIds.includes(words[0].id)) {
               app.addSavedWord(words[0].id);
             } else {
