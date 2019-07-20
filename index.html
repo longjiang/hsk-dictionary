@@ -111,7 +111,8 @@
           <div class="row">
             <div class="col-md-6">
               <div class="image-wrapper">
-                <img v-bind:src="image" class="example-image" v-if="hasImage">
+                <img v-bind:src="image" class="example-image" v-if="hasImage && !admin">
+                <img v-bind:src="image + '?v=' + Date.now()" class="example-image" v-if="hasImage && admin">
               </div>
             </div>
             <div class="col-md-6 example-wrapper text-md-left text-sm-center sm-mt2">
