@@ -829,3 +829,8 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 .definitions {
   margin: 1rem 0;
 }
+
+.image-wall-image {
+  height: 5rem;
+  margin: 0 0.5rem 0.5rem 0;
+}

@@ -102,7 +102,6 @@ function EntryComponent(hsk) {
         app.characters.forEach(function (character) {
           character.examples = hsk.lookupFuzzy(character.character);
         });
-
         getLrcs(entry.word, function (lrcs) {
           lrcs.forEach(function (lrc) {
             lrc.matchedLines = [];
@@ -120,6 +119,15 @@ function EntryComponent(hsk) {
             );
           });
         });
+        SketchEngine.wsketch(entry.word, function(response) {
+          entry.sketch = response
+          console.log(entry.sketch)
+          app.key += 1
+        });
+        WordPhotos.getWebImages(entry.word, function(srcs) {
+          entry.images = srcs
+          app.key += 1
+        })
         app.getImage(entry);
         app.annotated = false; // Add pinyin again on update
         app.suggestions = [];

@@ -68,10 +68,6 @@ var entry = undefined;
             .next("ul")
             .toggleClass("collapsed");
         },
-        // ANCHOR img/anchors/save-word-button.png
-        showCedict: function (text) {
-          console.log(text, 'showCedict')
-        },
         processHash() {
           const app = this;
           const hash = decodeURI(location.hash).slice(1).split('/')
@@ -99,7 +95,6 @@ var entry = undefined;
                   if (this.$refs.entry) {
                     this.$refs.entry.show(entry)
                   }
-                  console.log(entry)
                 }
               }
             }

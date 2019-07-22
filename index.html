@@ -138,9 +138,11 @@
                   src="img/angle-left.svg" alt=""></button>
               <button class="paginate-button next" v-on:click="nextClick" title="Next word" v-if="hasNext"><img
                   src="img/angle-right.svg" alt=""></button>
-              <div class="pinyin">{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up"
+              <div class="pinyin"><span v-if="entry.measureWordPinyin">yī {{ entry.measureWordPinyin}} </span>{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up"
                   v-bind:data-speak="entry.word"></i></div>
-              <div class="word"><span v-bind:data-hsk="entry.book">{{ entry.word }}</span></div>
+              <div class="word">
+                <span v-if="entry.measureWord">一{{ entry.measureWord}}</span><span v-bind:data-hsk="entry.book">{{ entry.word }}</span>
+              </div>
               <div class="stroke-wrapper">
                 <a class="stroke btn-small" v-for="character in characters"
                   :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img
@@ -229,6 +231,112 @@
             </div>
           </div>
         </div>
+
+        <div class="container collocations" v-if="entry.sketch && entry.sketch.Gramrels" :key="key">
+          <div class="row mt-5 mb-5">
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject_of'">
+              <div class="label song-label mb-2">Adjective/Verb + {{ entry.word }}</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifier'">
+              <div class="label song-label mb-2">Adverb + {{ entry.word }}</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'A_Modifier'">
+              <div class="label song-label mb-2">Adjective + 的 + {{ entry.word }}</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object_of'">
+              <div class="label song-label mb-2">Verb + {{ entry.word }}</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Measure'">
+              <div class="label song-label mb-2">Measure Word + {{ entry.word }}</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'N_Modifier'">
+              <div class="label song-label mb-2">Noun + {{ entry.word }}</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possessor'">
+              <div class="label song-label mb-2">Noun + 的 + {{ entry.word }}</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possession'">
+              <div class="label song-label mb-2">{{ entry.word }} + 的 + Noun</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifies'">
+              <div class="label song-label mb-2">{{ entry.word }} + Noun</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+            <div class="col-md-4 mb-5" v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject'">
+              <div class="label song-label mb-2">{{ entry.word }} + Complement</div>
+              <ul class="character-examples collapsed" data-collapse-target>
+                <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="highlight(Word.cm.replace(/ /gi, ''))"class="character-example-word"></span></li>
+              </ul>
+              <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+                title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }}
+                  more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="container" v-if="entry.images && entry.images.length > 0">
+          <div class="row mt-4">
+            <div class="col-sm-12">
+              <div class="label song-label">Images of “{{ entry.word }}” from <a :href="`https://image.so.com/i?q=${entry.word}&src=srp#/`">360 Photos</a></div>
+              <div class="image-wall mt-4">
+                <img :src="image.img" alt="" v-if="!image.img.includes('nipic')" v-for="image in entry.images.slice(0, 12)" class="image-wall-image">
+              </div>
+            </div>
+          </div>
+        </div>
         
         <!-- ANCHOR img/anchors/character-example.png -->
         <!-- FIXME Handle homonyms (e.g. 称 in 称心如意 should be chèn not chēng) -->
@@ -304,7 +412,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- ANCHOR img/anchors/lyrics-bar.png -->
         <div class="container-flud lyrics-bar" v-cloak v-if="lrcs && lrcs.length > 0 ">
           <div class="row">
@@ -458,19 +566,19 @@
   <script src="vendor/annotator-js/js/tipped.js?v=4.2.7"></script>
   <script src="vendor/annotator-js/js/annotator.js?v=1.0.0"></script>
   <script src="vendor/pinyinify/pinyinify.js"></script>
-  <script src="js/helper.js?v=4.0.0"></script>
-  <script src="js/cedict.js?v=4.0.0"></script>
-  <script src="js/hsk.js?v=4.0.0"></script>
-  <script src="js/word-photos.js?v=4.0.0"></script>
-  <script src="js/lrc.js?v=4.0.0"></script>
-  <script src="js/youtube.js?v=4.0.0"></script>
+  <script src="js/lib/helper.js?v=4.0.0"></script>
+  <script src="js/lib/cedict.js?v=4.0.0"></script>
+  <script src="js/lib/hsk.js?v=4.0.0"></script>
+  <script src="js/lib/word-photos.js?v=4.0.0"></script>
+  <script src="js/lib/lrc.js?v=4.0.0"></script>
+  <script src="js/lib/youtube.js?v=4.0.0"></script>
+  <script src="js/lib/sketch-engine.js?v=4.0.0"></script>
   <script src="js/components/entry-component.js?v=4.0.0"></script>
   <script src="js/components/search-component.js?v=4.0.0"></script>
   <script src="js/components/saved-words-component.js?v=4.0.0"></script>
   <script src="js/components/browse-component.js?v=4.0.0"></script>
   <script src="js/hsk-dictionary.js?v=4.0.0"></script>
   <script src="//apis.google.com/js/client.js?onload=init"></script>
-  <!-- <script src="//www.youtube.com/iframe_api"></script> -->
 </body>
 
 </html>
