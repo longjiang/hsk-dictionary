@@ -20,16 +20,6 @@ const WordPhotos = {
         fail()
       });
   },
-  uploadPhotoAndUpdate(url, $button) {
-    savePhoto(app.entry, url, function (response) {
-      $button.after('<span class="success">Uploaded</span>');
-      app.hasImage = true;
-      app.image = response.url + '?' + Date.now();
-      setTimeout(function () {
-        $(".success").remove();
-      }, 3000);
-    });
-  },
   getSrcsFromUnsplash(term, callcback) {
     Helper.scrape("https://unsplash.com/search/photos/" + term, function (
       $html
@@ -49,12 +39,3 @@ const WordPhotos = {
     });
   }
 }
-
-/*
-  Photos.getSrcsFromUnsplash(
-    app.hsk.simplifyEnglish(app.entry.english),
-    function (srcs) {
-      app.unsplashSrcs = srcs;
-    }
-  );
-*/
