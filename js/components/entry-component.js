@@ -145,18 +145,6 @@ function EntryComponent(hsk) {
         $(".youtube iframe").remove(); // Show new videos;
         app.$forceUpdate();
       },
-      showPinyinClick: function (e) {
-        const app = this
-        var selector = $(e.target).attr("data-target-selector");
-        $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
-        $(e.target).text("Loading...");
-        // eslint-disable-next-line no-undef
-        new Annotator().annotateBySelector(selector + " *", function () {
-          var index = $(e.target).attr("data-index");
-          app.lrcs[index].annotated = true;
-          app.$forceUpdate();
-        });
-      },
       getImage() {
         var app = this;
         WordPhotos.getPhoto(app.entry, function (imagePath) {
@@ -181,11 +169,6 @@ function EntryComponent(hsk) {
             utterance.lang = "zh-CN";
             speechSynthesis.speak(utterance);
           });
-      },
-      showMoreClick(e) {
-        var $button = $(e.currentTarget);
-        $button.siblings("[data-collapse-target]").toggleClass("collapsed");
-        $button.toggleClass("collapsed");
       },
       togglePartExamples(part) {
         var app = this;

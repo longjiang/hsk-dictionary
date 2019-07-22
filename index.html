@@ -129,10 +129,10 @@
       <ul class="character-examples collapsed" :id="`Gramrels-${type}`" data-collapse-target>
         <li v-for="Word in collocation.Words" v-if="Word.cm" class="character-example"><span v-html="Helper.highlight(Word.cm.replace(/ /gi, ''), word, level)"class="character-example-word"></span></li>
       </ul>
-      <button class="show-more mt1" v-on:click="Helper.showPinyinClick"
-      :data-target-selector="`#Gramrels-${type}`":data-bg-hsk="entry.book">Show Pinyin</button>
+      <button class="show-more" v-on:click="Helper.showPinyinClick"
+      :data-target-selector="`#Gramrels-${type}`">Show Pinyin</button>
       <button v-if="collocation.Words.length > 4" class="show-more collapsed" v-on:click="Helper.showMoreClick"
-        title="Show all examples"><span class="label-expand">Show {{ collocation.Words.length - 4 }} more</span><span class="label-collapse">Collapse</span></button>
+        title="Show all examples" :data-bg-hsk="entry.book"><span class="label-expand">Show {{ collocation.Words.length - 4 }} more</span><span class="label-collapse">Collapse</span></button>
     </div>
   </script>
 
@@ -208,13 +208,12 @@
               </div>
               <div class="col-md-6 example-wrapper text-md-left text-sm-center sm-mt2">
                 <div class="label" v-bind:data-bg-hsk="entry.book" v-if="entry.oofc == ''">HSK {{ entry.book }}</div>
-                <div class="example-sentence">
+                <div class="example-sentence mt-4">
                   <!-- <p class="example-sentence-pinyin">{{ entry.examplePinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="entry.example"></i></p> -->
                   <p class="example-sentence-word" v-html="highlight(entry.example)"></p>
                   <p class="example-sentence-english">{{ entry.exampleTranslation }}</p>
-                  <button class="show-more mt1" v-on:click="showPinyinClick"
-                  data-target-selector=".example-sentence-word" 
-                  :data-bg-hsk="entry.book">Show Pinyin</button>
+                  <button class="show-more mt1" v-on:click="Helper.showPinyinClick"
+                  data-target-selector=".example-sentence-word">Show Pinyin</button>
                 </div>
               </div>
             </div>
@@ -248,17 +247,17 @@
 
         <div class="container collocations" v-if="entry.sketch && entry.sketch.Gramrels" :key="key">
           <div class="row mt-5 mb-5">
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject_of'" :title="`Adjective/Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifier'" :title="`Adverb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'A_Modifier'" :title="`Adjective + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object_of'" :title="`Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Measure'" :title="`Measure Word + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'N_Modifier'" :title="`Noun + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possessor'" :title="`Noun + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possession'" :title="`${entry.word}的 + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifies'" :title="`${entry.word} (的) + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object'" :title="`${entry.word} + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject'" :title="`${entry.word} + Complement`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject_of' && collocation.Words.length > 0" :title="`Adjective/Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifier' && collocation.Words.length > 0" :title="`Adverb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'A_Modifier' && collocation.Words.length > 0" :title="`Adjective + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object_of' && collocation.Words.length > 0" :title="`Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Measure' && collocation.Words.length > 0" :title="`Measure Word + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'N_Modifier' && collocation.Words.length > 0" :title="`Noun + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possessor' && collocation.Words.length > 0" :title="`Noun + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possession' && collocation.Words.length > 0" :title="`${entry.word}的 + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifies' && collocation.Words.length > 0" :title="`${entry.word} (的) + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object' && collocation.Words.length > 0" :title="`${entry.word} + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject' && collocation.Words.length > 0" :title="`${entry.word} + Complement`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
           </div>
         </div>
 
@@ -329,7 +328,7 @@
                       v-bind:data-speak="example.word"></i></span> <em
                     class="character-example-english">{{ example.english }}</em></li>
               </ul>
-              <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="showMoreClick"
+              <button v-if="character.examples.length > 4" class="show-more collapsed" v-on:click="Helper.showMoreClick"
                 title="Show all examples"><span class="label-expand">Show {{ character.examples.length - 4 }}
                   more</span><span class="label-collapse">Collapse</span></button>
             </div>
@@ -369,10 +368,9 @@
                         v-on:click="YouTube.seekYouTube(lrc, line.starttime)" v-html="highlight(line.line)">
                       </div>
                     </div>
-                    <button class="show-more mt1" v-on:click="showPinyinClick"
-                      :data-target-selector="'#lyrics-' + entry.id + '-' + lrcIndex" :data-index="lrcIndex"
-                      :data-bg-hsk="entry.book" v-if="!lrc.annotated">Show Pinyin</button>
-                    <button class="show-more collapsed mt1" v-on:click="showMoreClick"><span class="label-expand">Show
+                    <button class="show-more mt1" v-on:click="Helper.showPinyinClick"
+                      :data-target-selector="'#lyrics-' + entry.id + '-' + lrcIndex">Show Pinyin</button>
+                    <button class="show-more collapsed mt1" v-on:click="Helper.showMoreClick" :data-bg-hsk="entry.book"><span class="label-expand">Show
                         Entire Song</span><span class="label-collapse">Collapse</span></button>
                   </div>
                   <div class="col-md-6 text-center">

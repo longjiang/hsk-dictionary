@@ -18,7 +18,8 @@ const Helper = {
     $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
     $(e.target).text("Loading...");
     // eslint-disable-next-line no-undef
-    new Annotator().annotateBySelector(selector + " *", function () {
+    new Annotator().annotateBySelector(`${selector}, ${selector} *`, function () {
+      $(e.target).remove()
     });
   },
   showMoreClick(e) {
