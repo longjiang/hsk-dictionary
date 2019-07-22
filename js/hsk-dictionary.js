@@ -2,90 +2,8 @@
 * v3.7.7
 */
 
-// eslint-disable-next-line no-unused-vars
-var onYouTubePlayerAPIReady = function () {
-  // This needs to be in global scope as YouTube api will call it
-  // This function is overwridden from the app.loadYouTubeiFrame() function
-};
-
-// eslint-disable-next-line no-unused-vars
-var onPlayerReady = function (evt) {
-  // Required by YouTube API
-};
-
-class Timer {
-  constructor() {
-    this._currentTime = 0; // seconds
-    this._onTimeChangeHandlers = [];
-  }
-  play() {
-    // setTimeout
-  }
-  pause() {
-
-  }
-  setCurrentTime(currentTime) {
-    this._currentTime = currentTime;
-    this._onTimeChangeHandlers.forEach(function (handler) {
-      handler(this._currentTime);
-    });
-  }
-}
-
 
 (function ($) {
-
-  function getLrcs(word, callback) {
-    $.getJSON(
-      "https://www.chinesezerotohero.com/lyrics-search/lrc/search/" +
-      word +
-      "/20", // Limit to only 20 songs
-      function (results) {
-        callback(results);
-      });
-  }
-
-  function savePhoto(word, url, callback) {
-    $.getJSON(
-      "save-photo.php?id=" +
-      word.id +
-      "&word=" +
-      word.word +
-      "&url=" +
-      encodeURIComponent(url),
-      callback
-    );
-  }
-
-  function getSrcsFromUnsplash(term, callcback) {
-    scrape("https://unsplash.com/search/photos/" + term, function (
-      $html
-    ) {
-      var srcs = [];
-
-      var $metas = $html.filter("meta"); // cannot use find
-      $metas.each(function () {
-        var property = $(this).attr("property");
-        if (property) {
-          if (property.includes("og:image:secure_url")) {
-            srcs.push($(this).attr("content"));
-          }
-        }
-      });
-      callcback(srcs);
-    });
-  }
-
-  function scrape(url, callback) {
-    $.ajax("proxy.php?" + url).done(function (response) {
-      // We use 'ownerDocument' so we don't load the images and scripts!
-      // https://stackoverflow.com/questions/15113910/jquery-parse-html-without-loading-images
-      var ownerDocument = document.implementation.createHTMLDocument("virtual");
-      var $html = $(response, ownerDocument);
-      callback($html, response);
-    });
-  }
-
   function main(hskObj) {
     // eslint-disable-next-line no-undef
     var app = new Vue({
@@ -123,7 +41,15 @@ class Timer {
             this.displayEntry(entry);
           }
         },
-
+        getImage() {
+          var app = this;
+          WordPhotos.getPhoto(app.entry, function(imagePath){
+            app.image = imagePath;
+            app.hasImage = true;
+          }, function() {
+            app.hasImage = false;
+          })
+        },
         displayEntry: function (entry) {
           app = this;
           app.entry = entry;
@@ -160,96 +86,6 @@ class Timer {
           $("#lookup").val(entry.word);
           $(".youtube iframe").remove(); // Show new videos;
           app.$forceUpdate();
-        },
-
-        /*
-        loadYouTubeiFrame(youtube, starttime, element) {
-          var src =
-          "https://www.youtube.com/embed/" +
-          youtube +
-          "?start=" +
-          Math.floor(starttime) +
-          "&playsinline=1";
-          var iframe =
-          '<iframe src="' +
-          src +
-          '" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
-          $(element).after(iframe); // Add the embed
-        },
-        */
-
-        removeYouTubeAPIVars: function () {
-          if (window['YT']) {
-            ['YT', 'YTConfig', 'onYTReady', 'yt', 'ytDomDomGetNextId', 'ytEventsEventsListeners', 'ytEventsEventsCounter'].forEach(function (key) {
-              window[key] = undefined;
-            });
-          }
-        },
-
-        loadYouTubeiFrame: function (youtube, starttime, elementId, lrc) {
-          var app = this;
-          var player;
-          // $('.youtube iframe').remove();
-          this.removeYouTubeAPIVars();
-          window.onYouTubePlayerAPIReady = function () {
-            // eslint-disable-next-line no-undef
-            player = new YT.Player(elementId, {
-              height: '390',
-              width: '640',
-              videoId: youtube,
-              playerVars: { 'start': parseInt(starttime), 'autoplay': 1, 'controls': 1, 'showinfo': 0, 'rel': 0 },
-              events: {
-                'onReady': onPlayerReady,
-                'onStateChange': function (playerStatus) {
-                  if (playerStatus == 1) { // Playing, update time
-                    lrc.timer.setCurrentTime(lrc, player.getCurrentTime());
-                    lrc.timer.play();
-
-                  }
-                  if (playerStatus == 2) { // Playing, update time
-                    lrc.timer.setCurrentTime(lrc, player.getCurrentTime());
-                    lrc.timer.pauase();
-                  }
-                }
-              }
-            });
-            lrc.youtubePlayer = player
-          }
-          $.getScript('//www.youtube.com/iframe_api');
-        },
-
-        seekYouTube: function (lrc, starttime) {
-          var player = lrc.youtubePlayer;
-          player.seekTo(starttime);
-        },
-
-        getImage: function (entry) {
-          var app = this;
-          var imagePath = "img/words/" + entry.id + "-" + entry.word + ".jpg";
-          $.ajax(imagePath)
-            .done(function () {
-              app.image = imagePath;
-              app.hasImage = true;
-            })
-            .fail(function () {
-              app.hasImage = false;
-            });
-          getSrcsFromUnsplash(
-            app.hsk.simplifyEnglish(app.entry.english),
-            function (srcs) {
-              app.unsplashSrcs = srcs;
-            }
-          );
-        },
-        uploadPhotoAndUpdate(url, $button) {
-          savePhoto(app.entry, url, function (response) {
-            $button.after('<span class="success">Uploaded</span>');
-            app.hasImage = true;
-            app.image = response.url + '?' + Date.now();
-            setTimeout(function () {
-              $(".success").remove();
-            }, 3000);
-          });
         },
         countWordsInLesson(lesson) {
           var count = 0;
@@ -423,64 +259,12 @@ class Timer {
           var $firstSong = $songs.find(".song:last-child");
           $firstSong.prependTo($songs); // move to the last
         },
-        cycleYouTube(lrc, index) {
-          var $versions = $("#lrc-" + index + "-youtube");
-          $versions.find(".youtube:first-child").appendTo($versions);
-          lrc.currentYoutubeIndex += 1;
-          if (lrc.currentYoutubeIndex > lrc.youtube.length) {
-            lrc.currentYoutubeIndex =
-              lrc.currentYoutubeIndex - lrc.youtube.length;
-          }
-          var $youtube = $versions.find('.youtube:first-child .youtube-screen')
-          $youtube.click(); // Load the iframe
-        },
-        rejectLine(line) {
-          var bannedPatterns = [
-            "www",
-            "LRC",
-            " - ",
-            "歌词",
-            "QQ",
-            "演唱：",
-            "编辑：",
-            "☆"
-          ];
-          var rejected = false;
-          bannedPatterns.forEach(function (pattern) {
-            if (line.includes(pattern)) {
-              rejected = true;
-            }
-          });
-          return rejected;
-        },
-        /**
-        *
-        * @param {*} index the index of the lrc line
-        * @param {*} margin show 'margin' number of lines above and below the first matched line
-        * @param {*} lrc the lrc object
-        */
-        inContext(index, margin, lrc) {
-          var min = lrc.matchedLines[0] - margin;
-          var max = lrc.matchedLines[0] + margin;
-          return index >= min && index <= max;
-        },
         recalculateExampleColumns: function (word) {
           var $div = $(".character-example-wrapper > div");
           var span = 12 / word.length;
           $div.removeClass();
           $div.addClass("col-md-" + span);
         },
-
-        addAnimatedSvgLinks: function (word) {
-          var chars = word.split("");
-          var html = "";
-          var app = this;
-          chars.forEach(function (char) {
-            html = html + app.hsk.hanzi.animatedSvgLink(char);
-          });
-          return html;
-        },
-
         attachSpeakEventHandler: function () {
           $(".speak")
             .off()
@@ -565,6 +349,9 @@ class Timer {
             localStorage.removeItem('savedWordIds')
           }
         },
+        showCedict: function(text) {
+          console.log(text, 'showCedict')
+        },
         processHash: function() {
           const app = this;
           const hash = decodeURI(location.hash).slice(1).split('/')
@@ -576,7 +363,11 @@ class Timer {
               if (args.length > 0) {
                 const id = args[0]
                 app.showById(id)
-                window.scrollTo(0, 0)
+              }
+            } else if (method === 'cedict') {
+              if (args.length > 0) {
+                const text = args[0]
+                app.showCedict(text)
               }
             }
           } else if (controller === 'saved-words') {
@@ -584,6 +375,7 @@ class Timer {
           } else if (controller === 'browse') {
             this.view = "browse";
           }
+          window.scrollTo(0, 0)
         }
       },
       computed: {
@@ -638,7 +430,9 @@ class Timer {
   }
 
   HSK.load(function (hsk) {
-    main(hsk);
+    // CEDICT.load(function(cedict) {
+      main(hsk);
+    // })
   });
 
   // eslint-disable-next-line no-undef
