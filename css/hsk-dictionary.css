@@ -520,6 +520,8 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 
 .song-label {
   background: #4e4e4e;
+  display: block;
+  padding: 0.2rem 1rem;
 }
 
 .learn-this-bar, .learn-this-bar a {

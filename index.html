@@ -245,28 +245,11 @@
           </div>
         </div>
 
-        <div class="container collocations" v-if="entry.sketch && entry.sketch.Gramrels" :key="key">
-          <div class="row mt-5 mb-5">
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject_of' && collocation.Words.length > 0" :title="`Adjective/Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifier' && collocation.Words.length > 0" :title="`Adverb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'A_Modifier' && collocation.Words.length > 0" :title="`Adjective + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object_of' && collocation.Words.length > 0" :title="`Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Measure' && collocation.Words.length > 0" :title="`Measure Word + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'N_Modifier' && collocation.Words.length > 0" :title="`Noun + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possessor' && collocation.Words.length > 0" :title="`Noun + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possession' && collocation.Words.length > 0" :title="`${entry.word}的 + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifies' && collocation.Words.length > 0" :title="`${entry.word} (的) + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object' && collocation.Words.length > 0" :title="`${entry.word} + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject' && collocation.Words.length > 0" :title="`${entry.word} + Complement`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
-          </div>
-        </div>
-
         <div class="container" v-if="entry.images && entry.images.length > 0">
           <div class="row mt-4">
             <div class="col-sm-12">
-              <div class="label song-label">Images of “{{ entry.word }}”</div>
               <div class="image-wall mt-4">
-                <img :src="image.img" alt="" v-if="!image.img.includes('nipic')" v-for="image in entry.images.slice(0, 12)" class="image-wall-image">
+                <img :src="image.img" alt="" v-if="!image.img.includes('nipic')" v-for="image in entry.images.slice(0, 20)" class="image-wall-image">
               </div>
               <div><a :href="`https://image.so.com/i?q=${entry.word}&src=srp#/`">360 Photos</a></div>
             </div>
@@ -275,8 +258,8 @@
         
         <!-- ANCHOR img/anchors/character-example.png -->
         <!-- FIXME Handle homonyms (e.g. 称 in 称心如意 should be chèn not chēng) -->
-        <div class="container mt2 mb2" v-cloak>
-          <div class="row mt1 character-example-wrapper">
+        <div class="container mt-4 mb-4" v-cloak>
+          <div class="row character-example-wrapper mt-4">
             <!-- ANCHOR img/anchors/character.png -->
             <div class="col-md-6" v-for="character in characters">
               <!-- ANCHOR img/anchors/character-example-header.png -->
@@ -334,27 +317,34 @@
             </div>
           </div>
         </div>
-        
-        <!-- ANCHOR img/anchors/learn-this.png -->
-        <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak v-if="entry.book !== 'outside'">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-12 text-center">
-                Learn this word in <b>Lesson {{ entry.lesson }}<span v-if="entry.book < 5">, Text
-                    {{ entry.dialog }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course"
-                  :data-hsk="entry.book">HSK {{ entry.book }} Video Course</a>
-              </div>
-            </div>
+
+        <div class="container collocations" v-if="entry.sketch && entry.sketch.Gramrels" :key="key">
+          <div class="row mt-5 mb-4">
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject_of' && collocation.Words.length > 0" :title="`Adjective/Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifier' && collocation.Words.length > 0" :title="`Adverb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'A_Modifier' && collocation.Words.length > 0" :title="`Adjective + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object_of' && collocation.Words.length > 0" :title="`Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Measure' && collocation.Words.length > 0" :title="`Measure Word + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'N_Modifier' && collocation.Words.length > 0" :title="`Noun + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possessor' && collocation.Words.length > 0" :title="`Noun + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Possession' && collocation.Words.length > 0" :title="`${entry.word}的 + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifies' && collocation.Words.length > 0" :title="`${entry.word} (的) + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Object' && collocation.Words.length > 0" :title="`${entry.word} + Noun`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
+            <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject' && collocation.Words.length > 0" :title="`${entry.word} + Complement`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
           </div>
         </div>
 
         <!-- ANCHOR img/anchors/lyrics-bar.png -->
-        <div class="container-flud lyrics-bar" v-cloak v-if="lrcs && lrcs.length > 0 ">
-          <div class="row">
-            <div class="col-sm-12 text-center mt-4 mb-2">
-              <div class="label song-label">{{ entry.word }} IN SONG LYRICS</div>
+        <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak>
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                  <strong>“{{ entry.word }}” IN SONG LYRICS</strong>
+              </div>
             </div>
           </div>
+        </div>
+        <div class="container-flud lyrics-bar" v-cloak v-if="lrcs && lrcs.length > 0 ">
           <div class="songs">
             <div class="row song" v-for="lrc, lrcIndex in lrcs" v-if="lrc.youtube && lrc.youtube.length > 0">
               <div class="container">
@@ -394,6 +384,19 @@
             </div>
           </div>
         </div><!-- .lyrics-bar -->
+        
+        <!-- ANCHOR img/anchors/learn-this.png -->
+        <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak v-if="entry.book !== 'outside'">
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-12 text-center">
+                Learn this word in <b>Lesson {{ entry.lesson }}<span v-if="entry.book < 5">, Text
+                    {{ entry.dialog }}</span></b> of our <a href="https://courses.chinesezerotohero.com/" class="video-course"
+                  :data-hsk="entry.book">HSK {{ entry.book }} Video Course</a>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </script>
 
