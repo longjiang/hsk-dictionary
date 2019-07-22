@@ -284,7 +284,6 @@ body {
 .english {
   font-size: 1.4rem;
   font-style: italic;
-  margin: 1.5rem 0 2rem 0;
 }
 
 .learn-this {
@@ -630,6 +629,10 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   color: #6a3669;
 }
 
+.hskoutside, [data-hsk="outside"] {
+  color: #c395c2;
+}
+
 .bg-hsk1, [data-bg-hsk="1"] {
   background-color: #f8b51e;
   color: white;
@@ -657,6 +660,11 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 
 .bg-hsk6, [data-bg-hsk="6"] {
   background-color: #6a3669;
+  color: white;
+}
+
+.bg-hskoutside, [data-bg-hsk="outside"] {
+  background-color: #c395c2;
   color: white;
 }
 
@@ -810,4 +818,13 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 #import-textarea {
   display: block;
   width: 100%;
+}
+
+.definitions {
+  text-align: left;
+  display: inline-block;
+}
+
+.definitions {
+  margin: 1rem 0;
 }

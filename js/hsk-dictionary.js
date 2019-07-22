@@ -40,14 +40,14 @@ const SavedWords = {
 var entry = undefined;
 
 (function ($) {
-  function main(hsk) {
+  function main(hsk, cedict) {
     hskDictionaryApp = new Vue({
       el: "#hsk-dictionary",
       components: {
-        'search': SearchComponent(hsk),
-        'browse': BrowseComponent(hsk),
-        'saved-words': SavedWordsComponent(hsk),
-        'entry': EntryComponent(hsk),
+        'search': SearchComponent(hsk, cedict),
+        'browse': BrowseComponent(hsk, cedict),
+        'saved-words': SavedWordsComponent(hsk, cedict),
+        'entry': EntryComponent(hsk, cedict),
       },
       data: {
         wordList: hsk.listWhere(function (word) {
@@ -90,14 +90,25 @@ var entry = undefined;
               }
             } else if (method === 'cedict') {
               if (args.length > 0) {
-                const text = args[0]
-                // app.showCedict(text)
+                const traditional = args[0]
+                const results = cedict.lookup(traditional)
+                if (results.length > 0) {
+                  entry = results[0]
+                  entry.word = entry.simplified
+                  entry.book = "outside"
+                  if (this.$refs.entry) {
+                    this.$refs.entry.show(entry)
+                  }
+                  console.log(entry)
+                }
               }
             }
           } else if (controller === 'saved-words') {
-            app.view = "saved-words";
+            app.view = "saved-words"
           } else if (controller === 'browse') {
-            app.view = "browse";
+            app.view = "browse"
+          } else {
+            location.hash = "browse"
           }
           window.scrollTo(0, 0)
         }
@@ -110,9 +121,9 @@ var entry = undefined;
   }
 
   HSK.load(function (hsk) {
-    // CEDICT.load(function(cedict) {
-      main(hsk);
-    // })
+    CEDICT.load(function(cedict) {
+      main(hsk, cedict);
+    })
   });
 
   // eslint-disable-next-line no-undef

@@ -100,12 +100,20 @@
       <div class="suggestions" v-cloak v-if="suggestions.length > 0">
         <a :href="suggestion.href" v-on:click="suggestionClick" class="suggestion"
           v-for="suggestion in suggestions">
-          <span class="character-example-word" v-bind:data-hsk="suggestion.book">{{ suggestion.word }}</span>
-          <span class="character-example-pinyin">{{ suggestion.pinyin }}</span>
-          <span class="character-example-english">{{ suggestion.english }}</span>
-          <span class="suggestion-not-found"
-            v-if="suggestion.notFound"><b>&ldquo;{{ suggestion.text }}&rdquo;</b> is not in
-            the HSK. Try looking it up in <b>Wiktionary.</b></span>
+          <span v-if="suggestion.type === 'hsk'">
+            <span class="character-example-word" v-bind:data-hsk="suggestion.row.book">{{ suggestion.row.word }}</span>
+            <span class="character-example-pinyin">{{ suggestion.row.pinyin }}</span>
+            <span class="character-example-english">{{ suggestion.row.english }}</span>
+          </span>
+          <span v-if="suggestion.type === 'cedict'">
+            <span class="character-example-word">{{ suggestion.row.simplified }}</span>
+            <span class="character-example-pinyin">{{ suggestion.row.pinyin }}</span>
+            <span class="character-example-english" v-if="suggestion.row.definitions && suggestion.row.definitions.length > 0">{{ suggestion.row.definitions[0].text }}</span>
+          </span>
+          <span v-if="suggestion.type === 'notFound'">
+            <span class="suggestion-not-found"><b>&ldquo;{{ suggestion.text }}&rdquo;</b> is not in
+              the HSK. Try looking it up in <b>Wiktionary.</b></span>
+          </span>
         </a>
       </div>
       <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick"
@@ -138,13 +146,18 @@
                   :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img
                     src="img/stroke.svg"> Strokes</a>
               </div>
-              <p class="english">{{ entry.english }}</p>
+              <div class="definitions" v-if="entry.english">
+                <p class="english" v-if="entry.english">{{ entry.english }}</p>
+              </div>
+              <ol class="definitions" v-if="entry.definitions">
+                <li v-for="definition in entry.definitions" class="english">{{ definition.text }}</li>
+              </ol>
             </div>
           </div>
         </div>
         
         <!-- ANCHOR img/anchors/oofc.png -->
-        <div class="container-fluid mb2" v-cloak v-if="entry.oofc !== ''">
+        <div class="container-fluid mb2" v-cloak v-if="entry.oofc && entry.oofc !== ''">
           <div class="container">
             <div class="row">
               <div class="col-sm-12 text-center">
@@ -157,7 +170,7 @@
         </div>
         
         <!-- ANCHOR img/anchors/pn.png -->
-        <div class="container-fluid mb2" v-cloak v-if="entry.pn !== ''">
+        <div class="container-fluid mb2" v-cloak v-if="entry.pn && entry.pn !== ''">
           <div class="container">
             <div class="row">
               <div class="col-sm-12 text-center">
@@ -171,7 +184,7 @@
         </div>
         
         <!-- ANCHOR img/anchors/example-bar.png -->
-        <div class="container-fluid example-bar" v-cloak v-if="entry.example !== ''">
+        <div class="container-fluid example-bar" v-cloak v-if="entry.example && entry.example !== ''">
           <div class="container">
             <div class="row">
               <div class="col-md-6">
@@ -225,14 +238,14 @@
             <div class="col-md-6" v-for="character in characters">
               <!-- ANCHOR img/anchors/character-example-header.png -->
               <div class="character-example-header">
-                <b class="character-example-header-word" :data-hsk="character.examples[0].book">{{ character.character }}</b>
+                <b class="character-example-header-word" :data-hsk="character.examples.length > 0 ? character.examples[0].book : 'outside'">{{ character.character }}</b>
                 <a class="stroke btn-small" :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank"
                   title="Show stroke order animation"><img src="img/stroke.svg"></a>
                 <span v-if="character.pinyin">
                   ({{ character.pinyin[0] }})
                   <em>{{ character.definition }}</em>
                 </span>
-                <div class="etymology" :data-bg-hsk="character.examples[0].book" v-if="character.etymology"><span
+                <div class="etymology" :data-bg-hsk="character.examples.length > 0 ? character.examples[0].book : 'outside'" v-if="character.etymology"><span
                     v-if="character.etymology.type"><b>Origin:</b> A <em v-if="character.etymology">
                       {{ character.etymology.type }}</em> character.</span> <span
                     v-if="character.etymology.hint"><b>Mnemonic:</b> {{ character.etymology.hint }}.</span></div>
@@ -280,7 +293,7 @@
         </div>
         
         <!-- ANCHOR img/anchors/learn-this.png -->
-        <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak>
+        <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak v-if="entry.book !== 'outside'">
           <div class="container">
             <div class="row">
               <div class="col-sm-12 text-center">

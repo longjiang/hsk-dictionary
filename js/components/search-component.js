@@ -1,4 +1,4 @@
-function SearchComponent(hsk) {
+function SearchComponent(hsk, cedict) {
   return {
     template: '#search-template',
     data() {
@@ -40,21 +40,36 @@ function SearchComponent(hsk) {
         app.suggestions = [];
         var text = e.target.value;
         if (text !== "") {
-          var suggestions = hsk.lookupFuzzy(text).slice(0, 5);
-          if (suggestions.length > 0) {
-            app.suggestions = suggestions;
-            suggestions.forEach(function (suggestion) {
-              suggestion.href = "#view/hsk/" + suggestion.id;
-            });
-          } else if (suggestions.length == 0) {
-            app.suggestions = [
-              {
-                notFound: true,
-                text: text,
-                href: "https://en.wiktionary.org/w/index.php?search=" + text
-              }
-            ];
+          const hskSuggestions = hsk.lookupFuzzy(text).slice(0, 5);
+          const cedictSuggestions = cedict.lookupFuzzy(text).slice(0, 5);
+          var suggestions = [];
+          var hskWordStrArray = []
+          hskSuggestions.forEach(function(hskSuggestion) {
+            hskWordStrArray.push(hskSuggestion.word)
+            suggestions.push({
+              type: 'hsk',
+              href: "#view/hsk/" + hskSuggestion.id,
+              row: hskSuggestion
+            })
+          })
+          const cedictFiltered = cedictSuggestions.filter(function(cedictSuggestion) {
+            return ! hskWordStrArray.includes(cedictSuggestion.simplified)
+          })
+          cedictFiltered.forEach(function(cedictSuggestion){
+            suggestions.push({
+              type: 'cedict',
+              href: "#view/cedict/" + cedictSuggestion.traditional,
+              row: cedictSuggestion
+            })
+          })
+          if (suggestions.length === 0) {
+            suggestions.push({
+              type: "notFound",
+              text: text,
+              href: "https://en.wiktionary.org/w/index.php?search=" + text
+            })
           }
+          app.suggestions = suggestions;
         }
       },
       update() {

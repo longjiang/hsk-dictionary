@@ -6,7 +6,9 @@ class Character {
     this.hanzi = hanzi;
     this.animatedSvgLink = this.hanzi.animatedSvgLink(row.character);
     this.parts = [];
-    var parts = this.decomposition.substring(1).split("");
+    var parts = this.decomposition.split("").filter(function(char) {
+      return ! hanzi.isIdeographicDescCharacter(char)
+    });
     var character = this;
     parts.forEach(function (part) {
       var partObj = character.hanzi.lookup(part);
@@ -91,6 +93,14 @@ var Hanzi = {
       char +
       "</a>"
     );
+  },
+
+  isIdeographicDescCharacter(char) {
+    if (char.replace(/[\u2ff0-\u2ffe]/, "") === "") {
+      return true;
+    } else {
+      return false;
+    }
   }
 };
 

@@ -11,7 +11,7 @@ var CEDICT = {
             traditional: matches[1],
             pinyin: cedict.parsePinyin(matches[3]),
             definitions: matches[4].split('/'),
-            search: matches[3].toLowerCase().replace(/[\s\d]/gi, '') + ' ' + matches[4]
+            search: matches[1] + ' ' + matches[2] + ' ' + matches[3].toLowerCase().replace(/[\s\d]/gi, '') + ' ' + matches[4]
           }
           row.definitions.forEach(function(definition, index){
             definitionObj = {
@@ -59,9 +59,9 @@ var CEDICT = {
       pinyin: cedict.parsePinyin(m[2])
     }
   },
-  lookup(text) {
+  lookup(traditional) {
     return this._data.filter(function(row) {
-      return row.simplified === text
+      return row.traditional === traditional
     })
   },
   lookupFuzzy(text) {
