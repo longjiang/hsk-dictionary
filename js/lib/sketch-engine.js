@@ -32,6 +32,7 @@ const SketchEngine = {
           }).join('')
           line = '。' + line + '。';
           line = line.replace(new RegExp(`.*[。！？“]([^。！？”]*${term}[^。！？”]*[。！？”]).*`, 'gi'), '$1')
+          line = line.replace(/”$/, '');
           if (line.length > term.length + 1) {
             result.push(line)
           }
