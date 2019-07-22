@@ -294,7 +294,7 @@ class Timer {
           app.suggestions = [];
           var text = e.target.value;
           if (text !== "") {
-            var suggestions = app.hsk.lookupFuzzy(text);
+            var suggestions = app.hsk.lookupFuzzy(text).slice(0, 5);
             if (suggestions.length > 0) {
               app.suggestions = suggestions;
               suggestions.forEach(function (suggestion) {
@@ -349,8 +349,7 @@ class Timer {
           $button.toggleClass("collapsed");
         },
         backToBrowse() {
-          this.view = "browse";
-          location.hash = "";
+          location.hash = "#browse";
         },
         previousClick() {
           var thisId = parseInt(this.entry.id);
@@ -362,7 +361,7 @@ class Timer {
             var previousIndex = Math.max(0, i - 1);
             previousId = app.savedWordIds[previousIndex]
           }
-          location.hash = previousId;
+          location.hash = "view/hsk/" + previousId;
         },
         nextClick() {
           var thisId = parseInt(this.entry.id);
@@ -374,7 +373,7 @@ class Timer {
             var nextIndex = Math.min(app.savedWordIds.length - 1, i + 1);
             nextId = app.savedWordIds[nextIndex]
           }
-          location.hash = nextId;
+          location.hash = "view/hsk/" + nextId;
         },
         suggestionClick() {
           this.suggestions = [];
@@ -530,8 +529,7 @@ class Timer {
         },
         // ANCHOR img/anchors/saved-words-button.png
         savedWordsButtonClick: function () {
-          this.view = "saved-words";
-          location.hash = "";
+          location.hash = "saved-words";
         },
         showImportClick: function () {
           $('.import-wrapper').toggleClass('hidden');
@@ -566,6 +564,26 @@ class Timer {
             this.savedWordIds = []
             localStorage.removeItem('savedWordIds')
           }
+        },
+        processHash: function() {
+          const app = this;
+          const hash = decodeURI(location.hash).slice(1).split('/')
+          const controller = hash[0]
+          const method = hash[1]
+          const args = hash[2] ? hash[2].split(',') : []
+          if (controller === 'view') {
+            if (method == 'hsk') {
+              if (args.length > 0) {
+                const id = args[0]
+                app.showById(id)
+                window.scrollTo(0, 0)
+              }
+            }
+          } else if (controller === 'saved-words') {
+            this.view = "saved-words";
+          } else if (controller === 'browse') {
+            this.view = "browse";
+          }
         }
       },
       computed: {
@@ -591,7 +609,7 @@ class Timer {
             i = app.savedWordIdsSorted.indexOf(thisId.toString())
             return i + 1 < app.savedWordIds.length
           }
-        },
+        }
       },
       updated: function () {
         var app = this;
@@ -613,17 +631,10 @@ class Timer {
       }
     });
 
-    window.onhashchange = function () {
-      var id = decodeURI(location.hash.substr(1));
-      if (id) {
-        app.showById(id);
-        window.scrollTo(0, 0);
-      }
-    };
-    if (location.hash && location.hash.length > 1) {
-      var id = decodeURI(location.hash.substr(1));
-      app.showById(id);
-    }
+    app.processHash()
+
+    window.onhashchange = app.processHash
+    
   }
 
   HSK.load(function (hsk) {

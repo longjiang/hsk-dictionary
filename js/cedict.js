@@ -71,8 +71,3 @@ var CEDICT = {
     })
   }
 }
-
-CEDICT.load(function(cedict) {
-  console.log(cedict.lookup('台湾'))
-  console.log(cedict.lookupFuzzy('ke shi'))
-})
