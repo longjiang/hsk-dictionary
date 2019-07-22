@@ -131,7 +131,10 @@ function EntryComponent(hsk) {
         });
         SketchEngine.wsketch(entry.word, function(response) {
           entry.sketch = response
-          console.log(entry.sketch)
+          app.key += 1
+        });
+        SketchEngine.concordance(entry.word, function(response) {
+          entry.examples = response
           app.key += 1
         });
         WordPhotos.getWebImages(entry.word, function(srcs) {

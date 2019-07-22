@@ -27,4 +27,11 @@ const Helper = {
     $button.siblings("[data-collapse-target]").toggleClass("collapsed");
     $button.toggleClass("collapsed");
   },
+  unique(names) {
+    var uniqueNames = [];
+    $.each(names, function(i, el){
+        if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+    });
+    return uniqueNames;
+  }
 }
