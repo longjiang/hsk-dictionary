@@ -23,6 +23,7 @@ body {
 
 .title-text {
   margin-top: 0.5rem;
+  color: white;
 }
 
 @media (max-width: 768px) {
