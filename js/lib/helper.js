@@ -7,5 +7,23 @@ const Helper = {
       var $html = $(response, ownerDocument);
       callback($html, response);
     });
-  }
+  },
+  highlight(text, word, level) {
+    if (text) {
+      return text.replace(word, '<span data-hsk="' + level + '">' + word + "</span>");
+    }
+  },
+  showPinyinClick: function (e) {
+    var selector = $(e.target).attr("data-target-selector");
+    $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
+    $(e.target).text("Loading...");
+    // eslint-disable-next-line no-undef
+    new Annotator().annotateBySelector(selector + " *", function () {
+    });
+  },
+  showMoreClick(e) {
+    var $button = $(e.currentTarget);
+    $button.siblings("[data-collapse-target]").toggleClass("collapsed");
+    $button.toggleClass("collapsed");
+  },
 }

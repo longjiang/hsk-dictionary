@@ -1,6 +1,17 @@
 function EntryComponent(hsk) {
   return {
     template: '#entry-template',
+    components: {
+      'collocations': {
+        template: '#collocations-template',
+        props: ['word', 'level', 'type', 'title', 'collocation'],
+        data() {
+          return {
+            key: 0 // used to force re-render this component
+          }
+        }
+      },
+    },
     data() {
       return {
         entry: undefined,
@@ -13,7 +24,6 @@ function EntryComponent(hsk) {
         hsk: hsk,
         unsplashSrcs: [],
         unsplashSearchTerm: "",
-        annotated: false,
         key: 0 // used to force re-render this component
       }
     },
@@ -129,7 +139,6 @@ function EntryComponent(hsk) {
           app.key += 1
         })
         app.getImage(entry);
-        app.annotated = false; // Add pinyin again on update
         app.suggestions = [];
         $(".btn-saved-words").removeClass("blink");
         $("#lookup").val(entry.word);
@@ -224,16 +233,6 @@ function EntryComponent(hsk) {
       app.recalculateExampleColumns(this.entry.word);
       app.attachSpeakEventHandler();
       var selector = ".example-wrapper > .example-sentence *";
-      if ($(selector).length > 0 && !app.annotated) {
-        app.annotated = true; // Only once!
-        // eslint-disable-next-line no-undef
-        new Annotator().annotateBySelector(
-          selector,
-          function () {
-            // success
-          }
-        );
-      }
     }
   }
 }
