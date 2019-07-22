@@ -4,7 +4,8 @@ function SearchComponent(hsk) {
     data() {
       return {
         suggestions: [],
-        savedWordIds: SavedWords.getIds()
+        savedWordIds: SavedWords.getIds(),
+        key: 0,
       }
     },
     methods: {
@@ -56,6 +57,9 @@ function SearchComponent(hsk) {
           }
         }
       },
+      update() {
+        this.savedWordIds = SavedWords.getIds()
+      }
     }
   }
 }

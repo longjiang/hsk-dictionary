@@ -20,7 +20,10 @@ function BrowseComponent(hsk) {
         } else {
           SavedWords.remove(id);
         }
-        this.key += 1 // force re-render this component
+        this.key += 1
+        if (hskDictionaryApp.$refs.search) {
+          hskDictionaryApp.$refs.search.update()
+        }
       },
       countWordsInLesson(lesson) {
         var count = 0;

@@ -51,16 +51,20 @@ function EntryComponent(hsk) {
           SavedWords.remove(id);
         }
         this.key += 1 // force re-render this component
+        if (hskDictionaryApp.$refs.search) {
+          hskDictionaryApp.$refs.search.update()
+        }
       },
       previousClick() {
-        var thisId = parseInt(this.entry.id);
+        var thisId = parseInt(this.entry.id)
         var previousId;
         if (SavedWords.count() < 2) {
-          var previousId = Math.max(hsk.first(), thisId - 1);
+          var previousId = Math.max(hsk.first(), thisId - 1)
         } else {
-          i = SavedWords.getIdsSorted().indexOf(thisId.toString())
+          const savedIds = SavedWords.getIdsSorted()
+          i = savedIds.indexOf(thisId.toString())
           var previousIndex = Math.max(0, i - 1);
-          previousId = SavedWords.getIds()[previousIndex]
+          previousId = savedIds[previousIndex]
         }
         location.hash = "view/hsk/" + previousId;
       },
@@ -68,13 +72,14 @@ function EntryComponent(hsk) {
         var thisId = parseInt(this.entry.id);
         var nextId;
         if (SavedWords.count() < 2) {
-          var nextId = Math.min(hsk.last(), thisId + 1);
+          var nextId = Math.min(hsk.last(), thisId + 1)
         } else {
-          i = SavedWords.getIdsSorted().indexOf(thisId.toString())
-          var nextIndex = Math.min(SavedWords.count() - 1, i + 1);
-          nextId = SavedWords.getIds()[nextIndex]
+          const savedIds = SavedWords.getIdsSorted()
+          i = savedIds.indexOf(thisId.toString())
+          var nextIndex = Math.min(SavedWords.count() - 1, i + 1)
+          nextId = savedIds[nextIndex]
         }
-        location.hash = "view/hsk/" + nextId;
+        location.hash = "view/hsk/" + nextId
       },
       highlight(text) {
         if (text) {

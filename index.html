@@ -35,7 +35,7 @@
             <h1 class="title"><a href="https://www.chinesezerotohero.com"><img src="img/logo-mark.png" class="logo"
                   alt=""></a><a class="title-text" href="#">HSK Dictionary</a></h1>
 
-            <search></search>
+            <search ref="search"></search>
           </div>
         </div>
       </div>
@@ -109,7 +109,7 @@
         </a>
       </div>
       <button class="btn btn-saved-words ml-2" v-on:click="savedWordsButtonClick"
-        v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak><span
+        v-if="savedWordIds && savedWordIds.length > 0" type="button" v-cloak :key="key"><span
           class="btn-saved-words-count">{{ savedWordIds.length < 100 ? savedWordIds.length : '多' }}</span>
         Saved</button>
     </div>
@@ -124,7 +124,7 @@
           <div class="row text-center">
             <div class="col-md-12">
               <button class="save-word-button" v-on:click="saveWordClick" :data-id="entry.id"><i
-                  class="glyphicon glyphicon-star-empty" v-if="SavedWords.includes(entry.id)" title="Save word"></i><i
+                  class="glyphicon glyphicon-star-empty" v-if="!SavedWords.includes(entry.id)" title="Save word"></i><i
                   class="glyphicon glyphicon-star" v-if="SavedWords.includes(entry.id)" title="Remove word"></i></button>
               <button class="paginate-button previous" v-on:click="previousClick" title="Previous word" v-if="hasPrevious"><img
                   src="img/angle-left.svg" alt=""></button>
@@ -406,7 +406,7 @@
                           <li class="browse-words-item character-example" v-for="word in dialog">
                             <button class="saved-words-item-star" v-on:click="saveWordClick" :data-id="word.id"
                               title="Save word"><i class="glyphicon glyphicon-star-empty"
-                                v-if="!SavedWords.includes(word.id)"></i><i class="glyphicon glyphicon-star"
+                                v-if="!SavedWords.includes(word.id)" :key="key"></i><i class="glyphicon glyphicon-star"
                                 v-if="SavedWords.includes(word.id)"></i></button>
                             <a :href="'#view/hsk/' + word.id">
                               <span class="character-example-word" :data-hsk="word.book">{{ word.word }}</span>

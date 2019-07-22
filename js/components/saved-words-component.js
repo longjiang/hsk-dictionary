@@ -7,6 +7,12 @@ function SavedWordsComponent(hsk) {
       }
     },
     methods: {
+      updateSavedWordsDisplay( ) {
+        this.key += 1 // force re-render this component
+        if (hskDictionaryApp.$refs.search) {
+          hskDictionaryApp.$refs.search.update()
+        }
+      },
       saveWordClick: function (e) {
         var $target = $(e.target);
         if (e.target.tagName.toLowerCase() === "i") {
@@ -18,7 +24,7 @@ function SavedWordsComponent(hsk) {
         } else {
           SavedWords.remove(id);
         }
-        this.key += 1 // force re-render this component
+        this.updateSavedWordsDisplay()
       },
       showImportClick: function () {
         $('.import-wrapper').toggleClass('hidden');
@@ -38,7 +44,7 @@ function SavedWordsComponent(hsk) {
         if (confirmed) {
           SavedWords.removeAll()
         }
-        this.key += 1 // force re-render this component
+        this.updateSavedWordsDisplay()
       },
       importClick: function () {
         const list = $('#import-textarea').val().split("\n");
@@ -63,7 +69,7 @@ function SavedWordsComponent(hsk) {
           if (!SavedWords.getIds().includes(word.id)) SavedWords.add(word.id)
         })
         $('.import-wrapper').addClass('hidden')
-        this.key += 1
+        this.updateSavedWordsDisplay()
       },
     }
   }
