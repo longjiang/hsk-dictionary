@@ -20,6 +20,19 @@ const WordPhotos = {
         fail()
       });
   },
+  // strWord = "视频"
+  getWebImages(strWord, callback) {
+    $.getJSON(
+      `proxy.php?http://image.so.com/j?q=${strWord}&src=srp&correct=&sn=0&pn=10`,
+      function(response) {
+        srcs = []
+        response.list.forEach(function(item) {
+          srcs.push(item);
+        });
+        callback(srcs)
+      }
+    );
+  },
   getSrcsFromUnsplash(term, callcback) {
     Helper.scrape("https://unsplash.com/search/photos/" + term, function (
       $html
@@ -37,5 +50,18 @@ const WordPhotos = {
       });
       callcback(srcs);
     });
-  }
+  },
+        // word = {word: "视频", images: []}
+        getImages(word) {
+          $.getJSON(
+            `proxy.php?http://image.so.com/j?q=${
+              word.word
+            }&src=srp&correct=&sn=0&pn=10`,
+            function(response) {
+              response.list.forEach(function(item) {
+                word.images.push(item);
+              });
+            }
+          );
+        }
 }

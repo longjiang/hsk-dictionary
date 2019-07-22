@@ -28,11 +28,19 @@ var CEDICT = {
             }
             m = definition.match(/see (.*)/);
             if (m) {
-              definitionObj.type = "variant"
+              definitionObj.type = "reference"
               definitionObj.variant = cedict.parseWord(m[1])
-              definitionObj.text = `variant of ${definitionObj.variant.simplified} (${definitionObj.variant.pinyin})`
+              definitionObj.text = `see ${definitionObj.variant.simplified} (${definitionObj.variant.pinyin})`
             }
-            row.definitions[index] = definitionObj
+            m = definition.match(/CL:(.*)/);
+            if (m) {
+              const measureWord = cedict.parseWord(m[1])
+              row.measureWord = measureWord.simplified
+              row.measureWordPinyin = measureWord.pinyin
+              row.definitions.splice(index, 1) // Remove CL:  definition
+            } else {
+              row.definitions[index] = definitionObj
+            }
           })
           cedict._data.push(row)
         }
