@@ -13,14 +13,13 @@
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css?v=4.3.1" rel="stylesheet">
   <link href="vendor/css-spinners/spinner/heartbeat.css" rel="stylesheet">
-  <link href="vendor/annotator-js/css/tipped.css?v=4.2.7" rel="stylesheet">
   <link href="vendor/annotator-js/css/annotator.css?v=1.0.0" rel="stylesheet">
+  <link href="vendor/annotator-js/css/tipped.css" rel="stylesheet">
   <link href="css/hsk-dictionary.css?v=3.7.7" rel="stylesheet">
 
 </head>
 
 <body>
-
   <div class="add-pinyin">我现在给你，一段非常长的话，而且有English</div>
 
   <!-- Bootstrap core JavaScript -->
@@ -28,13 +27,17 @@
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js?v=4.3.1"></script>
   <script src="vendor/vue/vue.js?v=2.6.10"></script>
   <script src="vendor/pinyinify/pinyinify.js"></script>
+  <script src="vendor/annotator-js/js/tipped.js"></script>
   <script src="vendor/annotator-js/js/annotator.js"></script>
+  <script src="vendor/annotator-js/js/annotator-tooltip.js"></script>
   <script src="js/lib/helper.js"></script>
   <script src="js/lib/cedict.js"></script>
   <script src="js/lib/sketch-engine.js"></script>
   <script>
-    CEDICT.load(function(cedict) {
-      new Annotator(cedict).annotateBySelector('.add-pinyin')
+    CEDICT.load(function (cedict) {
+      new Annotator(cedict).annotateBySelector('.add-pinyin', function () {
+        AnnotatorTooltip.addTooltips()
+      })
     })
   </script>
 </body>

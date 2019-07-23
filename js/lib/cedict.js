@@ -89,9 +89,12 @@ var CEDICT = {
     }
   },
   lookup(text) {
-    return this._data.filter(function(row) {
+    const candidates = this._data.filter(function(row) {
       return row.traditional === text || row.simplified === text
+    }).sort(function(a, b) {
+      return b.search.length - a.search.length // Longer search string = longer definition = likely more common word
     })
+    return candidates
   },
   lookupFuzzy(text) {
     text = text.toLowerCase().replace(' ', '');
