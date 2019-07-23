@@ -59,25 +59,30 @@ var CEDICT = {
       callback(cedict)
     })
   },
+  subdict(data) {
+    let newDict = Object.assign({}, this)
+    return Object.assign(newDict, {_data: data})
+  },
+  subdictFromText(text) {
+    return this.subdict(this._data.filter(function(row){
+      return text.includes(row.simplified) || text.includes(row.traditional)
+    }))
+  },
   /* Returns the longest word in the dictionary that is inside `text` */
-  longest(text, start = 0) {
+  longest(text) {
     t.push(text)
     var matchedText = undefined
-    var index = 0
-    for (let [i, row] of this._data.slice(start).entries()) {
+    for (let [i, row] of this._data.entries()) {
       if (text.includes(row.simplified)) {
         matchedText = row.simplified
-        index = i
         break
       } else if (text.includes(row.traditional)) {
         matchedText = row.traditional
-        index = i
         break
       }
     }
     const result = {
       text: matchedText,
-      index: index,
       matches: this.lookup(matchedText)
     }
     return result;
