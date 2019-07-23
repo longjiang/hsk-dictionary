@@ -1,3 +1,4 @@
+var t = []
 var CEDICT = {
   _data: [],
   load(callback) {
@@ -52,25 +53,30 @@ var CEDICT = {
     })
   },
   /* Returns the longest word in the dictionary that is inside `text` */
-  longest(text) {
+  longest(text, start = 0) {
+    t.push(text)
     var matchedText = undefined
-    for (let row of this._data) {
+    var index = 0
+    for (let [i, row] of this._data.slice(start).entries()) {
       if (text.includes(row.simplified)) {
         matchedText = row.simplified
+        index = i
         break
       } else if (text.includes(row.traditional)) {
         matchedText = row.traditional
+        index = i
         break
       }
     }
     const result = {
       text: matchedText,
+      index: index,
       matches: this.lookup(matchedText)
     }
     return result;
   },
   parsePinyin(pinyin) {
-    return pinyinify(pinyin) // use the pinyinify library to parse tones
+    return pinyinify(pinyin.replace(/u:/gi, 'ü')) // use the pinyinify library to parse tones
     .replace(/\d/g, '') // pinyinify does not handle 'r5', we remove all digits
   },
   // text = 涎[xian2]
