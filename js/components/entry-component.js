@@ -131,15 +131,15 @@ function EntryComponent(hsk) {
         });
         SketchEngine.wsketch(entry.word, function(response) {
           entry.sketch = response
-          app.key += 1
+          app.collocationsKey += 1
         });
         SketchEngine.concordance(entry.word, function(response) {
           entry.examples = response
-          app.key += 1
+          app.concordanceKey += 1
         });
         WordPhotos.getWebImages(entry.word, function(srcs) {
           entry.images = srcs
-          app.key += 1
+          app.webImagesKey += 1
         })
         app.getImage(entry);
         app.suggestions = [];
