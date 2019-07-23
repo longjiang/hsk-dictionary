@@ -1,5 +1,5 @@
 const SketchEngine = {
-  corpname: 'preloaded/zhtenten_lenoch',
+  corpname: 'preloaded/zhtenten17_simplified_stf2',
   wsketch(term, callback) {
     $.getJSON(
       `sketch-engine-proxy.php?https://api.sketchengine.eu/bonito/run.cgi/wsketch?corpname=${this.corpname}&lemma=${term}`,
@@ -9,6 +9,9 @@ const SketchEngine = {
             Gramrel.Words = Gramrel.Words.filter(function (Word) {
               return Word.cm !== ""
             })
+            for (Word of Gramrel.Words) {
+              Word.cm = Word.cm.replace(/-\w( ?)/gi, '')
+            }
           })
         }
         callback(response);
@@ -24,7 +27,7 @@ const SketchEngine = {
       function (response) {
         const data = JSON.parse(response);
         var result = []
-        data.Lines.slice(0,500).forEach(function (Line) {
+        data.Lines.slice(0, 500).forEach(function (Line) {
           var line = Line.Left.map(function (item) {
             return item ? item.str : ''
           }).join('') + Line.Kwic[0].str + Line.Right.map(function (item) {
@@ -37,7 +40,7 @@ const SketchEngine = {
             result.push(line)
           }
         })
-        result = result.sort(function(a, b) {
+        result = result.sort(function (a, b) {
           return a.length - b.length;
         })
         callback(Helper.unique(result));
