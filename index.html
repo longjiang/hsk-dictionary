@@ -149,22 +149,22 @@
                   src="img/angle-left.svg" alt=""></button>
               <button class="paginate-button next" v-on:click="nextClick" title="Next word" v-if="hasNext"><img
                   src="img/angle-right.svg" alt=""></button>
-              <div class="pinyin"><span v-if="entry.measureWordPinyin">yī {{ entry.measureWordPinyin}} </span>{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up"
+              <div class="pinyin"><span v-if="entry.measureWords">yī {{ entry.measureWords[0].pinyin}} </span>{{ entry.pinyin }} <i class="speak glyphicon glyphicon-volume-up"
                   v-bind:data-speak="entry.word"></i></div>
               <div class="word">
-                <span v-if="entry.measureWord">一{{ entry.measureWord}}</span><span v-bind:data-hsk="entry.book">{{ entry.word }}</span>
+                <span v-if="entry.measureWords">一{{ entry.measureWords[0].simplified}}</span><span v-bind:data-hsk="entry.book">{{ entry.word }}</span>
               </div>
               <div class="stroke-wrapper">
                 <a class="stroke btn-small" v-for="character in characters"
                   :href="hsk.hanzi.animatedSvgUrl(character.character)" target="_blank" title="Show stroke order animation"><img
                     src="img/stroke.svg"> Strokes</a>
               </div>
-              <div class="definitions" v-if="entry.english">
+              <div class="definitions" v-if="entry.english && !entry.definitions">
                 <p class="english" v-if="entry.english">{{ entry.english }}</p>
               </div>
-              <ol class="definitions" v-if="entry.definitions">
-                <li v-for="definition in entry.definitions" class="english">{{ definition.text }}</li>
-              </ol>
+              <div class="definitions" v-if="entry.definitions">
+                <div v-for="definition in entry.definitions" class="english">{{ definition.text }}</div>
+              </div>
             </div>
           </div>
         </div>

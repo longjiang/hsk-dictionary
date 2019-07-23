@@ -80,6 +80,11 @@ var entry = undefined;
               if (args.length > 0) {
                 const id = args[0]
                 entry = hsk.get(id)
+                const cedictCandidates = cedict.lookup(entry.word)
+                if (cedictCandidates.length === 1) {
+                  entry.definitions = cedictCandidates[0].definitions
+                  entry.measureWords = cedictCandidates[0].measureWords
+                }
                 if (this.$refs.entry) {
                   this.$refs.entry.show(entry)
                 }

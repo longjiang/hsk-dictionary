@@ -35,9 +35,16 @@ var CEDICT = {
             }
             m = definition.match(/CL:(.*)/);
             if (m) {
-              const measureWord = cedict.parseWord(m[1])
-              row.measureWord = measureWord.simplified
-              row.measureWordPinyin = measureWord.pinyin
+              let measureWords = []
+              for (let item of m[1].split(',')) {
+                const mw = cedict.parseWord(item)
+                if (mw.simplified !== '个') {
+                  measureWords.push(mw)
+                }
+              }
+              if (measureWords.length > 0) {
+                row.measureWords = measureWords
+              }
               row.definitions.splice(index, 1) // Remove CL:  definition
             } else {
               row.definitions[index] = definitionObj
