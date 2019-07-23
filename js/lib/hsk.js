@@ -139,11 +139,13 @@ var HSK = {
     Hanzi.load(function (hanzi) {
       hsk.hanzi = hanzi;
       loader.loaded('hanzi.json')
+      console.log('hanzi ready')
     });
     Papa.parse(hsk._standardCourseCSV, {
       download: true,
       header: true,
       complete: function (results) {
+        console.log('hsk.csv parsed')
         results.data.forEach(function (row) {
           var result = {};
           for (var index in hsk._standardCourseCSVFields) {
@@ -151,6 +153,7 @@ var HSK = {
           }
           hsk._standardCourseData.push(result);
         });
+        console.log('hsk ready')
         loader.loaded('hsk.csv')
       }
     });

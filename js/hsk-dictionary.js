@@ -57,6 +57,9 @@ var entry = undefined;
         view:
           "browse" /* Default view is "browse words by course", can also set to "entry" (when viewing a word), or "saved-words" */,
       },
+      mounted() {
+        console.log('hskDictionaryApp mounted')
+      },
       methods: {
         adminClick: function () {
           if (this.$refs.entry) {
@@ -121,6 +124,7 @@ var entry = undefined;
   }
 
   let loader = new Loader(['hsk', 'cedict'], function() {
+    console.log('all loaded')
     main(HSK, CEDICT);
   })
 

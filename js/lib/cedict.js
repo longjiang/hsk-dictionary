@@ -6,6 +6,7 @@ var CEDICT = {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
+        console.log('cedict data downloaded')
         cedict.loadData(this.responseText, callback);
       }
     };
@@ -67,6 +68,7 @@ var CEDICT = {
     cedict._data = cedict._data.sort(function(a, b) {
       return b.simplified.length - a.simplified.length;
     })
+    console.log('cedict parsed')
     callback(cedict)
   },
   subdict(data) {
