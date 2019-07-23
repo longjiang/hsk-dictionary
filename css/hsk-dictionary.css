@@ -780,6 +780,7 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 
 .song {
   padding: 2rem 0;
+  margin: 0;
 }
 
 .song:nth-child(2n) {
