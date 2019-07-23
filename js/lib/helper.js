@@ -53,3 +53,22 @@ const Helper = {
     return mapped;
   }
 }
+
+class Loader {
+  _loaded = []
+  _goal = []
+  _complete = function() {}
+
+  constructor(goal, callback) {
+    this._goal = goal
+    this._complete = callback
+  }
+
+  loaded(item) {
+    let loader = this
+    this._loaded.push(item)
+    if (this._goal.filter(function(item) {
+      return ! loader._loaded.includes(item)
+    }).length === 0) this._complete()
+  }
+}

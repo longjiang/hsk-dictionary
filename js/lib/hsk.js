@@ -133,22 +133,26 @@ var HSK = {
    */
   load: function (callback) {
     var hsk = this;
+    const loader = new Loader(['hanzi.json', 'hsk.csv'], function() {
+      callback(hsk);
+    })
     Hanzi.load(function (hanzi) {
       hsk.hanzi = hanzi;
-      Papa.parse(hsk._standardCourseCSV, {
-        download: true,
-        header: true,
-        complete: function (results) {
-          results.data.forEach(function (row) {
-            var result = {};
-            for (var index in hsk._standardCourseCSVFields) {
-              result[index] = row[hsk._standardCourseCSVFields[index]];
-            }
-            hsk._standardCourseData.push(result);
-          });
-          callback(hsk);
-        }
-      });
+      loader.loaded('hanzi.json')
+    });
+    Papa.parse(hsk._standardCourseCSV, {
+      download: true,
+      header: true,
+      complete: function (results) {
+        results.data.forEach(function (row) {
+          var result = {};
+          for (var index in hsk._standardCourseCSVFields) {
+            result[index] = row[hsk._standardCourseCSVFields[index]];
+          }
+          hsk._standardCourseData.push(result);
+        });
+        loader.loaded('hsk.csv')
+      }
     });
   },
 

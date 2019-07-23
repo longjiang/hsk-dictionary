@@ -120,11 +120,17 @@ var entry = undefined;
     }
   }
 
-  HSK.load(function (hsk) {
-    CEDICT.load(function(cedict) {
-      main(hsk, cedict);
-    })
+  let loader = new Loader(['hsk', 'cedict'], function() {
+    main(HSK, CEDICT);
+  })
+
+  HSK.load(function (hskObj) {
+    loader.loaded('hsk')
   });
+
+  CEDICT.load(function(cedictObj) {
+    loader.loaded('cedict')
+  })
 
   // eslint-disable-next-line no-undef
 })(jQuery);

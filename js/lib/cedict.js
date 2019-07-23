@@ -9,7 +9,7 @@ var CEDICT = {
         cedict.loadData(this.responseText, callback);
       }
     };
-    xhttp.open("GET", 'https://www.filepicker.io/api/file/AdfenrwTBKAXwp2H55Cu', true); // cedict_ts.u8 uploaded via the CZH Resources course 
+    xhttp.open("GET", 'data/cedict_ts.u8.txt', true); // Use .txt extension so gzip will work with it
     xhttp.send();
   },
   loadData(cedictText, callback) {
