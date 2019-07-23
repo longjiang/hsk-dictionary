@@ -3,61 +3,70 @@ var CEDICT = {
   _data: [],
   load(callback) {
     const cedict = this
-    $.get('data/cedict_ts.u8', function(cedictText){
-      cedictText.split("\n").forEach(function(line){
-        const matches = line.match(/^([^\s]+) ([^\s]+) \[(.+)\] \/(.*)\//)
-        if (matches) {
-          var row = {
-            simplified: matches[2],
-            traditional: matches[1],
-            pinyin: cedict.parsePinyin(matches[3]),
-            definitions: matches[4].split('/'),
-            search: matches[1] + ' ' + matches[2] + ' ' + matches[3].toLowerCase().replace(/[\s\d]/gi, '') + ' ' + matches[4]
-          }
-          row.definitions.forEach(function(definition, index){
-            definitionObj = {
-              type: "definition",
-              text: definition.replace(/\[(.*)\]/, function(match, p1) {
-                return ' (' + cedict.parsePinyin(p1) + ')'
-              }).replace(/([^\s]+)\|([^\s]+)/, '$2')
-            }
-            var m = definition.match(/variant of (.*)/);
-            if (m) {
-              definitionObj.type = "variant"
-              definitionObj.variant = cedict.parseWord(m[1])
-              definitionObj.text = `variant of ${definitionObj.variant.simplified} (${definitionObj.variant.pinyin})`
-            }
-            m = definition.match(/see (.*)/);
-            if (m) {
-              definitionObj.type = "reference"
-              definitionObj.variant = cedict.parseWord(m[1])
-              definitionObj.text = `see ${definitionObj.variant.simplified} (${definitionObj.variant.pinyin})`
-            }
-            m = definition.match(/CL:(.*)/);
-            if (m) {
-              let measureWords = []
-              for (let item of m[1].split(',')) {
-                const mw = cedict.parseWord(item)
-                if (mw.simplified !== '个') {
-                  measureWords.push(mw)
-                }
-              }
-              if (measureWords.length > 0) {
-                row.measureWords = measureWords
-              }
-              row.definitions.splice(index, 1) // Remove CL:  definition
-            } else {
-              row.definitions[index] = definitionObj
-            }
-          })
-          cedict._data.push(row)
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        cedict.loadData(this.responseText, callback);
+      }
+    };
+    xhttp.open("GET", 'data/cedict_ts.u8', true);
+    xhttp.send();
+  },
+  loadData(cedictText, callback) {
+    const cedict = this
+    cedictText.split("\n").forEach(function(line){
+      const matches = line.match(/^([^\s]+) ([^\s]+) \[(.+)\] \/(.*)\//)
+      if (matches) {
+        var row = {
+          simplified: matches[2],
+          traditional: matches[1],
+          pinyin: cedict.parsePinyin(matches[3]),
+          definitions: matches[4].split('/'),
+          search: matches[1] + ' ' + matches[2] + ' ' + matches[3].toLowerCase().replace(/[\s\d]/gi, '') + ' ' + matches[4]
         }
-      })
-      cedict._data = cedict._data.sort(function(a, b) {
-        return b.simplified.length - a.simplified.length;
-      })
-      callback(cedict)
+        row.definitions.forEach(function(definition, index){
+          definitionObj = {
+            type: "definition",
+            text: definition.replace(/\[(.*)\]/, function(match, p1) {
+              return ' (' + cedict.parsePinyin(p1) + ')'
+            }).replace(/([^\s]+)\|([^\s]+)/, '$2')
+          }
+          var m = definition.match(/variant of (.*)/);
+          if (m) {
+            definitionObj.type = "variant"
+            definitionObj.variant = cedict.parseWord(m[1])
+            definitionObj.text = `variant of ${definitionObj.variant.simplified} (${definitionObj.variant.pinyin})`
+          }
+          m = definition.match(/see (.*)/);
+          if (m) {
+            definitionObj.type = "reference"
+            definitionObj.variant = cedict.parseWord(m[1])
+            definitionObj.text = `see ${definitionObj.variant.simplified} (${definitionObj.variant.pinyin})`
+          }
+          m = definition.match(/CL:(.*)/);
+          if (m) {
+            let measureWords = []
+            for (let item of m[1].split(',')) {
+              const mw = cedict.parseWord(item)
+              if (mw.simplified !== '个') {
+                measureWords.push(mw)
+              }
+            }
+            if (measureWords.length > 0) {
+              row.measureWords = measureWords
+            }
+            row.definitions.splice(index, 1) // Remove CL:  definition
+          } else {
+            row.definitions[index] = definitionObj
+          }
+        })
+        cedict._data.push(row)
+      }
     })
+    cedict._data = cedict._data.sort(function(a, b) {
+      return b.simplified.length - a.simplified.length;
+    })
+    callback(cedict)
   },
   subdict(data) {
     let newDict = Object.assign({}, this)
