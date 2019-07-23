@@ -45,8 +45,29 @@ var CEDICT = {
           cedict._data.push(row)
         }
       })
+      cedict._data = cedict._data.sort(function(a, b) {
+        return b.simplified.length - a.simplified.length;
+      })
       callback(cedict)
     })
+  },
+  /* Returns the longest word in the dictionary that is inside `text` */
+  longest(text) {
+    var matchedText = undefined
+    for (let row of this._data) {
+      if (text.includes(row.simplified)) {
+        matchedText = row.simplified
+        break
+      } else if (text.includes(row.traditional)) {
+        matchedText = row.traditional
+        break
+      }
+    }
+    const result = {
+      text: matchedText,
+      matches: this.lookup(matchedText)
+    }
+    return result;
   },
   parsePinyin(pinyin) {
     return pinyinify(pinyin) // use the pinyinify library to parse tones
@@ -67,9 +88,9 @@ var CEDICT = {
       pinyin: cedict.parsePinyin(m[2])
     }
   },
-  lookup(traditional) {
+  lookup(text) {
     return this._data.filter(function(row) {
-      return row.traditional === traditional
+      return row.traditional === text || row.simplified === text
     })
   },
   lookupFuzzy(text) {

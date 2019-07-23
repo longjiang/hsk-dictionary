@@ -21,20 +21,20 @@
 
 <body>
 
+  <div class="add-pinyin">我现在给你，一段非常长的话，而且有English</div>
 
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js?v=3.4.2"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js?v=4.3.1"></script>
   <script src="vendor/vue/vue.js?v=2.6.10"></script>
   <script src="vendor/pinyinify/pinyinify.js"></script>
+  <script src="vendor/annotator-js/js/annotator.js"></script>
   <script src="js/lib/helper.js"></script>
+  <script src="js/lib/cedict.js"></script>
   <script src="js/lib/sketch-engine.js"></script>
   <script>
-    SketchEngine.wsketch('电源', function(response) {
-      console.log(response, 'wsketch')
-    })
-    SketchEngine.concordance('吃饭', function(response) {
-      console.log(response, 'concordance')
+    CEDICT.load(function(cedict) {
+      new Annotator(cedict).annotateBySelector('.add-pinyin')
     })
   </script>
 </body>

@@ -13,12 +13,12 @@ const Helper = {
       return text.replace(word, '<span data-hsk="' + level + '">' + word + "</span>");
     }
   },
-  showPinyinClick: function (e) {
+  showPinyinClick(e) {
     var selector = $(e.target).attr("data-target-selector");
     $(selector).addClass("add-pinyin"); // Soo it will have the pinyin looks
     $(e.target).text("Loading...");
     // eslint-disable-next-line no-undef
-    new Annotator().annotateBySelector(`${selector}, ${selector} *`, function () {
+    new Annotator(CEDICT).annotateBySelector(`${selector}, ${selector} *`, function () {
       $(e.target).remove()
     });
   },
@@ -33,5 +33,13 @@ const Helper = {
         if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
     });
     return uniqueNames;
+  },
+  map(collection, callback) {
+    var i;
+    var mapped = [];
+    for (i = 0; i < collection.length; i++) {
+      mapped.push(callback(collection[i]));
+    }
+    return mapped;
   }
 }
