@@ -24,7 +24,7 @@ const Helper = {
     new Annotator(CEDICT).annotateBySelector(`${selector}`, function () {
       $(e.target).remove()
       AnnotatorTooltip.addTooltips(selector)
-      $(selector + ' .word-block').each(function() {
+      $(selector + ' .word-block[data-candidates]').each(function() {
         const candidates = JSON.parse(unescape($(this).attr('data-candidates')))
         $(this).click(function() {
           location.hash = `#view/cedict/${candidates[0].traditional}`
