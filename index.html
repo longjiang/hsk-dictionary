@@ -13,9 +13,9 @@
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css?v=4.3.1" rel="stylesheet">
   <link href="vendor/css-spinners/spinner/heartbeat.css" rel="stylesheet">
-  <link href="vendor/annotator-js/css/annotator.css?v=4.2.7" rel="stylesheet">
-  <link href="vendor/annotator-js/css/tipped.css?v=4.2.7" rel="stylesheet">
-  <link href="css/hsk-dictionary.css?v=4.2.7" rel="stylesheet">
+  <link href="vendor/annotator-js/css/annotator.css?v=4.2.8" rel="stylesheet">
+  <link href="vendor/annotator-js/css/tipped.css?v=4.2.8" rel="stylesheet">
+  <link href="css/hsk-dictionary.css?v=4.2.8" rel="stylesheet">
 
 </head>
 
@@ -245,8 +245,8 @@
           </div>
         </div>
 
-        <div class="container" v-if="entry.images && entry.images.length > 0" :key="webImagesKey">
-          <div class="row mt-4">
+        <div class="container" :key="webImagesKey">
+          <div class="row mt-4" v-if="entry.images && entry.images.length > 0">
             <div class="col-sm-12">
               <div class="image-wall mt-4">
                 <img :src="image.img" alt="" v-if="!image.img.includes('nipic')" v-for="image in entry.images.slice(0, 20)" class="image-wall-image">
@@ -318,8 +318,8 @@
           </div>
         </div>
 
-        <div class="container collocations" v-if="entry.sketch && entry.sketch.Gramrels" :key="collocationsKey">
-          <div class="row mt-5">
+        <div class="container collocations" :key="collocationsKey" >
+          <div class="row mt-5" v-if="entry.sketch && entry.sketch.Gramrels">
             <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'SentObject_of' && collocation.Words.length > 0" :title="`Adjective/Verb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
             <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'Modifier' && collocation.Words.length > 0" :title="`Adverb + ${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
             <collocations v-for="collocation in entry.sketch.Gramrels" v-if="collocation.name === 'A_Modifier' && collocation.Words.length > 0" :title="`Adjective + 的${entry.word}`" :word="entry.word" :level="entry.book" :type="collocation.name" :collocation="collocation"></collocations>
@@ -334,8 +334,8 @@
           </div>
         </div>
 
-        <div class="container concordance" v-if="entry.examples && entry.examples.length > 0" :key="concordanceKey">
-          <div class="row mb-5">
+        <div class="container concordance" :key="concordanceKey">
+          <div class="row mb-5" v-if="entry.examples && entry.examples.length > 0">
             <div class="col-sm-12">
               <div class="label song-label mb-2">Sentences with “{{ entry.word }}”</div>
               <ul class="character-examples collapsed" id="examples" data-collapse-target>
@@ -514,23 +514,22 @@
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js?v=4.3.1"></script>
   <script src="vendor/vue/vue.js?v=2.6.10"></script>
   <script src="vendor/papaparse/papaparse.min.js?v=5.0.0"></script>
-  <script src="vendor/popper/popper.min.js"></script>
-  <script src="vendor/annotator-js/js/tipped.js?v=4.2.7"></script>
-  <script src="vendor/annotator-js/js/annotator.js?v=4.2.7"></script>
-  <script src="vendor/annotator-js/js/annotator-tooltip.js?v=4.2.7"></script>
+  <script src="vendor/annotator-js/js/tipped.js?v=4.2.8"></script>
+  <script src="vendor/annotator-js/js/annotator.js?v=4.2.8"></script>
+  <script src="vendor/annotator-js/js/annotator-tooltip.js?v=4.2.8"></script>
   <script src="vendor/pinyinify/pinyinify.js"></script>
-  <script src="js/lib/helper.js?v=4.2.7"></script>
-  <script src="js/lib/cedict.js?v=4.2.7"></script>
-  <script src="js/lib/hsk.js?v=4.2.7"></script>
-  <script src="js/lib/word-photos.js?v=4.2.7"></script>
-  <script src="js/lib/lrc.js?v=4.2.7"></script>
-  <script src="js/lib/youtube.js?v=4.2.7"></script>
-  <script src="js/lib/sketch-engine.js?v=4.2.7"></script>
-  <script src="js/components/entry-component.js?v=4.2.7"></script>
-  <script src="js/components/search-component.js?v=4.2.7"></script>
-  <script src="js/components/saved-words-component.js?v=4.2.7"></script>
-  <script src="js/components/browse-component.js?v=4.2.7"></script>
-  <script src="js/hsk-dictionary.js?v=4.2.7"></script>
+  <script src="js/lib/helper.js?v=4.2.8"></script>
+  <script src="js/lib/cedict.js?v=4.2.8"></script>
+  <script src="js/lib/hsk.js?v=4.2.8"></script>
+  <script src="js/lib/word-photos.js?v=4.2.8"></script>
+  <script src="js/lib/lrc.js?v=4.2.8"></script>
+  <script src="js/lib/youtube.js?v=4.2.8"></script>
+  <script src="js/lib/sketch-engine.js?v=4.2.8"></script>
+  <script src="js/components/entry-component.js?v=4.2.8"></script>
+  <script src="js/components/search-component.js?v=4.2.8"></script>
+  <script src="js/components/saved-words-component.js?v=4.2.8"></script>
+  <script src="js/components/browse-component.js?v=4.2.8"></script>
+  <script src="js/hsk-dictionary.js?v=4.2.8"></script>
   <script src="//apis.google.com/js/client.js?onload=init"></script>
 </body>
 

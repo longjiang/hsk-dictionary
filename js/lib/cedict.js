@@ -118,6 +118,8 @@ var CEDICT = {
     text = text.toLowerCase().replace(' ', '');
     return this._data.filter(function(row) {
       return row.search.includes(text)
+    }).sort(function(a, b) {
+      return a.simplified.length - b.simplified.length
     })
   }
 }

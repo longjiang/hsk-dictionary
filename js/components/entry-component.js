@@ -24,7 +24,10 @@ function EntryComponent(hsk) {
         hsk: hsk,
         unsplashSrcs: [],
         unsplashSearchTerm: "",
-        key: 0 // used to force re-render this component
+        key: 0, // used to force re-render this component
+        collocationsKey: 0,
+        concordanceKey: 0,
+        webImagesKey: 0
       }
     },
     computed: {
