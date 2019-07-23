@@ -10,6 +10,7 @@ var CEDICT = {
       }
     };
     xhttp.open("GET", 'data/cedict_ts.u8.txt', true); // Use .txt extension so gzip will work with it
+    xhttp.setRequestHeader("Cache-Control", "max-age=3600");
     xhttp.send();
   },
   loadData(cedictText, callback) {
