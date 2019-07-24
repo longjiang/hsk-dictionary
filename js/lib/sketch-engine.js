@@ -72,6 +72,7 @@ const SketchEngine = {
       },
       function (response) {
         const data = JSON.parse(response);
+        console.log(data)
         let results = []
         for (let Line of data.Lines) {
           const left = Line.Left.map(function (item) {
@@ -80,10 +81,13 @@ const SketchEngine = {
           const right = Line.Right.map(function (item) {
             return item.str || item.strc
           }).join('').replace(/^([^</s>]*)<\/s>.*/, '$1')
+          const country = Line.ref.replace(/^[^_]*_[^_]*_[^_]*_[^_]*_([^_]*).*/g, '$1')
           results.push({
             left: left,
             right: right,
             text: left + term + right,
+            country: Helper.country(country),
+            ref: Line.ref
           })
         }
         results = results.sort(function(a,b) {
