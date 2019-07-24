@@ -55,11 +55,8 @@ const Helper = {
 }
 
 class Loader {
-  _loaded = []
-  _goal = []
-  _complete = function() {}
-
   constructor(goal, callback) {
+    this._loaded = []
     this._goal = goal
     this._complete = callback
   }
