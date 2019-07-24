@@ -26,7 +26,8 @@ function EntryComponent(hsk) {
         collocationsKey: 0,
         concordanceKey: 0,
         relatedKey: 0,
-        webImagesKey: 0
+        webImagesKey: 0,
+        mistakesKey: 0
       }
     },
     computed: {
@@ -148,6 +149,10 @@ function EntryComponent(hsk) {
         SketchEngine.concordance(entry.word, function(response) {
           entry.examples = response
           app.concordanceKey += 1
+        });
+        SketchEngine.mistakes(entry.word, function(response) {
+          entry.mistakes = response
+          app.mistakesKey += 1
         });
         WordPhotos.getWebImages(entry.word, function(srcs) {
           entry.images = srcs

@@ -22,7 +22,7 @@ const SketchEngine = {
     $.post(
       `sketch-engine-proxy.php?https://app.sketchengine.eu/bonito/run.cgi/concordance?corpname=${this.corpname}`,
       {
-        json: `{"lpos":"","wpos":"","default_attr":"word","attrs":"word","refs":"=doc.website","ctxattrs":"word","attr_allpos":"all","usesubcorp":"","viewmode":"kwic","cup_hl":"q","cup_err":"","cup_corr":"","cup_err_code":"","structs":"s,g","gdex_enabled":0,"fromp":1,"pagesize":1000,"concordance_query":[{"queryselector":"iqueryrow","iquery":"${term}"}],"kwicleftctx":"100#","kwicrightctx":"100#"}`
+        json: `{"lpos":"","wpos":"","default_attr":"word","attrs":"word","refs":"=doc.website","ctxattrs":"word","attr_allpos":"all","usesubcorp":"","viewmode":"kwic","cup_hl":"q","cup_err":"true","cup_corr":"","cup_err_code":"true","structs":"s,g","gdex_enabled":0,"fromp":1,"pagesize":1000,"concordance_query":[{"queryselector":"iqueryrow","iquery":"${term}"}],"kwicleftctx":"100#","kwicrightctx":"100#"}`
       },
       function (response) {
         const data = JSON.parse(response);
@@ -58,9 +58,35 @@ const SketchEngine = {
         minthesscore: 0,
         minsim: 0.3
       },
-      function(response) {
+      function (response) {
         const data = JSON.parse(response);
         callback(data)
+      }
+    )
+  },
+  mistakes(term, callback) {
+    $.post(
+      `sketch-engine-proxy.php?https://app.sketchengine.eu/bonito/run.cgi/concordance?corpname=preloaded/guangwai`,
+      {
+        json: `{"lpos":"","wpos":"","default_attr":"word","attrs":"word","refs":"=text.id","ctxattrs":"word","attr_allpos":"all","usesubcorp":"","viewmode":"kwic","cup_hl":"q","cup_err":"","cup_corr":"","cup_err_code":"","structs":"s,g","gdex_enabled":0,"fromp":1,"pagesize":50,"concordance_query":[{"queryselector":"iqueryrow","iquery":"${term}","sca_err.level":["col","form","mean","orth","punct"],"sca_err.type":["anom","incl","omit","wo"]}],"kwicleftctx":"100#","kwicrightctx":"100#"}`
+      },
+      function (response) {
+        const data = JSON.parse(response);
+        let results = []
+        for (let Line of data.Lines) {
+          const left = Line.Left.map(function (item) {
+            return item.str || item.strc
+          }).join('').replace(/.*<s>([^<s>]*?)$/, '$1')
+          const right = Line.Right.map(function (item) {
+            return item.str || item.strc
+          }).join('').replace(/^([^</s>]*)<\/s>.*/, '$1')
+          results.push({
+            left: left,
+            right: right,
+            text: left + term + right,
+          })
+        }
+        callback(results)
       }
     )
   }

@@ -382,6 +382,20 @@
           </div>
         </div>
 
+        <div class="container mistakes" :key="mistakesKey">
+          <div class="row mb-5" v-if="entry.mistakes && entry.mistakes.length > 0">
+            <div class="col-sm-12">
+              <div class="label song-label mb-2 mistakes-label">Common Mistakes with “{{ entry.word }}”</div>
+              <ul class="character-examples collapsed" id="mistakes" data-collapse-target>
+                <li class="character-example mistake-item" v-for="mistake in entry.mistakes" ><i class="glyphicon glyphicon-remove mistake-icon"></i><span class="character-example-word">{{ mistake.left }}<span class="mistake-word">{{ entry.word }}</span>{{ mistake.right }}</span></li>
+              </ul>
+              <button class="show-more" v-on:click="Helper.showPinyinClick" data-target-selector="#mistakes">Show Pinyin</button>
+              <button v-if="entry.mistakes.length > 4" class="show-more collapsed" v-on:click="Helper.showMoreClick"
+                title="Show all mistakes" :data-bg-hsk="entry.book"><span class="label-expand">Show {{ entry.mistakes.length - 4 }} more</span><span class="label-collapse">Collapse</span></button>
+            </div>
+          </div>
+        </div>
+
         <!-- ANCHOR img/anchors/lyrics-bar.png -->
         <div class="container-fluid learn-this-bar" :data-bg-hsk="entry.book" v-cloak v-if="lrcs && lrcs.length > 0 ">
           <div class="container">
