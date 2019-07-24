@@ -60,6 +60,7 @@ const SketchEngine = {
       },
       function (response) {
         const data = JSON.parse(response);
+        console.log(data)
         callback(data)
       }
     )
@@ -90,7 +91,7 @@ const SketchEngine = {
             ref: Line.ref
           })
         }
-        results = results.sort(function(a,b) {
+        results = results.sort(function (a, b) {
           return a.text.length - b.text.length
         })
         callback(results)

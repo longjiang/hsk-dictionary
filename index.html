@@ -67,8 +67,8 @@
               href="https://www.mdbg.net/chinese/dictionary?page=cedict">CC-CEDICT</a>. Images made <a
               v-on:click="adminClick">possible</a> with <a href="https://source.unsplash.com/">Unsplash Source</a> and
             <a href="https://www.canva.com/photos/">Canva</a></a>, and
-            <a href="https://pixabay.com/">Pixabay</a>. Small images are from <a
-              href="https://image.so.com/">360 Photo Search</a>. Character component
+            <a href="https://pixabay.com/">Pixabay</a>. Small images are from <a href="https://image.so.com/">360 Photo
+              Search</a>. Character component
             breakdown and stroke animation made possible
             by <a href="https://github.com/skishore/makemeahanzi">Make Me a Hanzi</a>. Example sentences and translation
             from <a href="http://www.jukuu.com/">Jukuu</a>. Related words, collocations, example sentences and common
@@ -292,7 +292,7 @@
                   ({{ character.pinyin[0] }})
                   <em>{{ character.definition }}</em>
                 </span>
-                <div class="etymology" :data-bg-hsk="character.examples.length > 0 ? character.examples[0].book : 'outside'" v-if="character.etymology"><span
+                <div class="etymology" v-if="character.etymology"><span
                     v-if="character.etymology.type"><b>Origin:</b> A <em v-if="character.etymology">
                       {{ character.etymology.type }}</em> character.</span> <span
                     v-if="character.etymology.hint"><b>Mnemonic:</b> {{ character.etymology.hint }}.</span></div>
@@ -347,9 +347,12 @@
                 <li v-for="word in entry.related" class="related-item character-example">
                   <a class="character-example-word" v-if="word.hskCandidates && word.hskCandidates.length > 0" :href="`#view/hsk/${word.hskCandidates[0].id}`"><span :data-hsk="word.hskCandidates[0].book">{{ word.word}}</span></a>
                   <a class="character-example-word" v-if="(word.hskCandidates.length < 1) && word.cedictCandidates && word.cedictCandidates.length > 0" :href="`#view/cedict/${word.cedictCandidates[0].traditional}`"><span data-hsk="outside">{{ word.word}}</span></a>
+                  <span class="character-example-pinyin" v-if="word.cedictCandidates && word.cedictCandidates.length > 0">{{ word.cedictCandidates[0].pinyin }} <i :data-speak="word.word" class="speak glyphicon glyphicon-volume-up"></i></span>
+                  <ul class="character-example-english inline-list" v-if="word.cedictCandidates && word.cedictCandidates.length > 0">
+                    <li v-for="definition in word.cedictCandidates[0].definitions">{{ definition.text }}</li>
+                  </ul>
                 </li>
               </ul>
-              <button class="show-more" v-on:click="Helper.showPinyinClick" data-target-selector="#related">Show Pinyin</button>
               <button v-if="entry.related.length > 12" class="show-more collapsed" v-on:click="Helper.showMoreClick"
                 title="Show all related words" :data-bg-hsk="entry.book"><span class="label-expand">Show {{ entry.related.length - 12 }} more</span><span class="label-collapse">Collapse</span></button>
             </div>

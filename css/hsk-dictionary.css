@@ -815,8 +815,10 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 }
 
 .etymology {
-  padding: 0.6rem 1rem;
+  padding: 0.6rem 0;
   margin: 0.5rem 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 
 #import-textarea {
@@ -845,15 +847,10 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
 .related {
   list-style: none;
   padding: 0;
-  column-count: 4;
-  text-align: center;
+  column-count: 2;
 }
 
-.related-item {
-  margin: 0;
-}
-
-.related.collapsed li:nth-child(n + 13) {
+.related.collapsed li:nth-child(n+13) {
   display: none;
 }
 
@@ -880,4 +877,18 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   list-style: none;
   text-align: center;
   padding: 0;
+}
+
+.inline-list {
+  list-style: none;
+  padding: 0;
+  display: inline;
+}
+
+.inline-list>li {
+  display: inline;
+}
+
+.inline-list>li+li::before {
+  content: ", "
 }
