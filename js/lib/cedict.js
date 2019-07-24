@@ -5,7 +5,7 @@ var CEDICT = {
     const cedict = this
     Helper.loaderMessage('Downloading CC-CEDICT data (`cedict_ts.u8.txt`, 3.4MB).')
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
         Helper.loaderMessage('CC-CEDICT data downloaded.')
         cedict.loadData(this.responseText, callback);
@@ -17,7 +17,7 @@ var CEDICT = {
   },
   loadData(cedictText, callback) {
     const cedict = this
-    cedictText.split("\n").forEach(function(line){
+    cedictText.split("\n").forEach(function (line) {
       const matches = line.match(/^([^\s]+) ([^\s]+) \[(.+)\] \/(.*)\//)
       if (matches) {
         var row = {
@@ -27,10 +27,10 @@ var CEDICT = {
           definitions: matches[4].split('/'),
           search: matches[1] + ' ' + matches[2] + ' ' + matches[3].toLowerCase().replace(/[\s\d]/gi, '') + ' ' + matches[4]
         }
-        row.definitions.forEach(function(definition, index){
+        row.definitions.forEach(function (definition, index) {
           definitionObj = {
             type: "definition",
-            text: definition.replace(/\[(.*)\]/, function(match, p1) {
+            text: definition.replace(/\[(.*)\]/, function (match, p1) {
               return ' (' + cedict.parsePinyin(p1) + ')'
             }).replace(/([^\s]+)\|([^\s]+)/, '$2')
           }
@@ -66,7 +66,7 @@ var CEDICT = {
         cedict._data.push(row)
       }
     })
-    cedict._data = cedict._data.sort(function(a, b) {
+    cedict._data = cedict._data.sort(function (a, b) {
       return b.simplified.length - a.simplified.length;
     })
     Helper.loaderMessage('CC-CEDICT file (cedict_ts.u8.txt) parsed.')
@@ -74,10 +74,10 @@ var CEDICT = {
   },
   subdict(data) {
     let newDict = Object.assign({}, this)
-    return Object.assign(newDict, {_data: data})
+    return Object.assign(newDict, { _data: data })
   },
   subdictFromText(text) {
-    return this.subdict(this._data.filter(function(row){
+    return this.subdict(this._data.filter(function (row) {
       return text.includes(row.simplified) || text.includes(row.traditional)
     }))
   },
@@ -102,7 +102,7 @@ var CEDICT = {
   },
   parsePinyin(pinyin) {
     return pinyinify(pinyin.replace(/u:/gi, 'ü')) // use the pinyinify library to parse tones
-    .replace(/\d/g, '') // pinyinify does not handle 'r5', we remove all digits
+      .replace(/\d/g, '') // pinyinify does not handle 'r5', we remove all digits
   },
   // text = 涎[xian2]
   // text = 協|协[xie2]
@@ -120,18 +120,18 @@ var CEDICT = {
     }
   },
   lookup(text) {
-    const candidates = this._data.filter(function(row) {
+    const candidates = this._data.filter(function (row) {
       return row.traditional === text || row.simplified === text
-    }).sort(function(a, b) {
-      return b.search.length - a.search.length // Longer search string = longer definition = likely more common word
+    }).sort(function (a, b) {
+      return b.definitions.length - a.definitions.length // More definitions = longer definition = likely more common word
     })
     return candidates
   },
   lookupFuzzy(text) {
     text = text.toLowerCase().replace(' ', '');
-    return this._data.filter(function(row) {
+    return this._data.filter(function (row) {
       return row.search.includes(text)
-    }).sort(function(a, b) {
+    }).sort(function (a, b) {
       return a.simplified.length - b.simplified.length
     })
   }
