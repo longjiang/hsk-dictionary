@@ -142,7 +142,7 @@
       <div class="container">
           <div class="row text-center">
             <div class="col-md-12">
-              <button class="save-word-button" v-on:click="saveWordClick" :data-id="entry.id"><i
+              <button class="save-word-button" v-on:click="saveWordClick" :data-id="entry.id" v-if="entry.book !== 'outside'"><i
                   class="glyphicon glyphicon-star-empty" v-if="!SavedWords.includes(entry.id)" title="Save word"></i><i
                   class="glyphicon glyphicon-star" v-if="SavedWords.includes(entry.id)" title="Remove word"></i></button>
               <button class="paginate-button previous" v-on:click="previousClick" title="Previous word" v-if="hasPrevious"><img
@@ -261,6 +261,17 @@
             </div>
           </div>
         </div>
+
+        <div class="container" :key="webImagesKey">
+          <div class="row mt-5 mb-5" v-if="entry.images && entry.images.length > 0">
+            <div class="col-sm-12">
+              <div class="image-wall5">
+                <img :src="image.img" alt="" v-if="!image.img.includes('nipic')" v-for="image in entry.images.slice(0, 20)" class="image-wall-image">
+              </div>
+              <div>Photos from <a :href="`https://image.so.com/i?q=${entry.word}&src=srp#/`">360 Photo Search</a></div>
+            </div>
+          </div>
+        </div>
         
         <!-- ANCHOR img/anchors/character-example.png -->
         <!-- FIXME Handle homonyms (e.g. 称 in 称心如意 should be chèn not chēng) -->
@@ -367,17 +378,6 @@
               <button class="show-more" v-on:click="Helper.showPinyinClick" data-target-selector="#examples">Show Pinyin</button>
               <button v-if="entry.examples.length > 4" class="show-more collapsed" v-on:click="Helper.showMoreClick"
                 title="Show all examples" :data-bg-hsk="entry.book"><span class="label-expand">Show {{ Math.min(entry.examples.length, 100) - 4 }} more</span><span class="label-collapse">Collapse</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="container" :key="webImagesKey">
-          <div class="row mt-5 mb-5" v-if="entry.images && entry.images.length > 0">
-            <div class="col-sm-12">
-              <div class="image-wall5">
-                <img :src="image.img" alt="" v-if="!image.img.includes('nipic')" v-for="image in entry.images.slice(0, 20)" class="image-wall-image">
-              </div>
-              <div>Photos from <a :href="`https://image.so.com/i?q=${entry.word}&src=srp#/`">360 Photo Search</a></div>
             </div>
           </div>
         </div>
