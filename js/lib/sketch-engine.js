@@ -86,6 +86,9 @@ const SketchEngine = {
             text: left + term + right,
           })
         }
+        results = results.sort(function(a,b) {
+          return a.text.length - b.text.length
+        })
         callback(results)
       }
     )
