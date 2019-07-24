@@ -3,10 +3,11 @@ var CEDICT = {
   _data: [],
   load(callback) {
     const cedict = this
+    Helper.loaderMessage('Downloading CC-CEDICT data (`cedict_ts.u8.txt`, 3.4MB).')
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        console.log('cedict data downloaded')
+        Helper.loaderMessage('CC-CEDICT data downloaded.')
         cedict.loadData(this.responseText, callback);
       }
     };
@@ -68,7 +69,7 @@ var CEDICT = {
     cedict._data = cedict._data.sort(function(a, b) {
       return b.simplified.length - a.simplified.length;
     })
-    console.log('cedict parsed')
+    Helper.loaderMessage('CC-CEDICT file (cedict_ts.u8.txt) parsed.')
     callback(cedict)
   },
   subdict(data) {

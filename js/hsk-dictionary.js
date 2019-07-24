@@ -58,7 +58,7 @@ var entry = undefined;
           "browse" /* Default view is "browse words by course", can also set to "entry" (when viewing a word), or "saved-words" */,
       },
       mounted() {
-        console.log('hskDictionaryApp mounted')
+        Helper.loaderMessage('HSK Dictionary Vue app mounted.')
       },
       methods: {
         adminClick: function () {
@@ -124,7 +124,7 @@ var entry = undefined;
   }
 
   let loader = new Loader(['hsk', 'cedict'], function() {
-    console.log('all loaded')
+    Helper.loaderMessage('All data loaded.')
     main(HSK, CEDICT);
   })
 

@@ -58,6 +58,10 @@ const Helper = {
         return country
       }
     }
+  },
+  loaderMessage(message) {
+    console.log('Helper.loaderMessage(message): ', message)
+    $('.loading-messages').append(`<li>${message}</li>`)
   }
 }
 
