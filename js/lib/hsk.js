@@ -140,7 +140,7 @@ var HSK = {
       hsk.hanzi = hanzi;
       loader.loaded('hanzi.json')
       Helper.loaderMessage('Hanzi library ready.')
-      Helper.loaderMessage('7 seconds more...')
+      Helper.loaderMessage('Ready in 7 seconds...')
     });
     Papa.parse(hsk._standardCourseCSV, {
       download: true,
