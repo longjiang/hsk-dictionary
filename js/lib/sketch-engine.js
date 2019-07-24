@@ -46,5 +46,22 @@ const SketchEngine = {
         callback(Helper.unique(result));
       }
     );
+  },
+  thesaurus(term, callback) {
+    $.post(
+      `sketch-engine-proxy.php?https://app.sketchengine.eu/bonito/run.cgi/thes?corpname=${this.corpname}`,
+      {
+        lemma: term,
+        lpos: '',
+        clusteritems: 0,
+        maxthesitems: 100,
+        minthesscore: 0,
+        minsim: 0.3
+      },
+      function(response) {
+        const data = JSON.parse(response);
+        callback(data)
+      }
+    )
   }
 };

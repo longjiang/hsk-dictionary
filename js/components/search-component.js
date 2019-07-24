@@ -5,7 +5,7 @@ function SearchComponent(hsk, cedict) {
       return {
         suggestions: [],
         savedWordIds: SavedWords.getIds(),
-        key: 0,
+        searchKey: 0,
       }
     },
     methods: {

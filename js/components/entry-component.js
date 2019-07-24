@@ -6,9 +6,7 @@ function EntryComponent(hsk) {
         template: '#collocations-template',
         props: ['word', 'level', 'type', 'title', 'collocation'],
         data() {
-          return {
-            key: 0 // used to force re-render this component
-          }
+          return {}
         }
       },
     },
@@ -24,9 +22,10 @@ function EntryComponent(hsk) {
         hsk: hsk,
         unsplashSrcs: [],
         unsplashSearchTerm: "",
-        key: 0, // used to force re-render this component
+        entryKey: 0, // used to force re-render this component
         collocationsKey: 0,
         concordanceKey: 0,
+        relatedKey: 0,
         webImagesKey: 0
       }
     },
@@ -63,7 +62,7 @@ function EntryComponent(hsk) {
         } else {
           SavedWords.remove(id);
         }
-        this.key += 1 // force re-render this component
+        this.entryKey += 1 // force re-render this component
         if (hskDictionaryApp.$refs.search) {
           hskDictionaryApp.$refs.search.update()
         }
@@ -107,6 +106,7 @@ function EntryComponent(hsk) {
       },
       show(entry) {
         const app = this;
+        app.entryKey += 1;
         app.entry = entry;
         if (SavedWords.includes(entry.id)) {
           entry.saved = true;
@@ -132,6 +132,15 @@ function EntryComponent(hsk) {
             );
           });
         });
+        SketchEngine.thesaurus(entry.word, function(response) {
+          entry.related = []
+          for (let Word of response.Words) {
+            Word.hskCandidates = HSK.lookup(Word.word)
+            Word.cedictCandidates = CEDICT.lookup(Word.word)
+            entry.related.push(Word)
+          }
+          app.relatedKey += 1
+        })
         SketchEngine.wsketch(entry.word, function(response) {
           entry.sketch = response
           app.collocationsKey += 1
@@ -221,7 +230,6 @@ function EntryComponent(hsk) {
       const app = this
       app.recalculateExampleColumns(this.entry.word);
       app.attachSpeakEventHandler();
-      var selector = ".example-wrapper > .example-sentence *";
     }
   }
 }

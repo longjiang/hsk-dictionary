@@ -3,12 +3,12 @@ function SavedWordsComponent(hsk) {
     template: '#saved-words-template',
     data() {
       return {
-        key: 0 // used to force re-render this component
+        savedWordsKey: 0 // used to force re-render this component
       }
     },
     methods: {
       updateSavedWordsDisplay( ) {
-        this.key += 1 // force re-render this component
+        this.savedWordsKey += 1 // force re-render this component
         if (hskDictionaryApp.$refs.search) {
           hskDictionaryApp.$refs.search.update()
         }

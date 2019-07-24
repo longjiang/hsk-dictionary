@@ -4,7 +4,7 @@ function BrowseComponent(hsk) {
     data() {
       return {
         books: hsk.compileBooks(),
-        key: 0 // used to force re-render this component
+        browseKey: 0 // used to force re-render this component
       }
     },
     methods: {
@@ -20,7 +20,7 @@ function BrowseComponent(hsk) {
         } else {
           SavedWords.remove(id);
         }
-        this.key += 1
+        this.browseKey += 1
         if (hskDictionaryApp.$refs.search) {
           hskDictionaryApp.$refs.search.update()
         }

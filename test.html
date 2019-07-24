@@ -34,10 +34,8 @@
   <script src="js/lib/cedict.js"></script>
   <script src="js/lib/sketch-engine.js"></script>
   <script>
-    CEDICT.load(function (cedict) {
-      new Annotator(cedict).annotateBySelector('.add-pinyin', function () {
-        AnnotatorTooltip.addTooltips()
-      })
+    SketchEngine.thesaurus('流血', function(data) {
+      console.log(data)
     })
   </script>
 </body>

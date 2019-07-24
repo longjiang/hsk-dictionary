@@ -841,3 +841,18 @@ a.suggestion:hover, a.suggestion:first-child:not(:hover) {
   font-weight: normal;
   color: #ccc;
 }
+
+.related {
+  list-style: none;
+  padding: 0;
+  column-count: 4;
+  text-align: center;
+}
+
+.related-item {
+  margin: 0;
+}
+
+.related.collapsed li:nth-child(n + 13) {
+  display: none;
+}
